@@ -24,15 +24,14 @@ package es.jcyl.datosabiertos.apps.naturcyl;
 import org.osmdroid.util.GeoPoint;
 
 /**
- * Espacio habilitado para el estacionamiento de vehículos, que tiene como
- * finalidad facilitar el acceso ordenado de los visitantes con el objeto de
- * disminuir los impactos sobre el entorno.
+ * Estructura, fija o móvil, que se utiliza para la observación
+ * de fauna silvestre y permite la ocultación de los visitantes
+ * con el objeto de no ahuyentar o perturbar a los animales.
  *
  * @author David Población Criado
  */
-public class Aparcamiento {
-    public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/aparcamientos/1284378117797.kml";
-
+public class Observatorio {
+    public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/observatorios/1284378315734.kml";
     private int id;
     private String codigo;
     private String fechaDeclaracion;
@@ -43,15 +42,15 @@ public class Aparcamiento {
     private String acceso;
     private boolean interesTuristico;
     private double superficie;
-    private boolean delimitado;
-    private boolean aparcaBicis;
     private GeoPoint coordenadas;
     private String nombre;
+    private int tipoObservatorio;
+    private String entornoObservatorio;
 
-    public Aparcamiento() {
+    public Observatorio() {
     }
 
-    public Aparcamiento(int id, String codigo, String fechaDeclaracion, int estado, String fechaEstado, boolean senalizacionExterna, String observaciones, String acceso, boolean interesTuristico, double superficie, boolean delimitado, boolean aparcaBicis, GeoPoint coordenadas, String nombre) {
+    public Observatorio(int id, String codigo, String fechaDeclaracion, int estado, String fechaEstado, boolean senalizacionExterna, String observaciones, String acceso, boolean interesTuristico, double superficie, GeoPoint coordenadas, String nombre, int tipoObservatorio, String entornoObservatorio) {
         this.id = id;
         this.codigo = codigo;
         this.fechaDeclaracion = fechaDeclaracion;
@@ -62,15 +61,15 @@ public class Aparcamiento {
         this.acceso = acceso;
         this.interesTuristico = interesTuristico;
         this.superficie = superficie;
-        this.delimitado = delimitado;
-        this.aparcaBicis = aparcaBicis;
         this.coordenadas = coordenadas;
         this.nombre = nombre;
+        this.tipoObservatorio = tipoObservatorio;
+        this.entornoObservatorio = entornoObservatorio;
     }
 
     @Override
     public String toString() {
-        return "Aparcamiento{" +
+        return "Observatorio{" +
                 "id=" + id +
                 ", codigo='" + codigo + '\'' +
                 ", fechaDeclaracion='" + fechaDeclaracion + '\'' +
@@ -81,10 +80,10 @@ public class Aparcamiento {
                 ", acceso='" + acceso + '\'' +
                 ", interesTuristico=" + interesTuristico +
                 ", superficie=" + superficie +
-                ", delimitado=" + delimitado +
-                ", aparcaBicis=" + aparcaBicis +
                 ", coordenadas=" + coordenadas +
                 ", nombre='" + nombre + '\'' +
+                ", tipoObservatorio=" + tipoObservatorio +
+                ", entornoObservatorio='" + entornoObservatorio + '\'' +
                 '}';
     }
 
@@ -92,52 +91,72 @@ public class Aparcamiento {
         return id;
     }
 
-    public GeoPoint getCoordenadas() {
-        return coordenadas;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getCodigo() {
         return codigo;
     }
 
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
     public String getFechaDeclaracion() {
         return fechaDeclaracion;
+    }
+
+    public void setFechaDeclaracion(String fechaDeclaracion) {
+        this.fechaDeclaracion = fechaDeclaracion;
     }
 
     public int getEstado() {
         return estado;
     }
 
+    public void setEstado(int estado) {
+        this.estado = estado;
+    }
+
     public String getFechaEstado() {
         return fechaEstado;
+    }
+
+    public void setFechaEstado(String fechaEstado) {
+        this.fechaEstado = fechaEstado;
     }
 
     public boolean isSenalizacionExterna() {
         return senalizacionExterna;
     }
 
+    public void setSenalizacionExterna(boolean senalizacionExterna) {
+        this.senalizacionExterna = senalizacionExterna;
+    }
+
     public String getObservaciones() {
         return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
     }
 
     public String getAcceso() {
         return acceso;
     }
 
+    public void setAcceso(String acceso) {
+        this.acceso = acceso;
+    }
+
     public boolean isInteresTuristico() {
         return interesTuristico;
     }
 
-    public void setCoordenadas(GeoPoint coordenadas) {
-        this.coordenadas = coordenadas;
-    }
-
-    public boolean isDelimitado() {
-        return delimitado;
-    }
-
-    public boolean isAparcaBicis() {
-        return aparcaBicis;
+    public void setInteresTuristico(boolean interesTuristico) {
+        this.interesTuristico = interesTuristico;
     }
 
     public double getSuperficie() {
@@ -148,48 +167,12 @@ public class Aparcamiento {
         this.superficie = superficie;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public GeoPoint getCoordenadas() {
+        return coordenadas;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
-
-    public void setFechaDeclaracion(String fechaDeclaracion) {
-        this.fechaDeclaracion = fechaDeclaracion;
-    }
-
-    public void setEstado(int estado) {
-        this.estado = estado;
-    }
-
-    public void setFechaEstado(String fechaEstado) {
-        this.fechaEstado = fechaEstado;
-    }
-
-    public void setSenalizacionExterna(boolean senalizacionExterna) {
-        this.senalizacionExterna = senalizacionExterna;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    public void setAcceso(String acceso) {
-        this.acceso = acceso;
-    }
-
-    public void setInteresTuristico(boolean interesTuristico) {
-        this.interesTuristico = interesTuristico;
-    }
-
-    public void setDelimitado(boolean delimitado) {
-        this.delimitado = delimitado;
-    }
-
-    public void setAparcaBicis(boolean aparcaBicis) {
-        this.aparcaBicis = aparcaBicis;
+    public void setCoordenadas(GeoPoint coordenadas) {
+        this.coordenadas = coordenadas;
     }
 
     public String getNombre() {
@@ -198,5 +181,21 @@ public class Aparcamiento {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public int getTipoObservatorio() {
+        return tipoObservatorio;
+    }
+
+    public void setTipoObservatorio(int tipoObservatorio) {
+        this.tipoObservatorio = tipoObservatorio;
+    }
+
+    public String getEntornoObservatorio() {
+        return entornoObservatorio;
+    }
+
+    public void setEntornoObservatorio(String entornoObservatorio) {
+        this.entornoObservatorio = entornoObservatorio;
     }
 }
