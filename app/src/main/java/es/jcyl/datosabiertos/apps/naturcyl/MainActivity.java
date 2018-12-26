@@ -1,5 +1,5 @@
 /*
- * Aplicación para consultar los espacios abiertos de la comunidad
+ * Aplicación para consultar los espacios naturales de la comunidad
  * autónoma de Castilla y León, así como sus equipamientos y
  * posibilidades.
  *
@@ -26,9 +26,19 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import org.osmdroid.util.GeoPoint;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -47,6 +57,41 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        // Creacion de espacios
+        Document kmlEspacios = null;
+        ArrayList<EspacioNatural> listaEspacios = new ArrayList<>();
+        try {
+            kmlEspacios = new ObtenerKml().execute(EspacioNatural.URL_KML).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        NodeList nodosEspacios = kmlEspacios.getElementsByTagName("Placemark");
+        for (int i = 0; i < nodosEspacios.getLength(); i++) {
+            Node n = nodosEspacios.item(i);
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
+                Element e = (Element) n;
+                NodeList nl = e.getElementsByTagName("SimpleData");
+                ArrayList<GeoPoint> lgp = new ArrayList<>();
+                String c = e.getElementsByTagName("coordinates").item(0).getTextContent();
+                String[] t = c.split(" ");
+                for (String s : t) {
+                    String[] ll = s.replace(" ", "").split(",");
+                    GeoPoint gp = new GeoPoint(Double.valueOf(ll[0]), Double.valueOf(ll[1]));
+                    lgp.add(gp);
+                }
+                EspacioNatural en = new EspacioNatural(Integer.valueOf(nl.item(0).getTextContent()), nl.item(5).getTextContent(), nl.item(6).getTextContent(), nl.item(8).getTextContent().split("T")[0], nl.item(11).getTextContent(), lgp);
+                listaEspacios.add(en);
+            }
+        }
+        for (EspacioNatural en : listaEspacios) {
+            Log.i("ESPACIO", en.toString());
+        }
+
+
+
     }
 
     @Override
