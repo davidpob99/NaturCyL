@@ -26,65 +26,106 @@ import org.osmdroid.util.GeoPoint;
 import java.util.ArrayList;
 
 public class EspacioNatural {
-    // TODO
-    public static final String URL_CSV = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/espacios_naturales/1284378150075.csv";
     public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/espacios_naturales/1284378150075.kml";
+    public static final String URL_IMG_BASE = "https://idecyl.jcyl.es/sigren/";
 
     private int id;
+    private boolean q;
     private String codigo;
     private String nombre;
     private String fechaDeclaracion;
     private String tipoDeclaracion;
     private ArrayList<GeoPoint> coordenadas;
-    private ArrayList<Aparcamiento> aparcamientos;
+    private String imagen;
+    private ArrayList<Aparcamiento> aparcamientos; //TODO
 
-    public EspacioNatural(int id, String codigo, String nombre, String fechaDeclaracion, String tipoDeclaracion, ArrayList<GeoPoint> coordenadas) {
+    public EspacioNatural(int id, boolean q, String codigo, String nombre, String fechaDeclaracion, String tipoDeclaracion, ArrayList<GeoPoint> coordenadas, String imagen) {
         this.id = id;
+        this.q = q;
         this.codigo = codigo;
         this.nombre = nombre;
         this.fechaDeclaracion = fechaDeclaracion;
         this.tipoDeclaracion = tipoDeclaracion;
         this.coordenadas = coordenadas;
+        this.imagen = imagen;
     }
 
     @Override
     public String toString() {
         return "EspacioNatural{" +
                 "id=" + id +
+                ", q=" + q +
                 ", codigo='" + codigo + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", fechaDeclaracion='" + fechaDeclaracion + '\'' +
                 ", tipoDeclaracion='" + tipoDeclaracion + '\'' +
                 ", coordenadas=" + coordenadas +
+                ", imagen='" + imagen + '\'' +
                 ", aparcamientos=" + aparcamientos +
                 '}';
-    }
-
-    public ArrayList<GeoPoint> getCoordenadas() {
-        return coordenadas;
     }
 
     public int getId() {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public boolean isQ() {
+        return q;
+    }
+
+    public void setQ(boolean q) {
+        this.q = q;
+    }
+
     public String getCodigo() {
         return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
     public String getNombre() {
         return nombre;
     }
 
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
     public String getFechaDeclaracion() {
         return fechaDeclaracion;
+    }
+
+    public void setFechaDeclaracion(String fechaDeclaracion) {
+        this.fechaDeclaracion = fechaDeclaracion;
     }
 
     public String getTipoDeclaracion() {
         return tipoDeclaracion;
     }
 
-    public ArrayList<Aparcamiento> getAparcamientos() {
-        return aparcamientos;
+    public void setTipoDeclaracion(String tipoDeclaracion) {
+        this.tipoDeclaracion = tipoDeclaracion;
+    }
+
+    public ArrayList<GeoPoint> getCoordenadas() {
+        return coordenadas;
+    }
+
+    public void setCoordenadas(ArrayList<GeoPoint> coordenadas) {
+        this.coordenadas = coordenadas;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 }

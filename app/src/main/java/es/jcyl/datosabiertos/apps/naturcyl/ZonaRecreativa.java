@@ -24,28 +24,30 @@ package es.jcyl.datosabiertos.apps.naturcyl;
 import org.osmdroid.util.GeoPoint;
 
 /**
- * Los miradores son espacios acondicionados por su ubicación en un punto de interés paisajístico y por su acceso, facilita la contemplación e interpretación de una vista panorámica o de elementos singulares del paisaje de manera sencilla. Normalmente se ubican al aire libre, aunque puede estar cubierto o formar parte de una estructura edificada
+ * Las zonas recreativas son espacios al aire libre que puede incluir dotaciones como suministro de agua, servicio higiénicos, limpieza y recogida de residuos, mesas, bancos y barbacoas, estacionamiento de vehículos, circuitos para el ejercicio físico y juegos infantiles, en el que se pueden realizar diversas actividades recreativas, de ocio y espaiciamiento durante una jornada
  *
  * @author David Población Criado
  */
-public class Mirador extends EspacioNaturalItem {
-    public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/miradores/1284378314940.kml";
-    private String entorno;
+public class ZonaRecreativa extends EspacioNaturalItem {
+    public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/zonas_recreativas/1284378127843.kml";
 
-    public Mirador() {
+    private boolean merendero;
+
+    public ZonaRecreativa() {
         super();
     }
 
-    public Mirador(int id, boolean q, String codigo, String fechaDeclaracion, int estado, String fechaEstado, boolean senalizacionExterna, String observaciones, String acceso, boolean interesTuristico, double superficie, GeoPoint coordenadas, String nombre, String entorno) {
+    public ZonaRecreativa(int id, boolean q, String codigo, String fechaDeclaracion, int estado, String fechaEstado, boolean senalizacionExterna, String observaciones, String acceso, boolean interesTuristico, double superficie, GeoPoint coordenadas, String nombre, boolean merendero) {
         super(id, q, codigo, observaciones, fechaEstado, fechaDeclaracion, estado, senalizacionExterna, acceso, nombre, interesTuristico, superficie, coordenadas);
-        this.entorno = entorno;
+
+        this.merendero = merendero;
     }
 
-    public String getEntorno() {
-        return entorno;
+    public boolean isMerendero() {
+        return merendero;
     }
 
-    public void setEntorno(String entorno) {
-        this.entorno = entorno;
+    public void setMerendero(boolean merendero) {
+        this.merendero = merendero;
     }
 }

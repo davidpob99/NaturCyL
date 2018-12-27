@@ -30,157 +30,21 @@ import org.osmdroid.util.GeoPoint;
  *
  * @author David Población Criado
  */
-public class Observatorio {
+public class Observatorio extends EspacioNaturalItem {
     public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/observatorios/1284378315734.kml";
-    private int id;
-    private String codigo;
-    private String fechaDeclaracion;
-    private int estado;
-    private String fechaEstado;
-    private boolean senalizacionExterna;
-    private String observaciones;
-    private String acceso;
-    private boolean interesTuristico;
-    private double superficie;
-    private GeoPoint coordenadas;
-    private String nombre;
+
     private int tipoObservatorio;
     private String entornoObservatorio;
 
     public Observatorio() {
+        super();
     }
 
-    public Observatorio(int id, String codigo, String fechaDeclaracion, int estado, String fechaEstado, boolean senalizacionExterna, String observaciones, String acceso, boolean interesTuristico, double superficie, GeoPoint coordenadas, String nombre, int tipoObservatorio, String entornoObservatorio) {
-        this.id = id;
-        this.codigo = codigo;
-        this.fechaDeclaracion = fechaDeclaracion;
-        this.estado = estado;
-        this.fechaEstado = fechaEstado;
-        this.senalizacionExterna = senalizacionExterna;
-        this.observaciones = observaciones;
-        this.acceso = acceso;
-        this.interesTuristico = interesTuristico;
-        this.superficie = superficie;
-        this.coordenadas = coordenadas;
-        this.nombre = nombre;
+    public Observatorio(int id, boolean q, String codigo, String fechaDeclaracion, int estado, String fechaEstado, boolean senalizacionExterna, String observaciones, String acceso, boolean interesTuristico, double superficie, GeoPoint coordenadas, String nombre, int tipoObservatorio, String entornoObservatorio) {
+        super(id, q, codigo, observaciones, fechaEstado, fechaDeclaracion, estado, senalizacionExterna, acceso, nombre, interesTuristico, superficie, coordenadas);
+
         this.tipoObservatorio = tipoObservatorio;
         this.entornoObservatorio = entornoObservatorio;
-    }
-
-    @Override
-    public String toString() {
-        return "Observatorio{" +
-                "id=" + id +
-                ", codigo='" + codigo + '\'' +
-                ", fechaDeclaracion='" + fechaDeclaracion + '\'' +
-                ", estado=" + estado +
-                ", fechaEstado='" + fechaEstado + '\'' +
-                ", senalizacionExterna=" + senalizacionExterna +
-                ", observaciones='" + observaciones + '\'' +
-                ", acceso='" + acceso + '\'' +
-                ", interesTuristico=" + interesTuristico +
-                ", superficie=" + superficie +
-                ", coordenadas=" + coordenadas +
-                ", nombre='" + nombre + '\'' +
-                ", tipoObservatorio=" + tipoObservatorio +
-                ", entornoObservatorio='" + entornoObservatorio + '\'' +
-                '}';
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
-
-    public String getFechaDeclaracion() {
-        return fechaDeclaracion;
-    }
-
-    public void setFechaDeclaracion(String fechaDeclaracion) {
-        this.fechaDeclaracion = fechaDeclaracion;
-    }
-
-    public int getEstado() {
-        return estado;
-    }
-
-    public void setEstado(int estado) {
-        this.estado = estado;
-    }
-
-    public String getFechaEstado() {
-        return fechaEstado;
-    }
-
-    public void setFechaEstado(String fechaEstado) {
-        this.fechaEstado = fechaEstado;
-    }
-
-    public boolean isSenalizacionExterna() {
-        return senalizacionExterna;
-    }
-
-    public void setSenalizacionExterna(boolean senalizacionExterna) {
-        this.senalizacionExterna = senalizacionExterna;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    public String getAcceso() {
-        return acceso;
-    }
-
-    public void setAcceso(String acceso) {
-        this.acceso = acceso;
-    }
-
-    public boolean isInteresTuristico() {
-        return interesTuristico;
-    }
-
-    public void setInteresTuristico(boolean interesTuristico) {
-        this.interesTuristico = interesTuristico;
-    }
-
-    public double getSuperficie() {
-        return superficie;
-    }
-
-    public void setSuperficie(double superficie) {
-        this.superficie = superficie;
-    }
-
-    public GeoPoint getCoordenadas() {
-        return coordenadas;
-    }
-
-    public void setCoordenadas(GeoPoint coordenadas) {
-        this.coordenadas = coordenadas;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public int getTipoObservatorio() {

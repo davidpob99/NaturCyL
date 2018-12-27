@@ -21,7 +21,6 @@
 
 package es.jcyl.datosabiertos.apps.naturcyl;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -53,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Aparcamiento> listaAparcamientos;
     private ArrayList<Observatorio> listaObservatorios;
     private ArrayList<Mirador> listaMiradores;
+    private ArrayList<ZonaRecreativa> listaZonasRecreativas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +70,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ProgressDialog dialog = ProgressDialog.show(MainActivity.this, "",
-                "Cargando datos...", true);
+        //inicio
         inicializarEspacios();
         inicializarAparcamientos();
         inicializarObservatorios();
         inicializarMiradores();
-        dialog.dismiss();
+        inicializarZonasRecreativas();
     }
 
     @Override
@@ -132,13 +131,20 @@ public class MainActivity extends AppCompatActivity {
                     GeoPoint gp = new GeoPoint(Double.valueOf(ll[1]), Double.valueOf(ll[0]));
                     lgp.add(gp);
                 }
-                EspacioNatural en = new EspacioNatural(Integer.valueOf(nl.item(0).getTextContent()), nl.item(5).getTextContent(), nl.item(6).getTextContent(), nl.item(8).getTextContent().split("T")[0], nl.item(11).getTextContent(), lgp);
+                EspacioNatural en = new EspacioNatural(Integer.valueOf(nl.item(0).getTextContent()),
+                        Boolean.valueOf(nl.item(3).getTextContent()),
+                        nl.item(5).getTextContent(),
+                        nl.item(6).getTextContent(),
+                        nl.item(8).getTextContent().split("T")[0],
+                        nl.item(11).getTextContent(),
+                        lgp,
+                        nl.item(9).getTextContent());
                 listaEspacios.add(en);
             }
-        }/*
+        }
         for (EspacioNatural en : listaEspacios) {
             Log.i("ESPACIO", en.toString());
-        }*/
+        }
     }
 
     /**
@@ -173,6 +179,9 @@ public class MainActivity extends AppCompatActivity {
                         switch (el.getAttribute("name")) {
                             case "atr_gr_id":
                                 a.setId(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "atr_gr_tiene_q":
+                                a.setQ(Boolean.valueOf(no.getTextContent()));
                                 break;
                             case "equip_a_codigo":
                                 a.setCodigo(no.getTextContent());
@@ -272,6 +281,9 @@ public class MainActivity extends AppCompatActivity {
                             case "atr_gr_id":
                                 o.setId(Integer.valueOf(no.getTextContent()));
                                 break;
+                            case "atr_gr_tiene_q":
+                                o.setQ(Boolean.valueOf(no.getTextContent()));
+                                break;
                             case "equip_a_codigo":
                                 o.setCodigo(no.getTextContent());
                                 break;
@@ -353,6 +365,9 @@ public class MainActivity extends AppCompatActivity {
                             case "atr_gr_id":
                                 m.setId(Integer.valueOf(no.getTextContent()));
                                 break;
+                            case "atr_gr_tiene_q":
+                                m.setQ(Boolean.valueOf(no.getTextContent()));
+                                break;
                             case "equip_a_codigo":
                                 m.setCodigo(no.getTextContent());
                                 break;
@@ -396,10 +411,84 @@ public class MainActivity extends AppCompatActivity {
                 listaMiradores.add(m);
             }
         }
+    }
 
-        for (Mirador a : listaMiradores) {
-            Log.i("MIR", a.toString());
+    private void inicializarZonasRecreativas() {
+        Document kml = null;
+        listaZonasRecreativas = new ArrayList<>();
+
+        try {
+            kml = new ObtenerKml().execute(ZonaRecreativa.URL_KML).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        NodeList nodos = kml.getElementsByTagName("Placemark");
+        for (int i = 0; i < nodos.getLength(); i++) {
+            Node n = nodos.item(i);
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
+                Element e = (Element) n;
+                NodeList nl = e.getElementsByTagName("SimpleData");
+                ZonaRecreativa zr = new ZonaRecreativa();
+
+                for (int j = 0; j < nl.getLength(); j++) {
+                    Node no = nl.item(j);
+                    if (no.getNodeType() == Node.ELEMENT_NODE) {
+                        Element el = (Element) no;
+                        switch (el.getAttribute("name")) {
+                            case "atr_gr_id":
+                                zr.setId(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "atr_gr_tiene_q":
+                                zr.setQ(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "equip_a_codigo":
+                                zr.setCodigo(no.getTextContent());
+                                break;
+                            case "equip_a_observaciones":
+                                zr.setObservaciones(no.getTextContent());
+                                break;
+                            case "equip_a_estado_fecha":
+                                zr.setFechaEstado(no.getTextContent().split("T")[0]);
+                                break;
+                            case "equip_a_fecha_declaracion":
+                                zr.setFechaDeclaracion(no.getTextContent().split("T")[0]);
+                                break;
+                            case "estado_id":
+                                zr.setEstado(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "equip_b_senalizacion_ext":
+                                zr.setSenalizacionExterna(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "equip_b_acceso_modo":
+                                zr.setAcceso(no.getTextContent());
+                                break;
+                            case "equip_b_nombre":
+                                zr.setNombre(no.getTextContent());
+                                break;
+                            case "equip_b_tiene_interes":
+                                zr.setInteresTuristico(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "equip_b_superficie_aprox":
+                                zr.setSuperficie(Double.valueOf(no.getTextContent()));
+                                break;
+                            case "zona_rec_es_merendero":
+                                zr.setMerendero(Boolean.valueOf(no.getTextContent()));
+                                break;
+                        }
+                    }
+                }
+                String c = e.getElementsByTagName("coordinates").item(0).getTextContent();
+                String[] ll = c.split(",");
+                GeoPoint gp = new GeoPoint(Double.valueOf(ll[1]), Double.valueOf(ll[0]));
+                zr.setCoordenadas(gp);
+                listaZonasRecreativas.add(zr);
+            }
         }
 
+        for (ZonaRecreativa zr : listaZonasRecreativas) {
+            Log.i("ITEM", zr.toString());
+        }
     }
 }
