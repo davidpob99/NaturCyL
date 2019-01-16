@@ -3,7 +3,7 @@
  * autónoma de Castilla y León, así como sus equipamientos y
  * posibilidades.
  *
- * Copyright (C) 2018  David Población Criado
+ * Copyright (C) 2019  David Población Criado
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,33 +19,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
+package es.jcyl.datosabiertos.apps.naturcyl;
 
-buildscript {
-    
-    repositories {
-        google()
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
-        
+import android.view.View;
 
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        jcenter()
-        maven {
-            url "https://jitpack.io"
-        }
-    }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
+public interface RVClickListenerEspacio {
+    void onClickItem(View v, int posicion);
 }

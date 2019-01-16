@@ -21,15 +21,20 @@
 
 package es.jcyl.datosabiertos.apps.naturcyl;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.google.gson.Gson;
 
 import org.osmdroid.util.GeoPoint;
 import org.w3c.dom.Document;
@@ -53,6 +58,11 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Observatorio> listaObservatorios;
     private ArrayList<Mirador> listaMiradores;
     private ArrayList<ZonaRecreativa> listaZonasRecreativas;
+    private ArrayList<CasaParque> listaCasasParque;
+    private ArrayList<CentroVisitante> listaCentrosVisitantes;
+    private ArrayList<ArbolSingular> listaArbolesSingulares;
+
+    private RecyclerView rv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,10 +82,33 @@ public class MainActivity extends AppCompatActivity {
 
         //inicio
         inicializarEspacios();
+        /*
         inicializarAparcamientos();
         inicializarObservatorios();
         inicializarMiradores();
         inicializarZonasRecreativas();
+        inicializarCasasParque();
+        inicializarArbolesSingulares();
+        inicializarCentrosVisitantes();*/
+
+        // Cargar RecyclerView
+        RecyclerView rv = findViewById(R.id.espacio_rv);
+        rv.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rv.setLayoutManager(llm);
+        RVAdapterEspacio adapter = new RVAdapterEspacio(listaEspacios, new RVClickListenerEspacio() {
+            @Override
+            public void onClickItem(View v, int position) {
+                Gson gson = new Gson();
+                String jsonEspacio = gson.toJson(listaEspacios.get(position));
+                // String partidasTodas = gson.toJson(partidas);
+                Intent myIntent = new Intent(MainActivity.this, EspacioActivity.class);
+                myIntent.putExtra("posicion", position); // Pasar a InfoPartida la posición de la partida pulsada
+                myIntent.putExtra("espacio_natural", jsonEspacio);
+                startActivity(myIntent);
+            }
+        });
+        rv.setAdapter(adapter);
     }
 
     @Override
@@ -486,9 +519,242 @@ public class MainActivity extends AppCompatActivity {
                 listaZonasRecreativas.add(zr);
             }
         }
+    }
 
-        for (ZonaRecreativa zr : listaZonasRecreativas) {
-            Log.i("ITEM", zr.toString());
+    public void inicializarCasasParque() {
+        Document kml = null;
+        listaCasasParque = new ArrayList<>();
+
+        try {
+            kml = new ObtenerKml().execute(ZonaRecreativa.URL_KML).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        NodeList nodos = kml.getElementsByTagName("Placemark");
+        for (int i = 0; i < nodos.getLength(); i++) {
+            Node n = nodos.item(i);
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
+                Element e = (Element) n;
+                NodeList nl = e.getElementsByTagName("SimpleData");
+                CasaParque cp = new CasaParque();
+
+                for (int j = 0; j < nl.getLength(); j++) {
+                    Node no = nl.item(j);
+                    if (no.getNodeType() == Node.ELEMENT_NODE) {
+                        Element el = (Element) no;
+                        switch (el.getAttribute("name")) {
+                            case "atr_gr_id":
+                                cp.setId(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "atr_gr_tiene_q":
+                                cp.setQ(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "equip_a_codigo":
+                                cp.setCodigo(no.getTextContent());
+                                break;
+                            case "equip_a_observaciones":
+                                cp.setObservaciones(no.getTextContent());
+                                break;
+                            case "equip_a_estado_fecha":
+                                cp.setFechaEstado(no.getTextContent().split("T")[0]);
+                                break;
+                            case "equip_a_fecha_declaracion":
+                                cp.setFechaDeclaracion(no.getTextContent().split("T")[0]);
+                                break;
+                            case "estado_id":
+                                cp.setEstado(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "equip_b_senalizacion_ext":
+                                cp.setSenalizacionExterna(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "equip_b_acceso_modo":
+                                cp.setAcceso(no.getTextContent());
+                                break;
+                            case "equip_b_nombre":
+                                cp.setNombre(no.getTextContent());
+                                break;
+                            case "equip_b_tiene_interes":
+                                cp.setInteresTuristico(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "equip_b_superficie_aprox":
+                                cp.setSuperficie(Double.valueOf(no.getTextContent()));
+                                break;
+                            case "casa_parque_servicio_informativo":
+                                cp.setServicioInformativo(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "casa_parque_cida_biblio":
+                                cp.setServicioInformativo(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "casa_parque_tienda_verde":
+                                cp.setServicioInformativo(Boolean.valueOf(no.getTextContent()));
+                                break;
+                        }
+                    }
+                }
+                String c = e.getElementsByTagName("coordinates").item(0).getTextContent();
+                String[] ll = c.split(",");
+                GeoPoint gp = new GeoPoint(Double.valueOf(ll[1]), Double.valueOf(ll[0]));
+                cp.setCoordenadas(gp);
+                listaCasasParque.add(cp);
+            }
+        }
+    }
+
+    public void inicializarCentrosVisitantes() {
+        Document kml = null;
+        listaCentrosVisitantes = new ArrayList<>();
+
+        try {
+            kml = new ObtenerKml().execute(ZonaRecreativa.URL_KML).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        NodeList nodos = kml.getElementsByTagName("Placemark");
+        for (int i = 0; i < nodos.getLength(); i++) {
+            Node n = nodos.item(i);
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
+                Element e = (Element) n;
+                NodeList nl = e.getElementsByTagName("SimpleData");
+                CentroVisitante cv = new CentroVisitante();
+
+                for (int j = 0; j < nl.getLength(); j++) {
+                    Node no = nl.item(j);
+                    if (no.getNodeType() == Node.ELEMENT_NODE) {
+                        Element el = (Element) no;
+                        switch (el.getAttribute("name")) {
+                            case "atr_gr_id":
+                                cv.setId(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "atr_gr_tiene_q":
+                                cv.setQ(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "equip_a_codigo":
+                                cv.setCodigo(no.getTextContent());
+                                break;
+                            case "equip_a_observaciones":
+                                cv.setObservaciones(no.getTextContent());
+                                break;
+                            case "equip_a_estado_fecha":
+                                cv.setFechaEstado(no.getTextContent().split("T")[0]);
+                                break;
+                            case "equip_a_fecha_declaracion":
+                                cv.setFechaDeclaracion(no.getTextContent().split("T")[0]);
+                                break;
+                            case "estado_id":
+                                cv.setEstado(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "equip_b_senalizacion_ext":
+                                cv.setSenalizacionExterna(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "equip_b_acceso_modo":
+                                cv.setAcceso(no.getTextContent());
+                                break;
+                            case "equip_b_nombre":
+                                cv.setNombre(no.getTextContent());
+                                break;
+                            case "equip_b_tiene_interes":
+                                cv.setInteresTuristico(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "equip_b_superficie_aprox":
+                                cv.setSuperficie(Double.valueOf(no.getTextContent()));
+                                break;
+                            case "otro_punto_interes_tipo":
+                                cv.setTipo(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "otro_punto_interes_descripcion":
+                                cv.setDescripcion(no.getTextContent());
+                                break;
+                        }
+                    }
+                }
+                String c = e.getElementsByTagName("coordinates").item(0).getTextContent();
+                String[] ll = c.split(",");
+                GeoPoint gp = new GeoPoint(Double.valueOf(ll[1]), Double.valueOf(ll[0]));
+                cv.setCoordenadas(gp);
+                listaCentrosVisitantes.add(cv);
+            }
+        }
+    }
+
+    public void inicializarArbolesSingulares() {
+        Document kml = null;
+        listaArbolesSingulares = new ArrayList<>();
+
+        try {
+            kml = new ObtenerKml().execute(ZonaRecreativa.URL_KML).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        NodeList nodos = kml.getElementsByTagName("Placemark");
+        for (int i = 0; i < nodos.getLength(); i++) {
+            Node n = nodos.item(i);
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
+                Element e = (Element) n;
+                NodeList nl = e.getElementsByTagName("SimpleData");
+                ArbolSingular as = new ArbolSingular();
+
+                for (int j = 0; j < nl.getLength(); j++) {
+                    Node no = nl.item(j);
+                    if (no.getNodeType() == Node.ELEMENT_NODE) {
+                        Element el = (Element) no;
+                        switch (el.getAttribute("name")) {
+                            case "atr_gr_id":
+                                as.setId(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "atr_gr_tiene_q":
+                                as.setQ(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "equip_a_codigo":
+                                as.setCodigo(no.getTextContent());
+                                break;
+                            case "equip_a_observaciones":
+                                as.setObservaciones(no.getTextContent());
+                                break;
+                            case "equip_a_estado_fecha":
+                                as.setFechaEstado(no.getTextContent().split("T")[0]);
+                                break;
+                            case "equip_a_fecha_declaracion":
+                                as.setFechaDeclaracion(no.getTextContent().split("T")[0]);
+                                break;
+                            case "estado_id":
+                                as.setEstado(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "equip_b_senalizacion_ext":
+                                as.setSenalizacionExterna(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "equip_b_acceso_modo":
+                                as.setAcceso(no.getTextContent());
+                                break;
+                            case "equip_b_nombre":
+                                as.setNombre(no.getTextContent());
+                                break;
+                            case "equip_b_tiene_interes":
+                                as.setInteresTuristico(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "equip_b_superficie_aprox":
+                                as.setSuperficie(Double.valueOf(no.getTextContent()));
+                                break;
+                            case "arbol_nombre":
+                                as.setNombreArbol(no.getTextContent());
+                                break;
+                            case "especie_id":
+                                as.setEspecie(Integer.valueOf(no.getTextContent()));
+                                break;
+                        }
+                    }
+                }
+                String c = e.getElementsByTagName("coordinates").item(0).getTextContent();
+                String[] ll = c.split(",");
+                GeoPoint gp = new GeoPoint(Double.valueOf(ll[1]), Double.valueOf(ll[0]));
+                as.setCoordenadas(gp);
+                listaArbolesSingulares.add(as);
+            }
         }
     }
 }
