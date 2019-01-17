@@ -51,6 +51,16 @@ import java.util.concurrent.ExecutionException;
  * @author David Población Criado
  */
 public class MainActivity extends AppCompatActivity {
+    private static final String[] espaciosItems = {
+            "Aparcamiento",
+            "Observatorio",
+            "Mirador",
+            "ZonaRecreativa",
+            "CasaParque",
+            "CentroVisitante",
+            "ArbolSingular"
+    };
+
     private ArrayList<EspacioNatural> listaEspacios;
     private ArrayList<Aparcamiento> listaAparcamientos;
     private ArrayList<Observatorio> listaObservatorios;
@@ -61,14 +71,6 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<ArbolSingular> listaArbolesSingulares;
 
     private RecyclerView rv;
-    protected static final String[] items = {"Safari",
-            "Camera",
-            "Global",
-            "FireFox",
-            "UC Browser",
-            "Android Folder",
-            "VLC Player",
-            "Cold War"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,7 +193,23 @@ public class MainActivity extends AppCompatActivity {
      */
     private void inicializarAparcamientos() {
         Document kmlAparcamientos = null;
+        EspacioNaturalItem espacioNaturalItem;
         listaAparcamientos = new ArrayList<>();
+        /*
+        switch (espacioItem){
+            case "Aparcamiento":
+                espacioNaturalItem = new Aparcamiento();
+                break;
+            case "Observatorio":
+                espacioNaturalItem = new Mirador();
+            case "Mirador":
+                espacioNaturalItem = new Mirador();
+
+            case "ZonaRecreativa":
+            case "CasaParque":
+            case "CentroVisitante":
+            case "ArbolSingular":
+        }*/
 
         try {
             kmlAparcamientos = new ObtenerKml().execute(Aparcamiento.URL_KML).get();
