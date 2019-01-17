@@ -2,7 +2,11 @@
     <string name="app_name">NaturCyL</string>
     <string name="action_settings">Settings</string>
     <string name="hola">Hola Mundo</string>
-    <string name="title_activity_espacio">EspacioActivity</string>
+    <string name="title_activity_espacio"></string>
+    <string name="codigo">Código</string>
+    <string name="tipo">Tipo</string>
+    <string name="fecha_declaracion">Fecha de declaración</string>
+    <string name="observaciones">Observaciones</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

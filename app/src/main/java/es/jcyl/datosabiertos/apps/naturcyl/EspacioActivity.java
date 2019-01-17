@@ -23,6 +23,7 @@ package es.jcyl.datosabiertos.apps.naturcyl;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -31,22 +32,33 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Polygon;
 
 public class EspacioActivity extends AppCompatActivity {
     private static final int REQUEST_WRITE_STORAGE = 112;
+    private static final double ZOOM_MAPA = 12;
+    // private static final String URL_ORTOFOTO = "http://www.idecyl.jcyl.es/IGCyL/services/PaisajeCubierta/Ortofoto/MapServer/WMSServer?request=GetCapabilities&service=WMS";
 
+    protected static EspacioNatural espacioNatural;
     private MapView map;
     private IMapController mapController;
     private int posicion;
-    private EspacioNatural espacioNatural;
-    private Gson gson;
+
+    private TextView espacioNombre;
+    private TextView espacioTipo;
+    private TextView espacioFecha;
+    private ImageView espacioFoto;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,12 +77,9 @@ public class EspacioActivity extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        gson = new Gson();
-
         // Obtener de main
-        String stringEspacio = getIntent().getStringExtra("espacio_natural");
-        espacioNatural = gson.fromJson(stringEspacio, EspacioNatural.class);
-        posicion = Integer.valueOf(getIntent().getStringExtra("posicion"));
+        String s = getIntent().getStringExtra("posicion");
+        posicion = Integer.valueOf(s);
 
         // Comprobar permisos
         boolean hasPermission = (ContextCompat.checkSelfPermission(this,
@@ -80,13 +89,31 @@ public class EspacioActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     REQUEST_WRITE_STORAGE);
         }
-
+        // Inicializar mapa
         map = findViewById(R.id.espacio_map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
         mapController = map.getController();
-        mapController.setZoom(9.5);
-        mapController.setCenter(espacioNatural.getCoordenadas().get(0));
+        mapController.setZoom(ZOOM_MAPA);
+        mapController.setCenter(calcularPuntoMedio());
+
+        // Dibujar espacio
+        Polygon polygon = new Polygon();
+        polygon.setFillColor(Color.argb(75, 0, 220, 27));
+        polygon.setPoints(espacioNatural.getCoordenadas());
+        polygon.setTitle(espacioNatural.getNombre());
+        map.getOverlayManager().add(polygon);
+
+        // Inicializar texto e imagen
+        espacioNombre = findViewById(R.id.espacio_item_nombre);
+        espacioTipo = findViewById(R.id.espacio_tipo);
+        espacioFecha = findViewById(R.id.espacio_item_descripcion);
+        espacioFoto = findViewById(R.id.espacio_foto);
+
+        espacioNombre.setText(espacioNatural.getNombre());
+        espacioTipo.setText(espacioNatural.getTipoDeclaracion());
+        espacioFecha.setText(espacioNatural.getFechaDeclaracion());
+        Picasso.get().load(EspacioNatural.URL_IMG_BASE + espacioNatural.getImagen()).into(espacioFoto);
     }
 
     @Override
@@ -114,5 +141,27 @@ public class EspacioActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    /**
+     * Dado el espacio natural que es un atributo de la clase calcula el punto medio
+     * del polígono que forman sus coordenadas
+     *
+     * @return coordenadas del punto medio del polígono
+     */
+    public GeoPoint calcularPuntoMedio() {
+        double x = 0.;
+        double y = 0.;
+        int cont = espacioNatural.getCoordenadas().size();
+        for (int i = 0; i < cont - 1; i++) {
+            final GeoPoint point = espacioNatural.getCoordenadas().get(i);
+            x += point.getLatitude();
+            y += point.getLongitude();
+        }
+
+        x = x / cont;
+        y = y / cont;
+
+        return new GeoPoint(x, y);
     }
 }

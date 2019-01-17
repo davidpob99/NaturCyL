@@ -84,8 +84,8 @@ public class RVAdapterEspacio extends RecyclerView.Adapter<RVAdapterEspacio.Espa
         EspacioViewHolder(View v) {
             super(v);
             cv = v.findViewById(R.id.espacio_cv);
-            espacioNombre = v.findViewById(R.id.espacio_nombre);
-            espacioTipo = v.findViewById(R.id.espacio_tipo);
+            espacioNombre = v.findViewById(R.id.espacio_item_nombre);
+            espacioTipo = v.findViewById(R.id.espacio_item_descripcion);
             espacioFoto = v.findViewById(R.id.espacio_foto);
         }
     }

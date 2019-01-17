@@ -34,8 +34,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.gson.Gson;
-
 import org.osmdroid.util.GeoPoint;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -63,6 +61,14 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<ArbolSingular> listaArbolesSingulares;
 
     private RecyclerView rv;
+    protected static final String[] items = {"Safari",
+            "Camera",
+            "Global",
+            "FireFox",
+            "UC Browser",
+            "Android Folder",
+            "VLC Player",
+            "Cold War"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,12 +105,9 @@ public class MainActivity extends AppCompatActivity {
         RVAdapterEspacio adapter = new RVAdapterEspacio(listaEspacios, new RVClickListenerEspacio() {
             @Override
             public void onClickItem(View v, int position) {
-                Gson gson = new Gson();
-                String jsonEspacio = gson.toJson(listaEspacios.get(position));
-                // String partidasTodas = gson.toJson(partidas);
+                EspacioActivity.espacioNatural = listaEspacios.get(position);
                 Intent myIntent = new Intent(MainActivity.this, EspacioActivity.class);
-                myIntent.putExtra("posicion", position); // Pasar a InfoPartida la posición de la partida pulsada
-                myIntent.putExtra("espacio_natural", jsonEspacio);
+                myIntent.putExtra("posicion", String.valueOf(position));
                 startActivity(myIntent);
             }
         });
@@ -275,10 +278,7 @@ public class MainActivity extends AppCompatActivity {
                         gp);*/
                 listaAparcamientos.add(a);
             }
-        }/*
-        for (Aparcamiento a : listaAparcamientos) {
-            Log.i("APARCAMIENTO", a.toString());
-        }*/
+        }
     }
 
     /**
