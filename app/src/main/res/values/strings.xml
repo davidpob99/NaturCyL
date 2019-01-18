@@ -841,6 +841,7 @@
     Public License instead of this License.  But first, please read
     &lt;<a href="https://www.gnu.org/licenses/why-not-lgpl.html">https://www.gnu.org/licenses/why-not-lgpl.html</a>&gt;.</p>]]>
     </string>
+    <string name="title_activity_item"></string>
 
 
 </resources>

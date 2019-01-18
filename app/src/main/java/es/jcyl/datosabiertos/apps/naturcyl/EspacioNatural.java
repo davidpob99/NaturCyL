@@ -21,7 +21,10 @@
 
 package es.jcyl.datosabiertos.apps.naturcyl;
 
+import android.graphics.Color;
+
 import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.overlay.Polygon;
 
 import java.util.ArrayList;
 
@@ -37,7 +40,8 @@ public class EspacioNatural {
     private String tipoDeclaracion;
     private ArrayList<GeoPoint> coordenadas;
     private String imagen;
-    private ArrayList<Aparcamiento> aparcamientos; //TODO
+    private ArrayList<EspacioNaturalItem> items;
+    private Polygon poligonoCoordenadas;
 
     public EspacioNatural(int id, boolean q, String codigo, String nombre, String fechaDeclaracion, String tipoDeclaracion, ArrayList<GeoPoint> coordenadas, String imagen) {
         this.id = id;
@@ -48,6 +52,10 @@ public class EspacioNatural {
         this.tipoDeclaracion = tipoDeclaracion;
         this.coordenadas = coordenadas;
         this.imagen = imagen;
+        poligonoCoordenadas = new Polygon();
+        poligonoCoordenadas.setFillColor(Color.argb(75, 0, 220, 27));
+        poligonoCoordenadas.setPoints(getCoordenadas());
+        poligonoCoordenadas.setTitle(getNombre());
     }
 
     @Override
@@ -61,8 +69,121 @@ public class EspacioNatural {
                 ", tipoDeclaracion='" + tipoDeclaracion + '\'' +
                 ", coordenadas=" + coordenadas +
                 ", imagen='" + imagen + '\'' +
-                ", aparcamientos=" + aparcamientos +
                 '}';
+    }
+
+    public boolean estaEnEspacio(EspacioNaturalItem eni) {
+        GeoPoint coordenadasEni = eni.getCoordenadas();
+        double xMin = coordenadas.get(0).getLatitude();
+        double yMin = coordenadas.get(0).getLongitude();
+        double xMax = xMin;
+        double yMax = yMin;
+
+        for (GeoPoint gp : coordenadas) {
+            if (xMin > gp.getLatitude()) {
+                xMin = gp.getLatitude();
+            }
+            if (xMax < gp.getLatitude()) {
+                xMax = gp.getLatitude();
+            }
+            if (yMin > gp.getLongitude()) {
+                yMin = gp.getLongitude();
+            }
+            if (yMax < gp.getLongitude()) {
+                yMax = gp.getLongitude();
+            }
+        }
+        return coordenadasEni.getLatitude() <= xMax && coordenadasEni.getLatitude() >= xMin && coordenadasEni.getLongitude() <= yMax && coordenadasEni.getLongitude() >= yMin;
+    }
+
+    public boolean hayAparcamiento() {
+        for (EspacioNaturalItem eni : items) {
+            if (eni instanceof Aparcamiento) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hayArbolSingular() {
+        for (EspacioNaturalItem eni : items) {
+            if (eni instanceof ArbolSingular) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hayCampamento() {
+        for (EspacioNaturalItem eni : items) {
+            if (eni instanceof Campamento) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hayCasaParque() {
+        for (EspacioNaturalItem eni : items) {
+            if (eni instanceof CasaParque) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hayCentroVisitante() {
+        for (EspacioNaturalItem eni : items) {
+            if (eni instanceof CentroVisitante) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hayMirador() {
+        for (EspacioNaturalItem eni : items) {
+            if (eni instanceof Mirador) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hayObservatorio() {
+        for (EspacioNaturalItem eni : items) {
+            if (eni instanceof Observatorio) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hayRefugio() {
+        for (EspacioNaturalItem eni : items) {
+            if (eni instanceof Refugio) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hayZonaAcampada() {
+        for (EspacioNaturalItem eni : items) {
+            if (eni instanceof ZonaAcampada) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean hayZonaRecreativa() {
+        for (EspacioNaturalItem eni : items) {
+            if (eni instanceof ZonaRecreativa) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getId() {
@@ -127,5 +248,17 @@ public class EspacioNatural {
 
     public void setImagen(String imagen) {
         this.imagen = imagen;
+    }
+
+    public ArrayList<EspacioNaturalItem> getItems() {
+        return items;
+    }
+
+    public void setItems(ArrayList<EspacioNaturalItem> items) {
+        this.items = items;
+    }
+
+    public Polygon getPoligonoCoordenadas() {
+        return poligonoCoordenadas;
     }
 }

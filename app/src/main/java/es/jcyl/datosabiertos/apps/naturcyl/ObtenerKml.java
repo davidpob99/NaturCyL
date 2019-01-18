@@ -21,6 +21,7 @@
 
 package es.jcyl.datosabiertos.apps.naturcyl;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import org.w3c.dom.Document;
@@ -35,6 +36,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 public class ObtenerKml extends AsyncTask<String, Void, Document> {
+    private ProgressDialog progressDialog;
+
     @Override
     protected Document doInBackground(String... urls) {
         URL url = null;
@@ -60,5 +63,16 @@ public class ObtenerKml extends AsyncTask<String, Void, Document> {
             e.printStackTrace();
         }
         return doc;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        // super.onPreExecute();
+        MainActivity.progressDialog.show();
+    }
+
+    @Override
+    protected void onPostExecute(Document result) {
+        MainActivity.progressDialog.dismiss();
     }
 }

@@ -22,14 +22,16 @@
 package es.jcyl.datosabiertos.apps.naturcyl;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -42,7 +44,6 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.Polygon;
 
 public class EspacioActivity extends AppCompatActivity {
     private static final int REQUEST_WRITE_STORAGE = 112;
@@ -71,8 +72,8 @@ public class EspacioActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Snackbar.make(view, "Guardado en favoritos", Snackbar.LENGTH_LONG)
+                        .setAction("Guardado", null).show();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -98,22 +99,34 @@ public class EspacioActivity extends AppCompatActivity {
         mapController.setCenter(calcularPuntoMedio());
 
         // Dibujar espacio
-        Polygon polygon = new Polygon();
-        polygon.setFillColor(Color.argb(75, 0, 220, 27));
-        polygon.setPoints(espacioNatural.getCoordenadas());
-        polygon.setTitle(espacioNatural.getNombre());
-        map.getOverlayManager().add(polygon);
+        map.getOverlayManager().add(espacioNatural.getPoligonoCoordenadas());
 
         // Inicializar texto e imagen
-        espacioNombre = findViewById(R.id.espacio_item_nombre);
+        espacioNombre = findViewById(R.id.espacio_nombre);
         espacioTipo = findViewById(R.id.espacio_tipo);
-        espacioFecha = findViewById(R.id.espacio_item_descripcion);
+        espacioFecha = findViewById(R.id.espacio_descripcion);
         espacioFoto = findViewById(R.id.espacio_foto);
 
         espacioNombre.setText(espacioNatural.getNombre());
         espacioTipo.setText(espacioNatural.getTipoDeclaracion());
         espacioFecha.setText(espacioNatural.getFechaDeclaracion());
         Picasso.get().load(EspacioNatural.URL_IMG_BASE + espacioNatural.getImagen()).into(espacioFoto);
+
+        // Cargar RecyclerView
+        RecyclerView rv = findViewById(R.id.espacio_item_rv);
+        rv.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rv.setLayoutManager(llm);
+        RVAdapterEspacioItem adapter = new RVAdapterEspacioItem(Utilidades.crearItems(), new RVClickListenerEspacio() {
+            @Override
+            public void onClickItem(View v, int position) {
+                ListaItemsActivity.espacioNatural = espacioNatural;
+                Intent myIntent = new Intent(EspacioActivity.this, ListaItemsActivity.class);
+                myIntent.putExtra("posicion", String.valueOf(position));
+                startActivity(myIntent);
+            }
+        });
+        rv.setAdapter(adapter);
     }
 
     @Override

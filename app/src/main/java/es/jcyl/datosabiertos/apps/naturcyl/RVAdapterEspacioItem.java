@@ -29,31 +29,26 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 
-/**
- * Adaptador del RecyclerView que contiene los Espacios Naturales y que se encuentra en MainActivity
- */
-public class RVAdapterEspacio extends RecyclerView.Adapter<RVAdapterEspacio.EspacioViewHolder> {
-    private ArrayList<EspacioNatural> listaEspacios;
+public class RVAdapterEspacioItem extends RecyclerView.Adapter<RVAdapterEspacioItem.EspacioItemViewHolder> {
+    private ArrayList<EItem> items;
     private RVClickListenerEspacio listener;
 
-    public RVAdapterEspacio(ArrayList<EspacioNatural> listaEspacios, RVClickListenerEspacio listener) {
-        this.listaEspacios = listaEspacios;
+    public RVAdapterEspacioItem(ArrayList<EItem> items, RVClickListenerEspacio listener) {
+        this.items = items;
         this.listener = listener;
     }
 
     @Override
     public int getItemCount() {
-        return listaEspacios.size();
+        return items.size();
     }
 
     @Override
-    public EspacioViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.espacio_cardview, viewGroup, false);
-        final EspacioViewHolder pvh = new EspacioViewHolder(v);
+    public RVAdapterEspacioItem.EspacioItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.espacio_item_cardview, viewGroup, false);
+        final RVAdapterEspacioItem.EspacioItemViewHolder pvh = new RVAdapterEspacioItem.EspacioItemViewHolder(v);
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,10 +59,9 @@ public class RVAdapterEspacio extends RecyclerView.Adapter<RVAdapterEspacio.Espa
     }
 
     @Override
-    public void onBindViewHolder(EspacioViewHolder espacioViewHolder, int i) {
-        espacioViewHolder.espacioNombre.setText(listaEspacios.get(i).getNombre());
-        espacioViewHolder.espacioTipo.setText(listaEspacios.get(i).getTipoDeclaracion());
-        Picasso.get().load(EspacioNatural.URL_IMG_BASE + listaEspacios.get(i).getImagen()).into(espacioViewHolder.espacioFoto);
+    public void onBindViewHolder(EspacioItemViewHolder espacioItemViewHolder, int i) {
+        espacioItemViewHolder.itemNombre.setText(items.get(i).getNombre());
+        espacioItemViewHolder.itemFoto.setImageResource(items.get(i).getFoto());
     }
 
     @Override
@@ -75,18 +69,16 @@ public class RVAdapterEspacio extends RecyclerView.Adapter<RVAdapterEspacio.Espa
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-    public static class EspacioViewHolder extends RecyclerView.ViewHolder {
+    public static class EspacioItemViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
-        TextView espacioNombre;
-        TextView espacioTipo;
-        ImageView espacioFoto;
+        TextView itemNombre;
+        ImageView itemFoto;
 
-        EspacioViewHolder(View v) {
+        EspacioItemViewHolder(View v) {
             super(v);
-            cv = v.findViewById(R.id.espacio_cv);
-            espacioNombre = v.findViewById(R.id.espacio_nombre);
-            espacioTipo = v.findViewById(R.id.espacio_descripcion);
-            espacioFoto = v.findViewById(R.id.espacio_foto);
+            cv = v.findViewById(R.id.espacio_item_cv);
+            itemNombre = v.findViewById(R.id.espacio_item_nombre);
+            itemFoto = v.findViewById(R.id.espacio_item_foto);
         }
     }
 }
