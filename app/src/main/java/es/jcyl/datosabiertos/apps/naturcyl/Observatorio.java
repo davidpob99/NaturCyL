@@ -32,6 +32,11 @@ import org.osmdroid.util.GeoPoint;
  */
 public class Observatorio extends EspacioNaturalItem {
     public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/observatorios/1284378315734.kml";
+    public static final String[] TIPOS = {
+            "Observatorio de fauna",
+            "Observatorio astronómico",
+            "Otro"
+    };
 
     private int tipoObservatorio;
     private String entornoObservatorio;

@@ -35,7 +35,17 @@ import org.osmdroid.util.GeoPoint;
  */
 public class CentroVisitante extends CasaParque {
     public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/centros_de_visitantes/1284378137727.kml";
-
+    public static final String[] TIPOS = {
+            "Aula de la Naturaleza",
+            "Aula del río",
+            "Centro de Interpretación",
+            "Centro temático",
+            "Fauna silvestre",
+            "Jardín botánico",
+            "Oficina comarcal",
+            "Punto de información",
+            "Otro"
+    };
     private int tipo;
     private String descripcion;
 

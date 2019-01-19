@@ -35,7 +35,7 @@ public class ArbolSingular extends EspacioNaturalItem {
     public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/arboles_singulares/1284378127197.kml";
 
     private String nombreArbol;
-    private int especie;
+    private int especie; // FALTA DOCUMENTACIÓN
 
     public ArbolSingular() {
         super();

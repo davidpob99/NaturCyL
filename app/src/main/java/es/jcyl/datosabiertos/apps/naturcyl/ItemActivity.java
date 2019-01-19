@@ -102,13 +102,32 @@ public class ItemActivity extends AppCompatActivity {
         observaciones = findViewById(R.id.observaciones_item);
 
         inicializarComun();
-        // No comun
-        LinearLayout raiz = findViewById(R.id.particular_item);
+        inicializarConcreto();
+    }
 
+    private void inicializarComun() {
+        nombre.setText(lista.getEstanEnEspacio().get(posicion).getNombre());
+        codigo.setText(lista.getEstanEnEspacio().get(posicion).getCodigo());
+        area.setText(String.valueOf(lista.getEstanEnEspacio().get(posicion).getSuperficie()) + MEDIDA_AREA);
+        estado.setText(EspacioNaturalItem.estados[lista.getEstanEnEspacio().get(posicion).getEstado() - 1]);
+        senalizacion.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isSenalizacionExterna()));
+        q.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isQ()));
+        interesTuristico.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isInteresTuristico()));
+        acceso.setText(lista.getEstanEnEspacio().get(posicion).getAcceso());
+        observaciones.setText(lista.getEstanEnEspacio().get(posicion).getObservaciones());
+    }
+
+    private String booleanAEspanol(boolean b) {
+        return b ? "Sí" : "No";
+    }
+
+    private void inicializarConcreto() {
+        LinearLayout raiz = findViewById(R.id.particular_item);
+        TextView tv;
         switch (tipo) {
             case 0:
                 Aparcamiento a = (Aparcamiento) lista.get(posicion);
-                TextView tv = new TextView(this);
+                tv = new TextView(this);
                 tv.setText("Delimitado");
                 tv.setTypeface(null, Typeface.BOLD);
                 tv.setPadding(8, 8, 8, 8);
@@ -127,23 +146,113 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 break;
-
+            case 1:
+                Observatorio o = (Observatorio) lista.get(posicion);
+                tv = new TextView(this);
+                tv.setText("Tipo");
+                tv.setTypeface(null, Typeface.BOLD);
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                tv = new TextView(this);
+                tv.setText(Observatorio.TIPOS[o.getTipoObservatorio() < 3 ? o.getTipoObservatorio() : 2]);
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                tv = new TextView(this);
+                tv.setText("Entorno");
+                tv.setTypeface(null, Typeface.BOLD);
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                tv = new TextView(this);
+                tv.setText(o.getEntornoObservatorio());
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                break;
+            case 2:
+                Mirador m = (Mirador) lista.get(posicion);
+                tv = new TextView(this);
+                tv.setText("Entorno");
+                tv.setTypeface(null, Typeface.BOLD);
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                tv = new TextView(this);
+                tv.setText(m.getEntorno());
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                break;
+            case 3:
+                ZonaRecreativa zr = (ZonaRecreativa) lista.get(posicion);
+                tv = new TextView(this);
+                tv.setText("Merendero");
+                tv.setTypeface(null, Typeface.BOLD);
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                tv = new TextView(this);
+                tv.setText(booleanAEspanol(zr.isMerendero()));
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                break;
+            case 4:
+                CasaParque cp = (CasaParque) lista.get(posicion);
+                tv = new TextView(this);
+                tv.setText("Servicio informativo");
+                tv.setTypeface(null, Typeface.BOLD);
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                tv = new TextView(this);
+                tv.setText(booleanAEspanol(cp.isServicioInformativo()));
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                tv = new TextView(this);
+                tv.setText("Biblioteca");
+                tv.setTypeface(null, Typeface.BOLD);
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                tv = new TextView(this);
+                tv.setText(booleanAEspanol(cp.isBiblioteca()));
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                tv = new TextView(this);
+                tv.setText("Tienda verde");
+                tv.setTypeface(null, Typeface.BOLD);
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                tv = new TextView(this);
+                tv.setText(booleanAEspanol(cp.isTiendaVerde()));
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                break;
+            case 5:
+                CentroVisitante cv = (CentroVisitante) lista.get(posicion);
+                tv = new TextView(this);
+                tv.setText("Tipo");
+                tv.setTypeface(null, Typeface.BOLD);
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                tv = new TextView(this);
+                tv.setText(CentroVisitante.TIPOS[cv.getTipo() < 10 ? cv.getTipo() : 9]);
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                tv.setText("Descripción");
+                tv.setTypeface(null, Typeface.BOLD);
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                tv = new TextView(this);
+                tv.setText(cv.getDescripcion());
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                break;
+            case 6:
+                ArbolSingular as = (ArbolSingular) lista.get(posicion);
+                tv = new TextView(this);
+                tv.setText("Nombre");
+                tv.setTypeface(null, Typeface.BOLD);
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                tv = new TextView(this);
+                tv.setText(as.getNombreArbol());
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                break;
         }
-    }
-
-    private void inicializarComun() {
-        nombre.setText(lista.getEstanEnEspacio().get(posicion).getNombre());
-        codigo.setText(lista.getEstanEnEspacio().get(posicion).getCodigo());
-        area.setText(String.valueOf(lista.getEstanEnEspacio().get(posicion).getSuperficie()) + MEDIDA_AREA);
-        estado.setText(EspacioNaturalItem.estados[lista.getEstanEnEspacio().get(posicion).getEstado() - 1]);
-        senalizacion.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isSenalizacionExterna()));
-        q.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isQ()));
-        interesTuristico.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isInteresTuristico()));
-        acceso.setText(lista.getEstanEnEspacio().get(posicion).getAcceso());
-        observaciones.setText(lista.getEstanEnEspacio().get(posicion).getObservaciones());
-    }
-
-    private String booleanAEspanol(boolean b) {
-        return b ? "Sí" : "No";
     }
 }
