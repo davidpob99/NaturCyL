@@ -28,17 +28,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import java.util.ArrayList;
-
 public class ListaItemsActivity extends AppCompatActivity {
     protected static EspacioNatural espacioNatural;
     private int posicion;
-    private ArrayList<EspacioNaturalItem> listaItems;
+    private ListaEspaciosNaturalesItems<? extends EspacioNaturalItem> listaItems;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ArrayList<? extends EspacioNaturalItem> listaTmp = new ArrayList<>();
-        listaItems = new ArrayList<EspacioNaturalItem>();
+        ListaEspaciosNaturalesItems<? extends EspacioNaturalItem> listaTmp = new ListaEspaciosNaturalesItems<>();
+        listaItems = new ListaEspaciosNaturalesItems<>();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_items);
@@ -90,25 +88,22 @@ public class ListaItemsActivity extends AppCompatActivity {
                 listaItems = Utilidades.inicializarSendas();
                 break;*/
         }
-
-        //Comprobar los que están en el Espacio
-        for (EspacioNaturalItem eni : listaTmp) {
-            if (espacioNatural.estaEnEspacio(eni)) {
-                listaItems.add(eni);
-            }
-        }
+        listaItems = listaTmp;
+        listaItems.setEspacioNatural(espacioNatural);
+        listaItems.actualizarEnEspacio();
 
         // Cargar RecyclerView
         RecyclerView rv = findViewById(R.id.item_rv);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        RVAdapterItem adapter = new RVAdapterItem(listaItems, new RVClickListenerEspacio() {
+        RVAdapterItem adapter = new RVAdapterItem(listaItems.getEstanEnEspacio(), new RVClickListenerEspacio() {
             @Override
             public void onClickItem(View v, int position) {
-                ItemActivity.espacioNaturalItem = listaItems.get(position);
+                ItemActivity.lista = listaItems;
                 Intent myIntent = new Intent(ListaItemsActivity.this, ItemActivity.class);
                 myIntent.putExtra("tipo", String.valueOf(posicion));
+                myIntent.putExtra("posicion", String.valueOf(position));
                 startActivity(myIntent);
             }
         });

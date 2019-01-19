@@ -71,7 +71,7 @@ public class EspacioNatural {
                 ", imagen='" + imagen + '\'' +
                 '}';
     }
-
+    /*
     public boolean estaEnEspacio(EspacioNaturalItem eni) {
         GeoPoint coordenadasEni = eni.getCoordenadas();
         double xMin = coordenadas.get(0).getLatitude();
@@ -94,7 +94,7 @@ public class EspacioNatural {
             }
         }
         return coordenadasEni.getLatitude() <= xMax && coordenadasEni.getLatitude() >= xMin && coordenadasEni.getLongitude() <= yMax && coordenadasEni.getLongitude() >= yMin;
-    }
+    }*/
 
     public boolean hayAparcamiento() {
         for (EspacioNaturalItem eni : items) {

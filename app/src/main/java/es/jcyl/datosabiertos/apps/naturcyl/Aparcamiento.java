@@ -32,6 +32,10 @@ import org.osmdroid.util.GeoPoint;
  */
 public class Aparcamiento extends EspacioNaturalItem {
     public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/aparcamientos/1284378117797.kml";
+    public static final String[] PARTICULARES = {
+            "Delimitado",
+            "Aparca Bicis"
+    };
     private boolean delimitado;
     private boolean aparcaBicis;
 

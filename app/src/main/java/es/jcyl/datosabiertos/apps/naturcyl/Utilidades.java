@@ -80,9 +80,9 @@ public class Utilidades {
      *
      * @see Aparcamiento
      */
-    protected static ArrayList<Aparcamiento> inicializarAparcamientos() {
+    protected static ListaEspaciosNaturalesItems<Aparcamiento> inicializarAparcamientos() {
         Document kml = null;
-        ArrayList<Aparcamiento> lista = new ArrayList<>();
+        ListaEspaciosNaturalesItems<Aparcamiento> lista = new ListaEspaciosNaturalesItems<>();
 
         try {
             kml = new ObtenerKml().execute(Aparcamiento.URL_KML).get();

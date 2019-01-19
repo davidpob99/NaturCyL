@@ -4,9 +4,15 @@
     <string name="hola">Hola Mundo</string>
     <string name="title_activity_espacio"></string>
     <string name="codigo">Código</string>
+    <string name="area">Área</string>
+    <string name="estado">Estado</string>
+    <string name="senalizacion">Señalización</string>
+    <string name="q">Q de calidad</string>
+    <string name="interes_turistico">Interés turístico</string>
     <string name="tipo">Tipo</string>
     <string name="fecha_declaracion">Fecha de declaración</string>
     <string name="observaciones">Observaciones</string>
+    <string name="acceso">Acceso</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
@@ -842,6 +848,4 @@
     &lt;<a href="https://www.gnu.org/licenses/why-not-lgpl.html">https://www.gnu.org/licenses/why-not-lgpl.html</a>&gt;.</p>]]>
     </string>
     <string name="title_activity_item"></string>
-
-
 </resources>
