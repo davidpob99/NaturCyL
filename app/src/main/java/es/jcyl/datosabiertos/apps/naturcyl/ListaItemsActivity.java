@@ -77,10 +77,10 @@ public class ListaItemsActivity extends AppCompatActivity {
                 break;
             case 9:
                 listaTmp = Utilidades.inicializarRefugios();
-                break;/*
+                break;
             case 10:
                 listaItems = Utilidades.inicializarQuioscos();
-                break;
+                break;/*
             case 11:
                 listaItems = Utilidades.inicializarInfraestructurasMenores();
                 break;

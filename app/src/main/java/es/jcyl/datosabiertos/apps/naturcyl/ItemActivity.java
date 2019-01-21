@@ -21,7 +21,9 @@
 
 package es.jcyl.datosabiertos.apps.naturcyl;
 
+import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -83,9 +85,13 @@ public class ItemActivity extends AppCompatActivity {
         mapController = map.getController();
         mapController.setZoom(ZOOM_MAPA);
         mapController.setCenter(lista.getEstanEnEspacio().get(posicion).getCoordenadas());
+        map.setClickable(false);
 
         // Añadir marcador
+        Resources res = getResources();
+        Drawable drawable = res.getDrawable(Utilidades.fotosItems[tipo]);
         Marker marcador = new Marker(map);
+        marcador.setIcon(drawable);
         marcador.setPosition(lista.getEstanEnEspacio().get(posicion).getCoordenadas());
         marcador.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         map.getOverlays().add(marcador);

@@ -2,8 +2,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="es.jcyl.datosabiertos.apps.naturcyl.MainActivity">
+    <group>
+        <item
+            android:id="@+id/accion_conjunto_datos"
+            android:title="@string/conjunto_datos" />
+        <item
+            android:id="@+id/accion_licencia_terceros"
+            android:title="@string/terceros" />
+    </group>
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/accion_acerca_de"
+        android:title="@string/acerca" />
+    <item
+        android:id="@+id/accion_ajustes"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />

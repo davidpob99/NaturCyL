@@ -22,7 +22,9 @@
 package es.jcyl.datosabiertos.apps.naturcyl;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -38,6 +40,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import org.osmdroid.api.IMapController;
@@ -54,12 +57,15 @@ public class EspacioActivity extends AppCompatActivity {
     private MapView map;
     private IMapController mapController;
     private int posicion;
+    private Favoritos favoritos;
+    private SharedPreferences preferencias;
+    private SharedPreferences.Editor editor;
 
     private TextView espacioNombre;
     private TextView espacioTipo;
     private TextView espacioFecha;
     private ImageView espacioFoto;
-
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,15 +74,28 @@ public class EspacioActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Guardado en favoritos", Snackbar.LENGTH_LONG)
-                        .setAction("Guardado", null).show();
+                obtenerFavoritos();
+                if (favoritosContieneEspacio()) {
+                    Snackbar.make(view, "Eliminado de favoritos", Snackbar.LENGTH_LONG)
+                            .setAction("Eliminado", null).show();
+                    favoritos.espacios.remove(espacioNatural);
+                    cambiarImagen();
+                } else {
+                    Snackbar.make(view, "Guardado en favoritos", Snackbar.LENGTH_LONG)
+                            .setAction("Guardado", null).show();
+                    favoritos.espacios.add(espacioNatural);
+                    cambiarImagen();
+                }
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        /*obtenerFavoritos();
+        cambiarImagen();*/
 
         // Obtener de main
         String s = getIntent().getStringExtra("posicion");
@@ -176,5 +195,33 @@ public class EspacioActivity extends AppCompatActivity {
         y = y / cont;
 
         return new GeoPoint(x, y);
+    }
+
+    private boolean favoritosContieneEspacio() {
+        return favoritos.espacios.contains(espacioNatural);
+    }
+
+    private void obtenerFavoritos() {
+        preferencias = this.getSharedPreferences("es.davidpob99.naturcyl", Context.MODE_PRIVATE);
+        editor = preferencias.edit();
+        Gson gson = new Gson();
+        String favsJson = preferencias.getString("favoritos", "");
+        favoritos = gson.fromJson(favsJson, Favoritos.class);
+    }
+
+    private void guardarFavoritos() {
+        preferencias = this.getSharedPreferences("es.davidpob99.naturcyl", Context.MODE_PRIVATE);
+        editor = preferencias.edit();
+        Gson gson = new Gson();
+        String favsJson = gson.toJson(favoritos);
+        editor.putString("favoritos", favsJson).commit();
+    }
+
+    private void cambiarImagen() {
+        if (favoritosContieneEspacio()) {
+            fab.setImageResource(R.drawable.ic_star_white_24dp);
+        } else {
+            fab.setImageResource(R.drawable.ic_star_border_white_24dp);
+        }
     }
 }

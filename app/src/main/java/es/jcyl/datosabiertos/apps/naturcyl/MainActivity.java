@@ -22,7 +22,9 @@
 package es.jcyl.datosabiertos.apps.naturcyl;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -41,6 +43,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -58,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences preferencias = this.getSharedPreferences("es.davidpob99.naturcyl", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferencias.edit();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -72,6 +78,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Primera ejecución
+        /*if (preferencias.getBoolean("firstrun", true)) {
+            editor.clear().commit();
+            Gson gson = new Gson();
+            // Favoritos favoritos = new Favoritos();
+            String cadenaEspacio = gson.toJson(espa)
+            Set<String> stringSet = new HashSet<>();
+            editor.putStringSet("espacios_favoritos", espacioNaturalSet).commit();
+            editor.putBoolean("firstrun", false).apply();
+        }*/
+
         // Diálogo de cargar
         progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setIndeterminate(false);
@@ -81,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
         //inicio
         inicializarEspacios();
+        Collections.sort(listaEspacios);
 
         // Cargar RecyclerView
         RecyclerView rv = findViewById(R.id.espacio_rv);
@@ -114,8 +132,19 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.accion_ajustes) {
             return true;
+        } else if (id == R.id.accion_licencia_terceros) {
+            Intent myIntent = new Intent(MainActivity.this, TextoActivity.class);
+            myIntent.putExtra("accion", "licencia_tercero");
+            startActivity(myIntent);
+        } else if (id == R.id.accion_conjunto_datos) {
+            Intent myIntent = new Intent(MainActivity.this, TextoActivity.class);
+            myIntent.putExtra("accion", "conjunto_datos");
+            startActivity(myIntent);
+        } else if (id == R.id.accion_acerca_de) {
+            Intent myIntent = new Intent(MainActivity.this, AcercaDeActivity.class);
+            startActivity(myIntent);
         }
 
         return super.onOptionsItemSelected(item);

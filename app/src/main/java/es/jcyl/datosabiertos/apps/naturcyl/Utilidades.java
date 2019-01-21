@@ -42,10 +42,11 @@ public class Utilidades {
             "Árboles singulares",
             "Zonas de acampada",
             "Campamentos",
-            "Refugios"
+            "Refugios",
+            "Quioscos"
 
     };
-    private static final int[] fotosItems = {
+    public static final int[] fotosItems = {
             R.drawable.ic_local_parking_black_24dp,
             R.drawable.ic_binoculars_black_24dp,
             R.drawable.ic_remove_red_eye_black_24dp,
@@ -55,7 +56,8 @@ public class Utilidades {
             R.drawable.ic_tree_black_24dp,
             R.drawable.ic_tent_black_24dp,
             R.drawable.ic_tent_black_24dp,
-            R.drawable.ic_castle_black_24dp
+            R.drawable.ic_castle_black_24dp,
+            R.drawable.ic_store_black_24dp
     };
 
     public static KmlDocument obtenerKmlDeUrl(String url) {
@@ -551,6 +553,43 @@ public class Utilidades {
                 }
                 inicializarCoordenadasComun(e, r);
                 lista.add(r);
+            }
+        }
+        return lista;
+    }
+
+    public static ListaEspaciosNaturalesItems<Quiosco> inicializarQuioscos() {
+        Document kml = null;
+        ListaEspaciosNaturalesItems<Quiosco> lista = new ListaEspaciosNaturalesItems<>();
+
+        try {
+            kml = new ObtenerKml().execute(Quiosco.URL_KML).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        NodeList nodos = kml.getElementsByTagName("Placemark");
+        for (int i = 0; i < nodos.getLength(); i++) {
+            Node n = nodos.item(i);
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
+                Element e = (Element) n;
+                NodeList nl = e.getElementsByTagName("SimpleData");
+                Quiosco q = new Quiosco();
+
+                for (int j = 0; j < nl.getLength(); j++) {
+                    Node no = nl.item(j);
+                    if (no.getNodeType() == Node.ELEMENT_NODE) {
+                        Element el = (Element) no;
+                        switch (el.getAttribute("name")) {
+                            default:
+                                inicializarComun(el, no, q);
+                                break;
+                        }
+                    }
+                }
+                inicializarCoordenadasComun(e, q);
+                lista.add(q);
             }
         }
         return lista;

@@ -28,7 +28,7 @@ import org.osmdroid.views.overlay.Polygon;
 
 import java.util.ArrayList;
 
-public class EspacioNatural {
+public class EspacioNatural implements Comparable<EspacioNatural> {
     public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/espacios_naturales/1284378150075.kml";
     public static final String URL_IMG_BASE = "https://idecyl.jcyl.es/sigren/";
 
@@ -56,6 +56,11 @@ public class EspacioNatural {
         poligonoCoordenadas.setFillColor(Color.argb(75, 0, 220, 27));
         poligonoCoordenadas.setPoints(getCoordenadas());
         poligonoCoordenadas.setTitle(getNombre());
+    }
+
+    @Override
+    public int compareTo(EspacioNatural espacioNatural) {
+        return nombre.compareTo(espacioNatural.getNombre());
     }
 
     @Override
