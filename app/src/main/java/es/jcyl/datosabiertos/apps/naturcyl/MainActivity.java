@@ -30,7 +30,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,16 +51,7 @@ import java.util.concurrent.ExecutionException;
  * @author David Población Criado
  */
 public class MainActivity extends AppCompatActivity {
-
-
     private ArrayList<EspacioNatural> listaEspacios;
-    private ArrayList<Aparcamiento> listaAparcamientos;
-    private ArrayList<Observatorio> listaObservatorios;
-    private ArrayList<Mirador> listaMiradores;
-    private ArrayList<ZonaRecreativa> listaZonasRecreativas;
-    private ArrayList<CasaParque> listaCasasParque;
-    private ArrayList<CentroVisitante> listaCentrosVisitantes;
-    private ArrayList<ArbolSingular> listaArbolesSingulares;
 
     private RecyclerView rv;
     protected static ProgressDialog progressDialog;
@@ -82,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Diálogo de cargar
         progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setIndeterminate(false);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -90,14 +81,6 @@ public class MainActivity extends AppCompatActivity {
 
         //inicio
         inicializarEspacios();
-        /*
-        inicializarAparcamientos();
-        inicializarObservatorios();
-        inicializarMiradores();
-        inicializarZonasRecreativas();
-        inicializarCasasParque();
-        inicializarArbolesSingulares();
-        inicializarCentrosVisitantes();*/
 
         // Cargar RecyclerView
         RecyclerView rv = findViewById(R.id.espacio_rv);
@@ -180,9 +163,9 @@ public class MainActivity extends AppCompatActivity {
                 listaEspacios.add(en);
             }
         }
-        for (EspacioNatural en : listaEspacios) {
+        /*for (EspacioNatural en : listaEspacios) {
             Log.i("ESPACIO", en.toString());
-        }
+        }*/
     }
 
 }

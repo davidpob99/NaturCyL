@@ -50,34 +50,34 @@ public class ListaItemsActivity extends AppCompatActivity {
         switch (posicion) {
             case 0:
                 listaTmp = Utilidades.inicializarAparcamientos();
-                break;/*
+                break;
             case 1:
-                listaItems = Utilidades.inicializarObservatorios();
+                listaTmp = Utilidades.inicializarObservatorios();
                 break;
             case 2:
-                listaItems = Utilidades.inicializarMiradores();
+                listaTmp = Utilidades.inicializarMiradores();
                 break;
             case 3:
-                listaItems = Utilidades.inicializarZonasRecreativas();
+                listaTmp = Utilidades.inicializarZonasRecreativas();
                 break;
             case 4:
-                listaItems = Utilidades.inicializarCasasParque();
+                listaTmp = Utilidades.inicializarCasasParque();
                 break;
             case 5:
-                listaItems = Utilidades.inicializarCentrosVisitantes();
+                listaTmp = Utilidades.inicializarCentrosVisitantes();
                 break;
             case 6:
-                listaItems = Utilidades.inicializarArbolesSingulares();
+                listaTmp = Utilidades.inicializarArbolesSingulares();
                 break;
             case 7:
-                listaItems = Utilidades.inicializarZonasAcampada();
+                listaTmp = Utilidades.inicializarZonasAcampada();
                 break;
             case 8:
-                listaItems = Utilidades.inicializarCampamentos();
+                listaTmp = Utilidades.inicializarCampamentos();
                 break;
             case 9:
-                listaItems = Utilidades.inicializarRefugios();
-                break;
+                listaTmp = Utilidades.inicializarRefugios();
+                break;/*
             case 10:
                 listaItems = Utilidades.inicializarQuioscos();
                 break;

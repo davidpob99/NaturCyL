@@ -31,8 +31,8 @@ import org.osmdroid.util.GeoPoint;
  */
 public class Refugio extends EspacioNaturalItem {
     public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/refugios/1284378322579.kml";
-    public static final String[] tipos = {"Cabaña", "Chozo o Chivitera", "Caseta", "Casa o Edificación", "Refugio de montaña"};
-    public static final String[] usos = {"Libre", "Restringido", "Desuso"};
+    public static final String[] TIPOS = {"Cabaña", "Chozo o Chivitera", "Caseta", "Casa o Edificación", "Refugio de montaña"};
+    public static final String[] USOS = {"Libre", "Restringido", "Desuso"};
 
     private int tipo;
     private int uso;

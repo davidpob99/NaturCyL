@@ -73,13 +73,54 @@ public class Utilidades {
         return items;
     }
 
+    public static void inicializarComun(Element el, Node no, EspacioNaturalItem eni) {
+        switch (el.getAttribute("name")) {
+            case "atr_gr_id":
+                eni.setId(Integer.valueOf(no.getTextContent()));
+                break;
+            case "atr_gr_tiene_q":
+                eni.setQ(Boolean.valueOf(no.getTextContent()));
+                break;
+            case "equip_a_codigo":
+                eni.setCodigo(no.getTextContent());
+                break;
+            case "equip_a_observaciones":
+                eni.setObservaciones(no.getTextContent());
+                break;
+            case "equip_a_estado_fecha":
+                eni.setFechaEstado(no.getTextContent().split("T")[0]);
+                break;
+            case "equip_a_fecha_declaracion":
+                eni.setFechaDeclaracion(no.getTextContent().split("T")[0]);
+                break;
+            case "estado_id":
+                eni.setEstado(Integer.valueOf(no.getTextContent()));
+                break;
+            case "equip_b_senalizacion_ext":
+                eni.setSenalizacionExterna(Boolean.valueOf(no.getTextContent()));
+                break;
+            case "equip_b_acceso_modo":
+                eni.setAcceso(no.getTextContent());
+                break;
+            case "equip_b_nombre":
+                eni.setNombre(no.getTextContent());
+                break;
+            case "equip_b_tiene_interes":
+                eni.setInteresTuristico(Boolean.valueOf(no.getTextContent()));
+                break;
+            case "equip_b_superficie_aprox":
+                eni.setSuperficie(Double.valueOf(no.getTextContent()));
+                break;
+        }
+    }
 
-    /**
-     * Inicializa los aparcamientos, obteniéndo los datos de la web y guardándolos
-     * en objetos de tipo Aparcamiento
-     *
-     * @see Aparcamiento
-     */
+    public static void inicializarCoordenadasComun(Element e, EspacioNaturalItem eni) {
+        String c = e.getElementsByTagName("coordinates").item(0).getTextContent();
+        String[] ll = c.split(",");
+        GeoPoint gp = new GeoPoint(Double.valueOf(ll[1]), Double.valueOf(ll[0]));
+        eni.setCoordenadas(gp);
+    }
+
     protected static ListaEspaciosNaturalesItems<Aparcamiento> inicializarAparcamientos() {
         Document kml = null;
         ListaEspaciosNaturalesItems<Aparcamiento> lista = new ListaEspaciosNaturalesItems<>();
@@ -104,65 +145,28 @@ public class Utilidades {
                     if (no.getNodeType() == Node.ELEMENT_NODE) {
                         Element el = (Element) no;
                         switch (el.getAttribute("name")) {
-                            case "atr_gr_id":
-                                a.setId(Integer.valueOf(no.getTextContent()));
-                                break;
-                            case "atr_gr_tiene_q":
-                                a.setQ(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_a_codigo":
-                                a.setCodigo(no.getTextContent());
-                                break;
-                            case "equip_a_observaciones":
-                                a.setObservaciones(no.getTextContent());
-                                break;
-                            case "equip_a_estado_fecha":
-                                a.setFechaEstado(no.getTextContent().split("T")[0]);
-                                break;
-                            case "equip_a_fecha_declaracion":
-                                a.setFechaDeclaracion(no.getTextContent().split("T")[0]);
-                                break;
-                            case "estado_id":
-                                a.setEstado(Integer.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_senalizacion_ext":
-                                a.setSenalizacionExterna(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_acceso_modo":
-                                a.setAcceso(no.getTextContent());
-                                break;
-                            case "equip_b_nombre":
-                                a.setNombre(no.getTextContent());
-                                break;
-                            case "equip_b_tiene_interes":
-                                a.setInteresTuristico(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_superficie_aprox":
-                                a.setSuperficie(Double.valueOf(no.getTextContent()));
-                                break;
                             case "aparcamiento_delimitacion":
                                 a.setDelimitado(Boolean.valueOf(no.getTextContent()));
                                 break;
                             case "aparcamiento_aparcabicicletas":
                                 a.setAparcaBicis(Boolean.valueOf(no.getTextContent()));
                                 break;
+                            default:
+                                inicializarComun(el, no, a);
+                                break;
                         }
                     }
                 }
-                String c = e.getElementsByTagName("coordinates").item(0).getTextContent();
-                String[] ll = c.split(",");
-                GeoPoint gp = new GeoPoint(Double.valueOf(ll[1]), Double.valueOf(ll[0]));
-                a.setCoordenadas(gp);
+                inicializarCoordenadasComun(e, a);
                 lista.add(a);
             }
         }
         return lista;
     }
-/*
 
-    public void inicializarObservatorios() {
+    public static ListaEspaciosNaturalesItems<Observatorio> inicializarObservatorios() {
         Document kml = null;
-        listaObservatorios = new ArrayList<>();
+        ListaEspaciosNaturalesItems<Observatorio> lista = new ListaEspaciosNaturalesItems<>();
 
         try {
             kml = new ObtenerKml().execute(Observatorio.URL_KML).get();
@@ -184,64 +188,28 @@ public class Utilidades {
                     if (no.getNodeType() == Node.ELEMENT_NODE) {
                         Element el = (Element) no;
                         switch (el.getAttribute("name")) {
-                            case "atr_gr_id":
-                                o.setId(Integer.valueOf(no.getTextContent()));
-                                break;
-                            case "atr_gr_tiene_q":
-                                o.setQ(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_a_codigo":
-                                o.setCodigo(no.getTextContent());
-                                break;
-                            case "equip_a_observaciones":
-                                o.setObservaciones(no.getTextContent());
-                                break;
-                            case "equip_a_estado_fecha":
-                                o.setFechaEstado(no.getTextContent().split("T")[0]);
-                                break;
-                            case "equip_a_fecha_declaracion":
-                                o.setFechaDeclaracion(no.getTextContent().split("T")[0]);
-                                break;
-                            case "estado_id":
-                                o.setEstado(Integer.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_senalizacion_ext":
-                                o.setSenalizacionExterna(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_acceso_modo":
-                                o.setAcceso(no.getTextContent());
-                                break;
-                            case "equip_b_nombre":
-                                o.setNombre(no.getTextContent());
-                                break;
-                            case "equip_b_tiene_interes":
-                                o.setInteresTuristico(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_superficie_aprox":
-                                o.setSuperficie(Double.valueOf(no.getTextContent()));
-                                break;
                             case "observatorio_tipo":
                                 o.setTipoObservatorio(Integer.valueOf(no.getTextContent()));
                                 break;
                             case "observatorio_entorno":
                                 o.setEntornoObservatorio(no.getTextContent());
                                 break;
+                            default:
+                                inicializarComun(el, no, o);
+                                break;
                         }
                     }
                 }
-                String c = e.getElementsByTagName("coordinates").item(0).getTextContent();
-                String[] ll = c.split(",");
-                GeoPoint gp = new GeoPoint(Double.valueOf(ll[1]), Double.valueOf(ll[0]));
-                o.setCoordenadas(gp);
-                listaObservatorios.add(o);
+                inicializarCoordenadasComun(e, o);
+                lista.add(o);
             }
         }
+        return lista;
     }
 
-
-    public void inicializarMiradores() {
+    public static ListaEspaciosNaturalesItems<Mirador> inicializarMiradores() {
         Document kml = null;
-        listaMiradores = new ArrayList<>();
+        ListaEspaciosNaturalesItems<Mirador> lista = new ListaEspaciosNaturalesItems<>();
 
         try {
             kml = new ObtenerKml().execute(Mirador.URL_KML).get();
@@ -263,60 +231,24 @@ public class Utilidades {
                     if (no.getNodeType() == Node.ELEMENT_NODE) {
                         Element el = (Element) no;
                         switch (el.getAttribute("name")) {
-                            case "atr_gr_id":
-                                m.setId(Integer.valueOf(no.getTextContent()));
-                                break;
-                            case "atr_gr_tiene_q":
-                                m.setQ(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_a_codigo":
-                                m.setCodigo(no.getTextContent());
-                                break;
-                            case "equip_a_observaciones":
-                                m.setObservaciones(no.getTextContent());
-                                break;
-                            case "equip_a_estado_fecha":
-                                m.setFechaEstado(no.getTextContent().split("T")[0]);
-                                break;
-                            case "equip_a_fecha_declaracion":
-                                m.setFechaDeclaracion(no.getTextContent().split("T")[0]);
-                                break;
-                            case "estado_id":
-                                m.setEstado(Integer.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_senalizacion_ext":
-                                m.setSenalizacionExterna(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_acceso_modo":
-                                m.setAcceso(no.getTextContent());
-                                break;
-                            case "equip_b_nombre":
-                                m.setNombre(no.getTextContent());
-                                break;
-                            case "equip_b_tiene_interes":
-                                m.setInteresTuristico(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_superficie_aprox":
-                                m.setSuperficie(Double.valueOf(no.getTextContent()));
-                                break;
                             case "mirador_entorno_ambiental":
                                 m.setEntorno(no.getTextContent());
                                 break;
+                            default:
+                                inicializarComun(el, no, m);
                         }
                     }
                 }
-                String c = e.getElementsByTagName("coordinates").item(0).getTextContent();
-                String[] ll = c.split(",");
-                GeoPoint gp = new GeoPoint(Double.valueOf(ll[1]), Double.valueOf(ll[0]));
-                m.setCoordenadas(gp);
-                listaMiradores.add(m);
+                inicializarCoordenadasComun(e, m);
+                lista.add(m);
             }
         }
+        return lista;
     }
 
-    private void inicializarZonasRecreativas() {
+    public static ListaEspaciosNaturalesItems<ZonaRecreativa> inicializarZonasRecreativas() {
         Document kml = null;
-        listaZonasRecreativas = new ArrayList<>();
+        ListaEspaciosNaturalesItems<ZonaRecreativa> lista = new ListaEspaciosNaturalesItems<>();
 
         try {
             kml = new ObtenerKml().execute(ZonaRecreativa.URL_KML).get();
@@ -338,63 +270,28 @@ public class Utilidades {
                     if (no.getNodeType() == Node.ELEMENT_NODE) {
                         Element el = (Element) no;
                         switch (el.getAttribute("name")) {
-                            case "atr_gr_id":
-                                zr.setId(Integer.valueOf(no.getTextContent()));
-                                break;
-                            case "atr_gr_tiene_q":
-                                zr.setQ(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_a_codigo":
-                                zr.setCodigo(no.getTextContent());
-                                break;
-                            case "equip_a_observaciones":
-                                zr.setObservaciones(no.getTextContent());
-                                break;
-                            case "equip_a_estado_fecha":
-                                zr.setFechaEstado(no.getTextContent().split("T")[0]);
-                                break;
-                            case "equip_a_fecha_declaracion":
-                                zr.setFechaDeclaracion(no.getTextContent().split("T")[0]);
-                                break;
-                            case "estado_id":
-                                zr.setEstado(Integer.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_senalizacion_ext":
-                                zr.setSenalizacionExterna(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_acceso_modo":
-                                zr.setAcceso(no.getTextContent());
-                                break;
-                            case "equip_b_nombre":
-                                zr.setNombre(no.getTextContent());
-                                break;
-                            case "equip_b_tiene_interes":
-                                zr.setInteresTuristico(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_superficie_aprox":
-                                zr.setSuperficie(Double.valueOf(no.getTextContent()));
-                                break;
                             case "zona_rec_es_merendero":
                                 zr.setMerendero(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            default:
+                                inicializarComun(el, no, zr);
                                 break;
                         }
                     }
                 }
-                String c = e.getElementsByTagName("coordinates").item(0).getTextContent();
-                String[] ll = c.split(",");
-                GeoPoint gp = new GeoPoint(Double.valueOf(ll[1]), Double.valueOf(ll[0]));
-                zr.setCoordenadas(gp);
-                listaZonasRecreativas.add(zr);
+                inicializarCoordenadasComun(e, zr);
+                lista.add(zr);
             }
         }
+        return lista;
     }
 
-    public void inicializarCasasParque() {
+    public static ListaEspaciosNaturalesItems<CasaParque> inicializarCasasParque() {
         Document kml = null;
-        listaCasasParque = new ArrayList<>();
+        ListaEspaciosNaturalesItems<CasaParque> lista = new ListaEspaciosNaturalesItems<>();
 
         try {
-            kml = new ObtenerKml().execute(ZonaRecreativa.URL_KML).get();
+            kml = new ObtenerKml().execute(CasaParque.URL_KML).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -413,42 +310,6 @@ public class Utilidades {
                     if (no.getNodeType() == Node.ELEMENT_NODE) {
                         Element el = (Element) no;
                         switch (el.getAttribute("name")) {
-                            case "atr_gr_id":
-                                cp.setId(Integer.valueOf(no.getTextContent()));
-                                break;
-                            case "atr_gr_tiene_q":
-                                cp.setQ(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_a_codigo":
-                                cp.setCodigo(no.getTextContent());
-                                break;
-                            case "equip_a_observaciones":
-                                cp.setObservaciones(no.getTextContent());
-                                break;
-                            case "equip_a_estado_fecha":
-                                cp.setFechaEstado(no.getTextContent().split("T")[0]);
-                                break;
-                            case "equip_a_fecha_declaracion":
-                                cp.setFechaDeclaracion(no.getTextContent().split("T")[0]);
-                                break;
-                            case "estado_id":
-                                cp.setEstado(Integer.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_senalizacion_ext":
-                                cp.setSenalizacionExterna(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_acceso_modo":
-                                cp.setAcceso(no.getTextContent());
-                                break;
-                            case "equip_b_nombre":
-                                cp.setNombre(no.getTextContent());
-                                break;
-                            case "equip_b_tiene_interes":
-                                cp.setInteresTuristico(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_superficie_aprox":
-                                cp.setSuperficie(Double.valueOf(no.getTextContent()));
-                                break;
                             case "casa_parque_servicio_informativo":
                                 cp.setServicioInformativo(Boolean.valueOf(no.getTextContent()));
                                 break;
@@ -458,24 +319,24 @@ public class Utilidades {
                             case "casa_parque_tienda_verde":
                                 cp.setServicioInformativo(Boolean.valueOf(no.getTextContent()));
                                 break;
+                            default:
+                                inicializarComun(el, no, cp);
                         }
                     }
                 }
-                String c = e.getElementsByTagName("coordinates").item(0).getTextContent();
-                String[] ll = c.split(",");
-                GeoPoint gp = new GeoPoint(Double.valueOf(ll[1]), Double.valueOf(ll[0]));
-                cp.setCoordenadas(gp);
-                listaCasasParque.add(cp);
+                inicializarCoordenadasComun(e, cp);
+                lista.add(cp);
             }
         }
+        return lista;
     }
 
-    public void inicializarCentrosVisitantes() {
+    public static ListaEspaciosNaturalesItems<CentroVisitante> inicializarCentrosVisitantes() {
         Document kml = null;
-        listaCentrosVisitantes = new ArrayList<>();
+        ListaEspaciosNaturalesItems<CentroVisitante> lista = new ListaEspaciosNaturalesItems<>();
 
         try {
-            kml = new ObtenerKml().execute(ZonaRecreativa.URL_KML).get();
+            kml = new ObtenerKml().execute(CentroVisitante.URL_KML).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -494,66 +355,31 @@ public class Utilidades {
                     if (no.getNodeType() == Node.ELEMENT_NODE) {
                         Element el = (Element) no;
                         switch (el.getAttribute("name")) {
-                            case "atr_gr_id":
-                                cv.setId(Integer.valueOf(no.getTextContent()));
-                                break;
-                            case "atr_gr_tiene_q":
-                                cv.setQ(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_a_codigo":
-                                cv.setCodigo(no.getTextContent());
-                                break;
-                            case "equip_a_observaciones":
-                                cv.setObservaciones(no.getTextContent());
-                                break;
-                            case "equip_a_estado_fecha":
-                                cv.setFechaEstado(no.getTextContent().split("T")[0]);
-                                break;
-                            case "equip_a_fecha_declaracion":
-                                cv.setFechaDeclaracion(no.getTextContent().split("T")[0]);
-                                break;
-                            case "estado_id":
-                                cv.setEstado(Integer.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_senalizacion_ext":
-                                cv.setSenalizacionExterna(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_acceso_modo":
-                                cv.setAcceso(no.getTextContent());
-                                break;
-                            case "equip_b_nombre":
-                                cv.setNombre(no.getTextContent());
-                                break;
-                            case "equip_b_tiene_interes":
-                                cv.setInteresTuristico(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_superficie_aprox":
-                                cv.setSuperficie(Double.valueOf(no.getTextContent()));
-                                break;
                             case "otro_punto_interes_tipo":
                                 cv.setTipo(Integer.valueOf(no.getTextContent()));
                                 break;
                             case "otro_punto_interes_descripcion":
                                 cv.setDescripcion(no.getTextContent());
                                 break;
+                            default:
+                                inicializarComun(el, no, cv);
+                                break;
                         }
                     }
                 }
-                String c = e.getElementsByTagName("coordinates").item(0).getTextContent();
-                String[] ll = c.split(",");
-                GeoPoint gp = new GeoPoint(Double.valueOf(ll[1]), Double.valueOf(ll[0]));
-                cv.setCoordenadas(gp);
-                listaCentrosVisitantes.add(cv);
+                inicializarCoordenadasComun(e, cv);
+                lista.add(cv);
             }
         }
+        return lista;
     }
 
-    public void inicializarArbolesSingulares() {
+    public static ListaEspaciosNaturalesItems<ArbolSingular> inicializarArbolesSingulares() {
         Document kml = null;
-        listaArbolesSingulares = new ArrayList<>();
+        ListaEspaciosNaturalesItems<ArbolSingular> lista = new ListaEspaciosNaturalesItems<>();
 
         try {
-            kml = new ObtenerKml().execute(ZonaRecreativa.URL_KML).get();
+            kml = new ObtenerKml().execute(ArbolSingular.URL_KML).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -572,57 +398,161 @@ public class Utilidades {
                     if (no.getNodeType() == Node.ELEMENT_NODE) {
                         Element el = (Element) no;
                         switch (el.getAttribute("name")) {
-                            case "atr_gr_id":
-                                as.setId(Integer.valueOf(no.getTextContent()));
-                                break;
-                            case "atr_gr_tiene_q":
-                                as.setQ(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_a_codigo":
-                                as.setCodigo(no.getTextContent());
-                                break;
-                            case "equip_a_observaciones":
-                                as.setObservaciones(no.getTextContent());
-                                break;
-                            case "equip_a_estado_fecha":
-                                as.setFechaEstado(no.getTextContent().split("T")[0]);
-                                break;
-                            case "equip_a_fecha_declaracion":
-                                as.setFechaDeclaracion(no.getTextContent().split("T")[0]);
-                                break;
-                            case "estado_id":
-                                as.setEstado(Integer.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_senalizacion_ext":
-                                as.setSenalizacionExterna(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_acceso_modo":
-                                as.setAcceso(no.getTextContent());
-                                break;
-                            case "equip_b_nombre":
-                                as.setNombre(no.getTextContent());
-                                break;
-                            case "equip_b_tiene_interes":
-                                as.setInteresTuristico(Boolean.valueOf(no.getTextContent()));
-                                break;
-                            case "equip_b_superficie_aprox":
-                                as.setSuperficie(Double.valueOf(no.getTextContent()));
-                                break;
                             case "arbol_nombre":
                                 as.setNombreArbol(no.getTextContent());
                                 break;
                             case "especie_id":
                                 as.setEspecie(Integer.valueOf(no.getTextContent()));
                                 break;
+                            default:
+                                inicializarComun(el, no, as);
                         }
                     }
                 }
-                String c = e.getElementsByTagName("coordinates").item(0).getTextContent();
-                String[] ll = c.split(",");
-                GeoPoint gp = new GeoPoint(Double.valueOf(ll[1]), Double.valueOf(ll[0]));
-                as.setCoordenadas(gp);
-                listaArbolesSingulares.add(as);
+                inicializarCoordenadasComun(e, as);
+                lista.add(as);
             }
         }
-    }*/
+        return lista;
+    }
+
+    public static ListaEspaciosNaturalesItems<ZonaAcampada> inicializarZonasAcampada() {
+        Document kml = null;
+        ListaEspaciosNaturalesItems<ZonaAcampada> lista = new ListaEspaciosNaturalesItems<>();
+
+        try {
+            kml = new ObtenerKml().execute(ZonaAcampada.URL_KML).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        NodeList nodos = kml.getElementsByTagName("Placemark");
+        for (int i = 0; i < nodos.getLength(); i++) {
+            Node n = nodos.item(i);
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
+                Element e = (Element) n;
+                NodeList nl = e.getElementsByTagName("SimpleData");
+                ZonaAcampada za = new ZonaAcampada();
+
+                for (int j = 0; j < nl.getLength(); j++) {
+                    Node no = nl.item(j);
+                    if (no.getNodeType() == Node.ELEMENT_NODE) {
+                        Element el = (Element) no;
+                        switch (el.getAttribute("name")) {
+                            default:
+                                inicializarComun(el, no, za);
+                        }
+                    }
+                }
+                inicializarCoordenadasComun(e, za);
+                lista.add(za);
+            }
+        }
+        return lista;
+    }
+
+    public static ListaEspaciosNaturalesItems<Campamento> inicializarCampamentos() {
+        Document kml = null;
+        ListaEspaciosNaturalesItems<Campamento> lista = new ListaEspaciosNaturalesItems<>();
+
+        try {
+            kml = new ObtenerKml().execute(Campamento.URL_KML).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        NodeList nodos = kml.getElementsByTagName("Placemark");
+        for (int i = 0; i < nodos.getLength(); i++) {
+            Node n = nodos.item(i);
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
+                Element e = (Element) n;
+                NodeList nl = e.getElementsByTagName("SimpleData");
+                Campamento c = new Campamento();
+
+                for (int j = 0; j < nl.getLength(); j++) {
+                    Node no = nl.item(j);
+                    if (no.getNodeType() == Node.ELEMENT_NODE) {
+                        Element el = (Element) no;
+                        switch (el.getAttribute("name")) {
+                            case "campamento_servicio_informativo":
+                                c.setServicioInformativo(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "campamento_cabanas":
+                                c.setCabanas(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "campamento_parcelas":
+                                c.setParcelas(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "campamento_categoria":
+                                c.setTipoCamping(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "web":
+                                c.setWeb(no.getTextContent());
+                                break;
+                            default:
+                                inicializarComun(el, no, c);
+                                break;
+                        }
+                    }
+                }
+                inicializarCoordenadasComun(e, c);
+                lista.add(c);
+            }
+        }
+        return lista;
+    }
+
+    public static ListaEspaciosNaturalesItems<Refugio> inicializarRefugios() {
+        Document kml = null;
+        ListaEspaciosNaturalesItems<Refugio> lista = new ListaEspaciosNaturalesItems<>();
+
+        try {
+            kml = new ObtenerKml().execute(Refugio.URL_KML).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        NodeList nodos = kml.getElementsByTagName("Placemark");
+        for (int i = 0; i < nodos.getLength(); i++) {
+            Node n = nodos.item(i);
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
+                Element e = (Element) n;
+                NodeList nl = e.getElementsByTagName("SimpleData");
+                Refugio r = new Refugio();
+
+                for (int j = 0; j < nl.getLength(); j++) {
+                    Node no = nl.item(j);
+                    if (no.getNodeType() == Node.ELEMENT_NODE) {
+                        Element el = (Element) no;
+                        switch (el.getAttribute("name")) {
+                            case "refugio_tipo":
+                                r.setTipo(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "refugio_uso":
+                                r.setUso(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "refugio_actividad":
+                                r.setActividad(no.getTextContent());
+                                break;
+                            case "refugio_capacidad_pernoctar":
+                                r.setCapacidadPernoctacion(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "refugio_servicio_comida":
+                                r.setServicioComida(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            default:
+                                inicializarComun(el, no, r);
+                                break;
+                        }
+                    }
+                }
+                inicializarCoordenadasComun(e, r);
+                lista.add(r);
+            }
+        }
+        return lista;
+    }
 }

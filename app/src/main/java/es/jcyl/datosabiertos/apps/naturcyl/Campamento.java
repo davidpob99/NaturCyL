@@ -47,6 +47,12 @@ import org.osmdroid.util.GeoPoint;
  */
 public class Campamento extends EspacioNaturalItem {
     public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/campamentos_turismo/1284378128806.kml";
+    public static final String[] TIPOS = {
+            "Juvenil",
+            "Turístico",
+            "Turístico",
+            "No especificado"
+    };
 
     private boolean servicioInformativo;
     private int cabanas;

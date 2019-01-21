@@ -21,6 +21,8 @@
 
 package es.jcyl.datosabiertos.apps.naturcyl;
 
+import android.util.Log;
+
 import org.osmdroid.util.GeoPoint;
 
 import java.util.ArrayList;
@@ -69,18 +71,27 @@ public class ListaEspaciosNaturalesItems<E extends EspacioNaturalItem> {
 
     public void actualizarEnEspacio() {
         for (E e : elementos) {
-            if (e.getCodigo().substring(0, 3).equals(espacioNatural.getCodigo()) ||
-                    (poligonoContiene(e.getCoordenadas()) && !estanEnEspacio.contains(e))) {
-                estanEnEspacio.add(e);
+            try {
+                if (e.getCodigo().substring(0, 3).equals(espacioNatural.getCodigo()) ||
+                        (poligonoContiene(e.getCoordenadas()) && !estanEnEspacio.contains(e))) {
+                    estanEnEspacio.add(e);
+                }
+            } catch (NullPointerException error) {
+                Log.e("ERROR", error.toString());
             }
         }
         // Arreglar problema de códigos como el Parque Nacional y Parque Regional
         for (E e : elementos) {
             for (int i = 0; i < estanEnEspacio.size(); i++) {
                 E f = estanEnEspacio.get(i);
-                if (f.getCodigo().substring(0, 3).equals(e.getCodigo().substring(0, 3)) && !estanEnEspacio.contains(e)) {
-                    estanEnEspacio.add(e);
+                try {
+                    if (f.getCodigo().substring(0, 3).equals(e.getCodigo().substring(0, 3)) && !estanEnEspacio.contains(e)) {
+                        estanEnEspacio.add(e);
+                    }
+                } catch (NullPointerException error) {
+                    Log.e("ERROR", error.toString());
                 }
+
             }
         }
 
