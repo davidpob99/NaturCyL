@@ -28,6 +28,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -64,6 +65,19 @@ public class Utilidades {
         KmlDocument kml = new KmlDocument();
         kml.parseKMLUrl(url);
         return kml;
+    }
+
+
+    public static File obtenerFichero(File dir, String fichero) {
+        File[] files = dir.listFiles();
+        //If this pathname does not denote a directory, then listFiles() returns null.
+        for (File f : files) {
+            // Log.i("F", f.getName());
+            if (f.getName().equals(fichero)) {
+                return f;
+            }
+        }
+        return null;
     }
 
     public static ArrayList<EItem> crearItems() {

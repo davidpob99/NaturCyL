@@ -21,10 +21,15 @@
 
 package es.jcyl.datosabiertos.apps.naturcyl;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -32,19 +37,35 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.downloader.Error;
+import com.downloader.OnDownloadListener;
+import com.downloader.OnProgressListener;
+import com.downloader.PRDownloader;
+import com.downloader.PRDownloaderConfig;
+import com.downloader.Progress;
 
 import org.osmdroid.util.GeoPoint;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.ExecutionException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import dmax.dialog.SpotsDialog;
 
 /**
  * Pantalla principal de la aplicación. Inicializa y guarda todos los
@@ -97,7 +118,45 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setMessage("Cargando datos, el tiempo depende de su conexión a Internet");
 
         //inicio
-        inicializarEspacios();
+        // Ver si hay Internet
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        if (isConnected) {
+            descargar("Espacios.kml", EspacioNatural.URL_KML);
+            descargar("Observatorios.kml", Observatorio.URL_KML);
+            descargar("Miradores.kml", Mirador.URL_KML);
+            descargar("ArbolesSingulares.kml", ArbolSingular.URL_KML);
+            descargar("ZonasRecreativas.kml", ZonaRecreativa.URL_KML);
+            descargar("CasasParque.kml", CasaParque.URL_KML);
+            descargar("CentrosVisitante.kml", CentroVisitante.URL_KML);
+            descargar("ZonasAcampada.kml", ZonaAcampada.URL_KML);
+            descargar("Campamentos.kml", Campamento.URL_KML);
+            descargar("Refugios.kml", Refugio.URL_KML);
+            descargar("Quioscos.kml", Quiosco.URL_KML);
+        } else {
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_DeviceDefault_Dialog);
+            } else {
+                builder = new AlertDialog.Builder(MainActivity.this);
+            }
+            builder.setTitle("Error")
+                    .setMessage("Ha habido un error al descargar los datos. Revise su conexión a Internet")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // continue with delete
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+
+        inicializarEspacios(getFilesDir());
         Collections.sort(listaEspacios);
 
         // Cargar RecyclerView
@@ -156,15 +215,23 @@ public class MainActivity extends AppCompatActivity {
      *
      * @see EspacioNatural
      */
-    private void inicializarEspacios() {
+    private void inicializarEspacios(File dir) {
         Document kmlEspacios = null;
+        File file = Utilidades.obtenerFichero(dir, "Espacios.kml");
         listaEspacios = new ArrayList<>();
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
 
         try {
-            kmlEspacios = new ObtenerKml().execute(EspacioNatural.URL_KML).get();
-        } catch (ExecutionException e) {
+            kmlEspacios = db.parse(file);
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (SAXException e) {
             e.printStackTrace();
         }
         NodeList nodosEspacios = kmlEspacios.getElementsByTagName("Placemark");
@@ -197,4 +264,53 @@ public class MainActivity extends AppCompatActivity {
         }*/
     }
 
+    private void descargar(String nombreFichero, final String url) {
+        PRDownloader.initialize(getApplicationContext());
+        // Setting timeout globally for the download network requests:
+        PRDownloaderConfig prDownloaderConfig = PRDownloaderConfig.newBuilder()
+                .setReadTimeout(30_000)
+                .setConnectTimeout(30_000)
+                .build();
+        PRDownloader.initialize(getApplicationContext(), prDownloaderConfig);
+        final AlertDialog ad = new SpotsDialog.Builder().setContext(this).setMessage("Descargando datos").build();
+        ad.show();
+
+        int downloadId = PRDownloader.download(url, getFilesDir().toString(), nombreFichero)
+                .build()
+                .setOnProgressListener(new OnProgressListener() {
+                    @Override
+                    public void onProgress(Progress progress) {
+                        // Log.i("PROG", progress.toString());
+                    }
+                })
+                .start(new OnDownloadListener() {
+                    @Override
+                    public void onDownloadComplete() {
+                        Log.i("INFO", "Archivo " + url + " descargado en" + getFilesDir().toString());
+                        ad.dismiss();
+                    }
+
+                    @Override
+                    public void onError(Error error) {
+                        Log.e("ERROR", error.toString());
+                        ad.dismiss();
+                        AlertDialog.Builder builder;
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_DeviceDefault_Dialog);
+                        } else {
+                            builder = new AlertDialog.Builder(MainActivity.this);
+                        }
+                        builder.setTitle("Error")
+                                .setMessage("Ha habido un error al descargar los datos. Revise su conexión a Internet")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue with delete
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+
+                    }
+                });
+    }
 }
