@@ -175,10 +175,12 @@ public class EspacioActivity extends AppCompatActivity {
      * Dado el espacio natural que es un atributo de la clase calcula el punto medio
      * del polígono que forman sus coordenadas
      *
+     * https://stackoverflow.com/questions/2792443/finding-the-centroid-of-a-polygon
+     *
      * @return coordenadas del punto medio del polígono
      */
     public GeoPoint calcularPuntoMedio() {
-        double x = 0.;
+        /*double x = 0.;
         double y = 0.;
         int cont = espacioNatural.getCoordenadas().size();
         for (int i = 0; i < cont - 1; i++) {
@@ -190,7 +192,50 @@ public class EspacioActivity extends AppCompatActivity {
         x = x / cont;
         y = y / cont;
 
-        return new GeoPoint(x, y);
+        return new GeoPoint(x, y);*/
+
+        double[] centroid = {0, 0};
+        double[][] vertices = new double[2][espacioNatural.getCoordenadas().size()];
+        for (int j = 0; j < espacioNatural.getCoordenadas().size(); j++) {
+            vertices[0][j] = espacioNatural.getCoordenadas().get(j).getLatitude();
+            vertices[1][j] = espacioNatural.getCoordenadas().get(j).getLongitude();
+        }
+        double signedArea = 0.0;
+        double x0 = 0.0; // Current vertex X
+        double y0 = 0.0; // Current vertex Y
+        double x1 = 0.0; // Next vertex X
+        double y1 = 0.0; // Next vertex Y
+        double a = 0.0;  // Partial signed area
+
+        // For all vertices except last
+        int i = 0;
+        for (i = 0; i < espacioNatural.getCoordenadas().size() - 1; ++i) {
+            x0 = vertices[0][i];
+            y0 = vertices[1][i];
+            x1 = vertices[0][i + 1];
+            y1 = vertices[1][i + 1];
+            a = x0 * y1 - x1 * y0;
+            signedArea += a;
+            centroid[0] += (x0 + x1) * a;
+            centroid[1] += (y0 + y1) * a;
+        }
+
+        // Do last vertex separately to avoid performing an expensive
+        // modulus operation in each iteration.
+        x0 = vertices[0][i];
+        y0 = vertices[1][i];
+        x1 = vertices[0][0];
+        y1 = vertices[1][0];
+        a = x0 * y1 - x1 * y0;
+        signedArea += a;
+        centroid[0] += (x0 + x1) * a;
+        centroid[1] += (y0 + y1) * a;
+
+        signedArea *= 0.5;
+        centroid[0] /= (6.0 * signedArea);
+        centroid[1] /= (6.0 * signedArea);
+
+        return new GeoPoint(centroid[0], centroid[1]);
     }
 
     private boolean favoritosContieneEspacio() {

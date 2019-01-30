@@ -53,7 +53,7 @@ public class EspacioNatural implements Comparable<EspacioNatural> {
         this.coordenadas = coordenadas;
         this.imagen = imagen;
         poligonoCoordenadas = new Polygon();
-        poligonoCoordenadas.setFillColor(Color.argb(75, 0, 220, 27));
+        poligonoCoordenadas.setFillColor(Color.argb(75, 205, 220, 57));
         poligonoCoordenadas.setPoints(getCoordenadas());
         poligonoCoordenadas.setTitle(getNombre());
     }

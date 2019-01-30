@@ -29,6 +29,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -114,14 +116,6 @@ public class MainActivity extends AppCompatActivity {
             editor.putStringSet("espacios_favoritos", espacioNaturalSet).commit();
             editor.putBoolean("firstrun", false).apply();
         }*/
-        // startActivity(new Intent(MainActivity.this, IntroActivity.class));
-
-        // Diálogo de cargar
-        progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setIndeterminate(false);
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setTitle("Cargando");
-        progressDialog.setMessage("Cargando datos, el tiempo depende de su conexión a Internet");
 
         //inicio
         // Comprobar permisos
@@ -137,8 +131,6 @@ public class MainActivity extends AppCompatActivity {
             Collections.sort(listaEspacios);
             cargarRV();
         }
-
-
     }
 
 
@@ -157,8 +149,15 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.accion_ajustes) {
-            return true;
+        if (id == R.id.accion_actualizar_datos) {
+            ProgressDialog progress = ProgressDialog.show(this, "dialog title",
+                    "dialog message", true);
+            progress.show();
+            descargarTodo();
+            inicializarEspacios(getApplicationContext().getFilesDir());
+            Collections.sort(listaEspacios);
+            cargarRV();
+            progress.dismiss();
         } else if (id == R.id.accion_licencia_terceros) {
             Intent myIntent = new Intent(MainActivity.this, TextoActivity.class);
             myIntent.putExtra("accion", "licencia_tercero");
@@ -262,15 +261,14 @@ public class MainActivity extends AppCompatActivity {
                 .setConnectTimeout(30_000)
                 .build();
         PRDownloader.initialize(getApplicationContext(), prDownloaderConfig);
-        final AlertDialog ad = new SpotsDialog.Builder().setContext(this).setMessage("Descargando datos").build();
-        ad.show();
 
+        final AlertDialog ad = new SpotsDialog.Builder().setContext(MainActivity.this).setMessage("Descargando datos").build();
         int downloadId = PRDownloader.download(url, getApplicationContext().getFilesDir().toString(), nombreFichero)
                 .build()
                 .setOnProgressListener(new OnProgressListener() {
                     @Override
                     public void onProgress(Progress progress) {
-                        // Log.i("PROG", progress.toString());
+                        ad.show();
                     }
                 })
                 .start(new OnDownloadListener() {
@@ -284,39 +282,48 @@ public class MainActivity extends AppCompatActivity {
                     public void onError(Error error) {
                         Log.e("ERROR", error.toString());
                         ad.dismiss();
-                        AlertDialog.Builder builder;
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_DeviceDefault_Dialog);
-                        } else {
-                            builder = new AlertDialog.Builder(MainActivity.this);
-                        }
-                        builder.setTitle("Error")
-                                .setMessage("Ha habido un error al descargar los datos. Revise su conexión a Internet")
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        // continue with delete
-                                    }
-                                })
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .show();
-
                     }
                 });
     }
 
     private void descargarTodo() {
-        descargar("Espacios.kml", EspacioNatural.URL_KML);
-        descargar("Aparcamientos.kml", Aparcamiento.URL_KML);
-        descargar("Observatorios.kml", Observatorio.URL_KML);
-        descargar("Miradores.kml", Mirador.URL_KML);
-        descargar("ArbolesSingulares.kml", ArbolSingular.URL_KML);
-        descargar("ZonasRecreativas.kml", ZonaRecreativa.URL_KML);
-        descargar("CasasParque.kml", CasaParque.URL_KML);
-        descargar("CentrosVisitante.kml", CentroVisitante.URL_KML);
-        descargar("ZonasAcampada.kml", ZonaAcampada.URL_KML);
-        descargar("Campamentos.kml", Campamento.URL_KML);
-        descargar("Refugios.kml", Refugio.URL_KML);
-        descargar("Quioscos.kml", Quiosco.URL_KML);
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        if (isConnected) {
+            descargar("Espacios.kml", EspacioNatural.URL_KML);
+            descargar("Aparcamientos.kml", Aparcamiento.URL_KML);
+            descargar("Observatorios.kml", Observatorio.URL_KML);
+            descargar("Miradores.kml", Mirador.URL_KML);
+            descargar("ArbolesSingulares.kml", ArbolSingular.URL_KML);
+            descargar("ZonasRecreativas.kml", ZonaRecreativa.URL_KML);
+            descargar("CasasParque.kml", CasaParque.URL_KML);
+            descargar("CentrosVisitante.kml", CentroVisitante.URL_KML);
+            descargar("ZonasAcampada.kml", ZonaAcampada.URL_KML);
+            descargar("Campamentos.kml", Campamento.URL_KML);
+            descargar("Refugios.kml", Refugio.URL_KML);
+            descargar("Quioscos.kml", Quiosco.URL_KML);
+        } else {
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_DeviceDefault_Dialog);
+            } else {
+                builder = new AlertDialog.Builder(MainActivity.this);
+            }
+            builder.setTitle("Error")
+                    .setMessage("Ha habido un error al descargar los datos. Revise su conexión a Internet")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // continue with delete
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
     }
 
     private void cargarRV() {

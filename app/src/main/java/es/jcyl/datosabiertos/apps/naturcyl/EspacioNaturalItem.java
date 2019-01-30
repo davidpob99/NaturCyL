@@ -43,6 +43,7 @@ public abstract class EspacioNaturalItem {
     private boolean interesTuristico;
     private double superficie;
     private GeoPoint coordenadas;
+    private boolean accesibilidad;
 
     public EspacioNaturalItem() {
 
@@ -80,7 +81,16 @@ public abstract class EspacioNaturalItem {
                 ", interesTuristico=" + interesTuristico +
                 ", superficie=" + superficie +
                 ", coordenadas=" + coordenadas +
+                ", accesibilidad=" + accesibilidad +
                 '}';
+    }
+
+    public boolean isAccesibilidad() {
+        return accesibilidad;
+    }
+
+    public void setAccesibilidad(boolean accesibilidad) {
+        this.accesibilidad = accesibilidad;
     }
 
     public int getId() {

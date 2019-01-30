@@ -100,6 +100,12 @@ public class ItemActivity extends AppCompatActivity {
         marcador.setIcon(drawable);
         marcador.setPosition(lista.getEstanEnEspacio().get(posicion).getCoordenadas());
         marcador.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        marcador.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker, MapView mapView) {
+                return false;
+            }
+        });
         map.getOverlays().add(marcador);
 
         // Añadir elementos comunes, de EspacioNaturalItem
@@ -170,7 +176,7 @@ public class ItemActivity extends AppCompatActivity {
     }
 
     private void inicializarComun() {
-        codigo.setText(lista.getEstanEnEspacio().get(posicion).getCodigo());
+        codigo.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isAccesibilidad()));
         area.setText(String.valueOf(lista.getEstanEnEspacio().get(posicion).getSuperficie()) + MEDIDA_AREA);
         estado.setText(EspacioNaturalItem.estados[lista.getEstanEnEspacio().get(posicion).getEstado() - 1]);
         senalizacion.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isSenalizacionExterna()));

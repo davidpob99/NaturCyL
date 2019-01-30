@@ -21,6 +21,8 @@
 
 package es.jcyl.datosabiertos.apps.naturcyl;
 
+import android.util.Log;
+
 import org.osmdroid.bonuspack.kml.KmlDocument;
 import org.osmdroid.util.GeoPoint;
 import org.w3c.dom.Document;
@@ -132,6 +134,8 @@ public class Utilidades {
             case "equip_b_superficie_aprox":
                 eni.setSuperficie(Double.valueOf(no.getTextContent()));
                 break;
+            case "acc_dis_id":
+                eni.setAccesibilidad(Integer.valueOf(no.getTextContent()) == 1);
         }
     }
 
@@ -699,6 +703,9 @@ public class Utilidades {
                 inicializarCoordenadasComun(e, q);
                 lista.add(q);
             }
+        }
+        for (Quiosco q : lista.elementos) {
+            Log.i("QUIOSCO", q.toString());
         }
         return lista;
     }

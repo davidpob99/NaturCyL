@@ -82,7 +82,7 @@ public class ListaItemsActivity extends AppCompatActivity {
                 listaTmp = Utilidades.inicializarRefugios(getApplicationContext().getFilesDir());
                 break;
             case 10:
-                listaItems = Utilidades.inicializarQuioscos(getApplicationContext().getFilesDir());
+                listaTmp = Utilidades.inicializarQuioscos(getApplicationContext().getFilesDir());
                 break;/*
             case 11:
                 listaItems = Utilidades.inicializarInfraestructurasMenores();

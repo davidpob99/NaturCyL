@@ -14,8 +14,8 @@
         android:id="@+id/accion_acerca_de"
         android:title="@string/acerca" />
     <item
-        android:id="@+id/accion_ajustes"
+        android:id="@+id/accion_actualizar_datos"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="@string/actualizar_datos"
         app:showAsAction="never" />
 </menu>

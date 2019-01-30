@@ -28,7 +28,7 @@ import org.osmdroid.util.GeoPoint;
 import java.util.ArrayList;
 
 public class ListaEspaciosNaturalesItems<E extends EspacioNaturalItem> {
-    private ArrayList<E> elementos;
+    public ArrayList<E> elementos;
     private ArrayList<E> estanEnEspacio;
     private EspacioNatural espacioNatural;
 
