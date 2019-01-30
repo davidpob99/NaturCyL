@@ -68,11 +68,9 @@ public class ObtenerKml extends AsyncTask<String, Void, Document> {
     @Override
     protected void onPreExecute() {
         // super.onPreExecute();
-        MainActivity.progressDialog.show();
     }
 
     @Override
     protected void onPostExecute(Document result) {
-        MainActivity.progressDialog.dismiss();
     }
 }

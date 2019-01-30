@@ -169,6 +169,9 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.accion_acerca_de) {
             Intent myIntent = new Intent(MainActivity.this, AcercaDeActivity.class);
             startActivity(myIntent);
+        } else if (id == R.id.accion_cercanos) {
+            Intent myIntent = new Intent(MainActivity.this, CercanosActivity.class);
+            startActivity(myIntent);
         }
 
         return super.onOptionsItemSelected(item);

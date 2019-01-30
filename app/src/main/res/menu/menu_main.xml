@@ -18,4 +18,9 @@
         android:orderInCategory="100"
         android:title="@string/actualizar_datos"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/accion_cercanos"
+        android:orderInCategory="100"
+        android:title="@string/title_activity_cercanos"
+        app:showAsAction="never" />
 </menu>

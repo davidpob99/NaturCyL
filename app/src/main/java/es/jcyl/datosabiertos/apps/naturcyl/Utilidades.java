@@ -21,8 +21,6 @@
 
 package es.jcyl.datosabiertos.apps.naturcyl;
 
-import android.util.Log;
-
 import org.osmdroid.bonuspack.kml.KmlDocument;
 import org.osmdroid.util.GeoPoint;
 import org.w3c.dom.Document;
@@ -704,9 +702,9 @@ public class Utilidades {
                 lista.add(q);
             }
         }
-        for (Quiosco q : lista.elementos) {
+        /*for (Quiosco q : lista.elementos) {
             Log.i("QUIOSCO", q.toString());
-        }
+        }*/
         return lista;
     }
 }
