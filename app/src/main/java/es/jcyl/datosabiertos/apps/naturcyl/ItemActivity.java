@@ -21,14 +21,18 @@
 
 package es.jcyl.datosabiertos.apps.naturcyl;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -38,6 +42,8 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
+import java.util.Locale;
+
 public class ItemActivity extends AppCompatActivity {
     private static final double ZOOM_MAPA = 17;
     private static final String MEDIDA_AREA = " m\u00B2";
@@ -46,7 +52,6 @@ public class ItemActivity extends AppCompatActivity {
     private int posicion;
     private int tipo;
 
-    private TextView nombre;
     private TextView codigo;
     private TextView area;
     private TextView estado;
@@ -73,10 +78,11 @@ public class ItemActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         posicion = Integer.valueOf(getIntent().getStringExtra("posicion"));
         tipo = Integer.valueOf(getIntent().getStringExtra("tipo"));
+        setTitle(lista.getEstanEnEspacio().get(posicion).getNombre());
 
         // Inicializar mapa
         map = findViewById(R.id.item_map);
@@ -97,7 +103,6 @@ public class ItemActivity extends AppCompatActivity {
         map.getOverlays().add(marcador);
 
         // Añadir elementos comunes, de EspacioNaturalItem
-        nombre = findViewById(R.id.nombre_item);
         codigo = findViewById(R.id.codigo_item);
         area = findViewById(R.id.area_item);
         estado = findViewById(R.id.estado_item);
@@ -111,8 +116,60 @@ public class ItemActivity extends AppCompatActivity {
         inicializarConcreto();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_item, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.accion_compartir) {
+            Intent i = new Intent(android.content.Intent.ACTION_SEND);
+            i.setType("text/plain");
+            i.putExtra(android.content.Intent.EXTRA_TEXT, "Visite "
+                    + lista.getEstanEnEspacio().get(posicion).getNombre()
+                    + " en el espacio de " + lista.getEspacioNatural().getNombre()
+                    + ". http://maps.google.com/maps?daddr="
+                    + lista.getEstanEnEspacio().get(posicion).getCoordenadas().getLatitude()
+                    + ","
+                    + lista.getEstanEnEspacio().get(posicion).getCoordenadas().getLongitude());
+            startActivity(Intent.createChooser(i, "Compartir"));
+        } else if (id == R.id.accion_abrir) {
+            String uri = String.format(Locale.ENGLISH, "geo:%f,%f",
+                    lista.getEstanEnEspacio().get(posicion).getCoordenadas().getLatitude(),
+                    lista.getEstanEnEspacio().get(posicion).getCoordenadas().getLongitude());
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            startActivity(intent);
+        } else if (id == R.id.accion_streetview) {
+            Uri gmmIntentUri = Uri.parse("google.streetview:cbll="
+                    + lista.getEstanEnEspacio().get(posicion).getCoordenadas().getLatitude()
+                    + ","
+                    + lista.getEstanEnEspacio().get(posicion).getCoordenadas().getLongitude());
+            Intent intent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            intent.setPackage("com.google.android.apps.maps");
+            startActivity(intent);
+        } else if (id == R.id.accion_como_llegar) {
+            String uri = "http://maps.google.com/maps?daddr="
+                    + lista.getEstanEnEspacio().get(posicion).getCoordenadas().getLatitude()
+                    + "," + lista.getEstanEnEspacio().get(posicion).getCoordenadas().getLongitude()
+                    + " (" + lista.getEstanEnEspacio().get(posicion).getNombre() + ")";
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+            intent.setPackage("com.google.android.apps.maps");
+            startActivity(intent);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void inicializarComun() {
-        nombre.setText(lista.getEstanEnEspacio().get(posicion).getNombre());
         codigo.setText(lista.getEstanEnEspacio().get(posicion).getCodigo());
         area.setText(String.valueOf(lista.getEstanEnEspacio().get(posicion).getSuperficie()) + MEDIDA_AREA);
         estado.setText(EspacioNaturalItem.estados[lista.getEstanEnEspacio().get(posicion).getEstado() - 1]);

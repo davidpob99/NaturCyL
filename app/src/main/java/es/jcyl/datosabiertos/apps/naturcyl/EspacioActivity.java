@@ -21,24 +21,21 @@
 
 package es.jcyl.datosabiertos.apps.naturcyl;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -49,7 +46,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 public class EspacioActivity extends AppCompatActivity {
-    private static final int REQUEST_WRITE_STORAGE = 112;
     private static final double ZOOM_MAPA = 12;
     private static final String URL_ORTOFOTO = "http://www.idecyl.jcyl.es/IGCyL/services/PaisajeCubierta/Ortofoto/MapServer/WMSServer?request=GetCapabilities&service=WMS";
 
@@ -61,7 +57,6 @@ public class EspacioActivity extends AppCompatActivity {
     private SharedPreferences preferencias;
     private SharedPreferences.Editor editor;
 
-    private TextView espacioNombre;
     private TextView espacioTipo;
     private TextView espacioFecha;
     private ImageView espacioFoto;
@@ -101,14 +96,7 @@ public class EspacioActivity extends AppCompatActivity {
         String s = getIntent().getStringExtra("posicion");
         posicion = Integer.valueOf(s);
 
-        // Comprobar permisos
-        boolean hasPermission = (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
-        if (!hasPermission) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUEST_WRITE_STORAGE);
-        }
+
         // Inicializar mapa
         map = findViewById(R.id.espacio_map);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -121,12 +109,11 @@ public class EspacioActivity extends AppCompatActivity {
         map.getOverlayManager().add(espacioNatural.getPoligonoCoordenadas());
 
         // Inicializar texto e imagen
-        espacioNombre = findViewById(R.id.espacio_nombre);
         espacioTipo = findViewById(R.id.espacio_tipo);
         espacioFecha = findViewById(R.id.espacio_descripcion);
         espacioFoto = findViewById(R.id.espacio_foto);
 
-        espacioNombre.setText(espacioNatural.getNombre());
+        setTitle(espacioNatural.getNombre());
         espacioTipo.setText(espacioNatural.getTipoDeclaracion());
         espacioFecha.setText(espacioNatural.getFechaDeclaracion());
         Picasso.get().load(EspacioNatural.URL_IMG_BASE + espacioNatural.getImagen()).into(espacioFoto);
@@ -147,7 +134,6 @@ public class EspacioActivity extends AppCompatActivity {
         });
         rv.setAdapter(adapter);
     }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -161,19 +147,29 @@ public class EspacioActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_WRITE_STORAGE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    //reload my activity with permission granted or use the features what required the permission
-                } else {
-                    Toast.makeText(this, "The app was not allowed to write to your storage. Hence, it cannot function properly. Please consider granting it this permission", Toast.LENGTH_LONG).show();
-                }
-            }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_espacio, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.accion_leyenda) {
+            Intent myIntent = new Intent(EspacioActivity.this, TextoActivity.class);
+            myIntent.putExtra("accion", "leyenda");
+            startActivity(myIntent);
         }
 
+        return super.onOptionsItemSelected(item);
     }
+
 
     /**
      * Dado el espacio natural que es un atributo de la clase calcula el punto medio

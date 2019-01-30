@@ -15,6 +15,11 @@
     <string name="observaciones">Observaciones</string>
     <string name="acceso">Acceso</string>
     <string name="acerca">Acerca de</string>
+    <string name="compartir">Compartir</string>
+    <string name="abrir">Abrir en</string>
+    <string name="streetview">StreetView</string>
+    <string name="como_llegar">Cómo llegar</string>
+    <string name="informacion">Información</string>
     <string name="conjunto_datos">Conjuntos de datos</string>
     <string name="terceros">Licencias de terceros</string>
     <string name="gnu_gpl_v3">GNU GPL v3</string>
@@ -792,4 +797,107 @@
     &lt;<a href="https://www.gnu.org/licenses/why-not-lgpl.html">https://www.gnu.org/licenses/why-not-lgpl.html</a>&gt;.</p>]]>
     </string>
     <string name="title_activity_item"></string>
+    <string name="leyenda">
+        ## Aparcamiento\n
+
+        Espacio habilitado para el estacionamiento de vehículos, que tiene como
+        finalidad facilitar el acceso ordenado de los visitantes con el objeto de
+        disminuir los impactos sobre el entorno.
+
+        \n## Observatorio\n
+
+        Estructura, fija o móvil, que se utiliza para la observación
+        de fauna silvestre y permite la ocultación de los visitantes
+        con el objeto d eno ahuyentar o perturbar a los animales.
+
+        \n## Mirador\n
+
+        Espacio acondicionado, que por su ubicación en un punto de interés
+        paisajístico y por su buen acceso, facilita la contemplación e interpretación de
+        una vista panorámica o de elementos singulares del paisaje de manera
+        sencilla. Normalmente se ubica al aire lubre, aunque puede ser cubierto o
+        formar parte de ua estructura edificada.
+
+        \n## Zona recreativa\n
+
+        Espacio al aire libre que puede incluir dotaciones como suministro de agua,
+        servicio higiénicos, limpieza y recogida de residuos, mesas, bancos y barbacoas,
+        estacionamiento de vehículos, circuitos para el ejercicio físico y juegos infantiles,
+        en el que se pueden realizar diversas actividades recreativas, de ocio y
+        espaiciamiento durante una jornada.
+
+        \n## Casa del parque\n
+
+        Equipamiento que es punto de referencia de toda la oferta de uso público y está
+        destinado a cumplir los servicios de recepción, información e interpretación
+        relacionados con el espacio natural protegido, sus valores naturales y culturales,
+        y su gestión, así como su orientación para la visita mediante información de la
+        oferta de uso público, y de promoción y desarrollo de programas de actividades y
+        servicios vinculados al uso público y a la educación ambiental. La información e
+        interpretación se realiza tanto con atención personalizada como con
+        exposiciones interpretativas.
+
+        \n## Centro de visitantes\n
+
+        Equipamiento que es punto de referencia de toda la oferta de uso público y está
+        destinado a cumplir los servicios de recepción, información e interpretación
+        relacionados con el espacio natural protegido, sus valores naturales y culturales,
+        y su gestión, así como su orientación para la visita mediante información de la
+        oferta de uso público, y de promoción y desarrollo de programas de actividades y
+        servicios vinculados al uso público y a la educación ambiental. La información e
+        interpretación se realiza tanto con atención personalizada como con
+        exposiciones interpretativas.
+
+        \n## Árbol singular\n
+
+        Árbol de gran dimensión, de belleza o edad extraordinaria y que suele tener
+        nombre propio. Muchos de estos árboles, además, forman parte de la historia y
+        de las tradiciones populares, protagonistas en obras literarias y pictóricas.
+        Algunos de ellos han alcanzado categoría de símbolo, al convertirse en
+        aglutinadores de identidades vinculadas a un país, a una comunidad o a una
+        ideología.
+
+        \n## Zona de acampada\n
+
+        Espacio debidamente delimitado y acondicionado para permitir la instalación de
+        tiendas de campaña por breves periodos de tiempo.
+
+        \n## Campamento\n
+
+        ### Campamento Juvenil\n
+
+        Los Campamentos Juveniles son equipamientos al aire libre en los que el
+        alojamiento se realiza generalmente mediante tiendas de campaña u otros
+        elementos portátiles similares, estando dotados de unos elementos básicos fijos,
+        debidamente preparados para el desarrollo de actividades de tiempo libre,
+        culturales o educativas. Estas instalaciones pretenden ofrecer lugares
+        debidamente acondicionados, en un contacto directo con la naturaleza y la
+        diversidad medio-ambiental, para que los jóvenes, a través de sus Asociaciones
+        Juveniles, Consejos de Juventud, Ayuntamientos, Colectivos Juveniles, etc.
+        puedan realizar sus actividades y prestar servicios a la juventud (Orden
+        ADM/1015/2008, de 4 de junio, por la que se aprueba la Carta de Servicios al
+        Ciudadano de la Red de Campamentos Juveniles de Castilla y León. BOCyL, 17
+        de junio de 2008, núm 115, p.11878).
+
+        \n### Campamento de turismo (camping)\n
+
+        Equipamiento turístico en un espacio al aire libre, destinado a facilitar, mediante
+        pago, la estancia temporal de usuarios en tiendas de campaña, remolques
+        habitables, caravanas y cualquier elemnto móvil similar. Esta dotado con
+        instalaciones y servicios que facilitan su utiicación y, en algunos casos, con
+        instalaciones de carácter permanete como pueden ser casa prefabricadas
+
+        \n## Refugio\n
+
+        Estructura techada que se crea para dar cobijo y permitir el descanso y
+        pernoctación durante uno o varios días, generalmente situada en itinerarios de
+        difícil práctica. Cubren las demandas de visitantes en zonas de montaña, alta
+        montaña y otras zonas aisladas o de difícil accesibilidad.
+
+        \n## Quiosco\n
+
+        Instalaciones incluidas como infraestructuras de uso
+        público destinadas a la venta de refrescos… etc.
+
+    </string>
 </resources>

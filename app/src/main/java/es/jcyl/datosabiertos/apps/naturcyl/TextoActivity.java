@@ -25,7 +25,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.widget.TextView;
 
 import ru.noties.markwon.Markwon;
@@ -40,7 +39,7 @@ public class TextoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_texto);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         accion = getIntent().getStringExtra("accion");
         texto = findViewById(R.id.texto);
 
@@ -71,19 +70,22 @@ public class TextoActivity extends AppCompatActivity {
                 Markwon.setMarkdown(texto, getString(R.string.datos));
                 setTitle(getString(R.string.conjunto_datos));
                 break;
+            case "leyenda":
+                Markwon.setMarkdown(texto, getString(R.string.leyenda));
+                setTitle(getString(R.string.informacion));
+                break;
         }
     }
 
-    @Override
+    /*@Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        atras();
         return super.onKeyDown(keyCode, event);
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onBackPressed() {
-        atras();
-    }
+        onKeyDown(0,null);
+    }*/
 
     private void atras() {
         switch (accion) {
@@ -92,6 +94,9 @@ public class TextoActivity extends AppCompatActivity {
                 break;
             case "licencia_app":
                 startActivity(new Intent(TextoActivity.this, AcercaDeActivity.class));
+                break;
+            case "leyenda":
+                startActivity(new Intent(TextoActivity.this, EspacioActivity.class));
                 break;
         }
     }

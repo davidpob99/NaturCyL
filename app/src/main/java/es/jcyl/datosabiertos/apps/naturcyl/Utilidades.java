@@ -27,10 +27,15 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 public class Utilidades {
     public static final String[] nombresItems = {
@@ -137,15 +142,23 @@ public class Utilidades {
         eni.setCoordenadas(gp);
     }
 
-    protected static ListaEspaciosNaturalesItems<Aparcamiento> inicializarAparcamientos() {
+    protected static ListaEspaciosNaturalesItems<Aparcamiento> inicializarAparcamientos(File dir) {
         Document kml = null;
         ListaEspaciosNaturalesItems<Aparcamiento> lista = new ListaEspaciosNaturalesItems<>();
+        File file = obtenerFichero(dir, "Aparcamientos.kml");
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
 
         try {
-            kml = new ObtenerKml().execute(Aparcamiento.URL_KML).get();
-        } catch (ExecutionException e) {
+            kml = db.parse(file);
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (SAXException e) {
             e.printStackTrace();
         }
         NodeList nodos = kml.getElementsByTagName("Placemark");
@@ -180,15 +193,23 @@ public class Utilidades {
         return lista;
     }
 
-    public static ListaEspaciosNaturalesItems<Observatorio> inicializarObservatorios() {
+    public static ListaEspaciosNaturalesItems<Observatorio> inicializarObservatorios(File dir) {
         Document kml = null;
         ListaEspaciosNaturalesItems<Observatorio> lista = new ListaEspaciosNaturalesItems<>();
+        File file = obtenerFichero(dir, "Observatorios.kml");
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
 
         try {
-            kml = new ObtenerKml().execute(Observatorio.URL_KML).get();
-        } catch (ExecutionException e) {
+            kml = db.parse(file);
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (SAXException e) {
             e.printStackTrace();
         }
         NodeList nodos = kml.getElementsByTagName("Placemark");
@@ -223,15 +244,24 @@ public class Utilidades {
         return lista;
     }
 
-    public static ListaEspaciosNaturalesItems<Mirador> inicializarMiradores() {
+    public static ListaEspaciosNaturalesItems<Mirador> inicializarMiradores(File dir) {
         Document kml = null;
         ListaEspaciosNaturalesItems<Mirador> lista = new ListaEspaciosNaturalesItems<>();
 
+        File file = obtenerFichero(dir, "Miradores.kml");
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
         try {
-            kml = new ObtenerKml().execute(Mirador.URL_KML).get();
-        } catch (ExecutionException e) {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        }
+
+        try {
+            kml = db.parse(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
             e.printStackTrace();
         }
         NodeList nodos = kml.getElementsByTagName("Placemark");
@@ -262,15 +292,23 @@ public class Utilidades {
         return lista;
     }
 
-    public static ListaEspaciosNaturalesItems<ZonaRecreativa> inicializarZonasRecreativas() {
+    public static ListaEspaciosNaturalesItems<ZonaRecreativa> inicializarZonasRecreativas(File dir) {
         Document kml = null;
         ListaEspaciosNaturalesItems<ZonaRecreativa> lista = new ListaEspaciosNaturalesItems<>();
+        File file = obtenerFichero(dir, "ZonasRecreativas.kml");
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
 
         try {
-            kml = new ObtenerKml().execute(ZonaRecreativa.URL_KML).get();
-        } catch (ExecutionException e) {
+            kml = db.parse(file);
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (SAXException e) {
             e.printStackTrace();
         }
         NodeList nodos = kml.getElementsByTagName("Placemark");
@@ -302,15 +340,23 @@ public class Utilidades {
         return lista;
     }
 
-    public static ListaEspaciosNaturalesItems<CasaParque> inicializarCasasParque() {
+    public static ListaEspaciosNaturalesItems<CasaParque> inicializarCasasParque(File dir) {
         Document kml = null;
         ListaEspaciosNaturalesItems<CasaParque> lista = new ListaEspaciosNaturalesItems<>();
+        File file = obtenerFichero(dir, "CasasParque.kml");
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
 
         try {
-            kml = new ObtenerKml().execute(CasaParque.URL_KML).get();
-        } catch (ExecutionException e) {
+            kml = db.parse(file);
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (SAXException e) {
             e.printStackTrace();
         }
         NodeList nodos = kml.getElementsByTagName("Placemark");
@@ -347,15 +393,23 @@ public class Utilidades {
         return lista;
     }
 
-    public static ListaEspaciosNaturalesItems<CentroVisitante> inicializarCentrosVisitantes() {
+    public static ListaEspaciosNaturalesItems<CentroVisitante> inicializarCentrosVisitantes(File dir) {
         Document kml = null;
         ListaEspaciosNaturalesItems<CentroVisitante> lista = new ListaEspaciosNaturalesItems<>();
+        File file = obtenerFichero(dir, "CentrosVisitante.kml");
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
 
         try {
-            kml = new ObtenerKml().execute(CentroVisitante.URL_KML).get();
-        } catch (ExecutionException e) {
+            kml = db.parse(file);
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (SAXException e) {
             e.printStackTrace();
         }
         NodeList nodos = kml.getElementsByTagName("Placemark");
@@ -390,15 +444,23 @@ public class Utilidades {
         return lista;
     }
 
-    public static ListaEspaciosNaturalesItems<ArbolSingular> inicializarArbolesSingulares() {
+    public static ListaEspaciosNaturalesItems<ArbolSingular> inicializarArbolesSingulares(File dir) {
         Document kml = null;
         ListaEspaciosNaturalesItems<ArbolSingular> lista = new ListaEspaciosNaturalesItems<>();
+        File file = obtenerFichero(dir, "ArbolesSingulares.kml");
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
 
         try {
-            kml = new ObtenerKml().execute(ArbolSingular.URL_KML).get();
-        } catch (ExecutionException e) {
+            kml = db.parse(file);
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (SAXException e) {
             e.printStackTrace();
         }
         NodeList nodos = kml.getElementsByTagName("Placemark");
@@ -432,15 +494,23 @@ public class Utilidades {
         return lista;
     }
 
-    public static ListaEspaciosNaturalesItems<ZonaAcampada> inicializarZonasAcampada() {
+    public static ListaEspaciosNaturalesItems<ZonaAcampada> inicializarZonasAcampada(File dir) {
         Document kml = null;
         ListaEspaciosNaturalesItems<ZonaAcampada> lista = new ListaEspaciosNaturalesItems<>();
+        File file = obtenerFichero(dir, "ZonasAcampada.kml");
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
 
         try {
-            kml = new ObtenerKml().execute(ZonaAcampada.URL_KML).get();
-        } catch (ExecutionException e) {
+            kml = db.parse(file);
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (SAXException e) {
             e.printStackTrace();
         }
         NodeList nodos = kml.getElementsByTagName("Placemark");
@@ -468,15 +538,23 @@ public class Utilidades {
         return lista;
     }
 
-    public static ListaEspaciosNaturalesItems<Campamento> inicializarCampamentos() {
+    public static ListaEspaciosNaturalesItems<Campamento> inicializarCampamentos(File dir) {
         Document kml = null;
         ListaEspaciosNaturalesItems<Campamento> lista = new ListaEspaciosNaturalesItems<>();
+        File file = obtenerFichero(dir, "Campamentos.kml");
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
 
         try {
-            kml = new ObtenerKml().execute(Campamento.URL_KML).get();
-        } catch (ExecutionException e) {
+            kml = db.parse(file);
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (SAXException e) {
             e.printStackTrace();
         }
         NodeList nodos = kml.getElementsByTagName("Placemark");
@@ -520,15 +598,23 @@ public class Utilidades {
         return lista;
     }
 
-    public static ListaEspaciosNaturalesItems<Refugio> inicializarRefugios() {
+    public static ListaEspaciosNaturalesItems<Refugio> inicializarRefugios(File dir) {
         Document kml = null;
         ListaEspaciosNaturalesItems<Refugio> lista = new ListaEspaciosNaturalesItems<>();
+        File file = obtenerFichero(dir, "Refugios.kml");
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
 
         try {
-            kml = new ObtenerKml().execute(Refugio.URL_KML).get();
-        } catch (ExecutionException e) {
+            kml = db.parse(file);
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (SAXException e) {
             e.printStackTrace();
         }
         NodeList nodos = kml.getElementsByTagName("Placemark");
@@ -572,15 +658,23 @@ public class Utilidades {
         return lista;
     }
 
-    public static ListaEspaciosNaturalesItems<Quiosco> inicializarQuioscos() {
+    public static ListaEspaciosNaturalesItems<Quiosco> inicializarQuioscos(File dir) {
         Document kml = null;
         ListaEspaciosNaturalesItems<Quiosco> lista = new ListaEspaciosNaturalesItems<>();
+        File file = obtenerFichero(dir, "Quioscos.kml");
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
 
         try {
-            kml = new ObtenerKml().execute(Quiosco.URL_KML).get();
-        } catch (ExecutionException e) {
+            kml = db.parse(file);
+        } catch (IOException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (SAXException e) {
             e.printStackTrace();
         }
         NodeList nodos = kml.getElementsByTagName("Placemark");

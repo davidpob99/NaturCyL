@@ -21,18 +21,20 @@
 
 package es.jcyl.datosabiertos.apps.naturcyl;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +43,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.downloader.Error;
 import com.downloader.OnDownloadListener;
@@ -54,18 +57,19 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.ExecutionException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import dmax.dialog.SpotsDialog;
+
+import static java.lang.System.exit;
 
 /**
  * Pantalla principal de la aplicación. Inicializa y guarda todos los
@@ -75,6 +79,7 @@ import dmax.dialog.SpotsDialog;
  * @author David Población Criado
  */
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_WRITE_STORAGE = 112;
     private ArrayList<EspacioNatural> listaEspacios;
 
     private RecyclerView rv;
@@ -109,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putStringSet("espacios_favoritos", espacioNaturalSet).commit();
             editor.putBoolean("firstrun", false).apply();
         }*/
+        // startActivity(new Intent(MainActivity.this, IntroActivity.class));
 
         // Diálogo de cargar
         progressDialog = new ProgressDialog(MainActivity.this);
@@ -118,63 +124,23 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setMessage("Cargando datos, el tiempo depende de su conexión a Internet");
 
         //inicio
-        // Ver si hay Internet
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
-
-        if (isConnected) {
-            descargar("Espacios.kml", EspacioNatural.URL_KML);
-            descargar("Observatorios.kml", Observatorio.URL_KML);
-            descargar("Miradores.kml", Mirador.URL_KML);
-            descargar("ArbolesSingulares.kml", ArbolSingular.URL_KML);
-            descargar("ZonasRecreativas.kml", ZonaRecreativa.URL_KML);
-            descargar("CasasParque.kml", CasaParque.URL_KML);
-            descargar("CentrosVisitante.kml", CentroVisitante.URL_KML);
-            descargar("ZonasAcampada.kml", ZonaAcampada.URL_KML);
-            descargar("Campamentos.kml", Campamento.URL_KML);
-            descargar("Refugios.kml", Refugio.URL_KML);
-            descargar("Quioscos.kml", Quiosco.URL_KML);
+        // Comprobar permisos
+        boolean hasPermission = (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+        if (!hasPermission) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_STORAGE);
         } else {
-            AlertDialog.Builder builder;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_DeviceDefault_Dialog);
-            } else {
-                builder = new AlertDialog.Builder(MainActivity.this);
-            }
-            builder.setTitle("Error")
-                    .setMessage("Ha habido un error al descargar los datos. Revise su conexión a Internet")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // continue with delete
-                        }
-                    })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
+            // descargarTodo();
+            inicializarEspacios(getApplicationContext().getFilesDir());
+            Collections.sort(listaEspacios);
+            cargarRV();
         }
 
-        inicializarEspacios(getFilesDir());
-        Collections.sort(listaEspacios);
 
-        // Cargar RecyclerView
-        RecyclerView rv = findViewById(R.id.espacio_rv);
-        rv.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        rv.setLayoutManager(llm);
-        RVAdapterEspacio adapter = new RVAdapterEspacio(listaEspacios, new RVClickListenerEspacio() {
-            @Override
-            public void onClickItem(View v, int position) {
-                EspacioActivity.espacioNatural = listaEspacios.get(position);
-                Intent myIntent = new Intent(MainActivity.this, EspacioActivity.class);
-                myIntent.putExtra("posicion", String.valueOf(position));
-                startActivity(myIntent);
-            }
-        });
-        rv.setAdapter(adapter);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -209,6 +175,25 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case REQUEST_WRITE_STORAGE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    descargarTodo();
+                    inicializarEspacios(getApplicationContext().getFilesDir());
+                    Collections.sort(listaEspacios);
+                    cargarRV();
+                } else {
+                    Toast.makeText(this, "Sin el permiso de almacenamiento no puede funcionar la app. Saliendo...", Toast.LENGTH_LONG).show();
+                    exit(1);
+                }
+            }
+        }
+
+    }
+
     /**
      * Inicializa los espacios naturales, obteniéndo los datos de la web y guardándolos
      * en objetos de tipo EspacioNatural
@@ -217,8 +202,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private void inicializarEspacios(File dir) {
         Document kmlEspacios = null;
-        File file = Utilidades.obtenerFichero(dir, "Espacios.kml");
         listaEspacios = new ArrayList<>();
+        File file = Utilidades.obtenerFichero(dir, "Espacios.kml");
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = null;
         try {
@@ -229,10 +214,15 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             kmlEspacios = db.parse(file);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
+            try {
+                kmlEspacios = new ObtenerKml().execute(EspacioNatural.URL_KML).get();
+            } catch (ExecutionException r) {
+                r.printStackTrace();
+            } catch (InterruptedException r) {
+                r.printStackTrace();
+            }
         }
         NodeList nodosEspacios = kmlEspacios.getElementsByTagName("Placemark");
         for (int i = 0; i < nodosEspacios.getLength(); i++) {
@@ -275,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
         final AlertDialog ad = new SpotsDialog.Builder().setContext(this).setMessage("Descargando datos").build();
         ad.show();
 
-        int downloadId = PRDownloader.download(url, getFilesDir().toString(), nombreFichero)
+        int downloadId = PRDownloader.download(url, getApplicationContext().getFilesDir().toString(), nombreFichero)
                 .build()
                 .setOnProgressListener(new OnProgressListener() {
                     @Override
@@ -286,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
                 .start(new OnDownloadListener() {
                     @Override
                     public void onDownloadComplete() {
-                        Log.i("INFO", "Archivo " + url + " descargado en" + getFilesDir().toString());
+                        Log.i("INFO", "Archivo " + url + " descargado en" + getApplicationContext().getFilesDir().toString());
                         ad.dismiss();
                     }
 
@@ -312,5 +302,37 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    private void descargarTodo() {
+        descargar("Espacios.kml", EspacioNatural.URL_KML);
+        descargar("Aparcamientos.kml", Aparcamiento.URL_KML);
+        descargar("Observatorios.kml", Observatorio.URL_KML);
+        descargar("Miradores.kml", Mirador.URL_KML);
+        descargar("ArbolesSingulares.kml", ArbolSingular.URL_KML);
+        descargar("ZonasRecreativas.kml", ZonaRecreativa.URL_KML);
+        descargar("CasasParque.kml", CasaParque.URL_KML);
+        descargar("CentrosVisitante.kml", CentroVisitante.URL_KML);
+        descargar("ZonasAcampada.kml", ZonaAcampada.URL_KML);
+        descargar("Campamentos.kml", Campamento.URL_KML);
+        descargar("Refugios.kml", Refugio.URL_KML);
+        descargar("Quioscos.kml", Quiosco.URL_KML);
+    }
+
+    private void cargarRV() {
+        RecyclerView rv = findViewById(R.id.espacio_rv);
+        rv.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        rv.setLayoutManager(llm);
+        RVAdapterEspacio adapter = new RVAdapterEspacio(listaEspacios, new RVClickListenerEspacio() {
+            @Override
+            public void onClickItem(View v, int position) {
+                EspacioActivity.espacioNatural = listaEspacios.get(position);
+                Intent myIntent = new Intent(MainActivity.this, EspacioActivity.class);
+                myIntent.putExtra("posicion", String.valueOf(position));
+                startActivity(myIntent);
+            }
+        });
+        rv.setAdapter(adapter);
     }
 }

@@ -21,7 +21,10 @@
 
 package es.jcyl.datosabiertos.apps.naturcyl;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,7 +43,7 @@ public class ListaItemsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_items);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Obtener de EspacioActivity
         posicion = Integer.valueOf(getIntent().getStringExtra("posicion"));
@@ -49,37 +52,37 @@ public class ListaItemsActivity extends AppCompatActivity {
 
         switch (posicion) {
             case 0:
-                listaTmp = Utilidades.inicializarAparcamientos();
+                listaTmp = Utilidades.inicializarAparcamientos(getApplicationContext().getFilesDir());
                 break;
             case 1:
-                listaTmp = Utilidades.inicializarObservatorios();
+                listaTmp = Utilidades.inicializarObservatorios(getApplicationContext().getFilesDir());
                 break;
             case 2:
-                listaTmp = Utilidades.inicializarMiradores();
+                listaTmp = Utilidades.inicializarMiradores(getApplicationContext().getFilesDir());
                 break;
             case 3:
-                listaTmp = Utilidades.inicializarZonasRecreativas();
+                listaTmp = Utilidades.inicializarZonasRecreativas(getApplicationContext().getFilesDir());
                 break;
             case 4:
-                listaTmp = Utilidades.inicializarCasasParque();
+                listaTmp = Utilidades.inicializarCasasParque(getApplicationContext().getFilesDir());
                 break;
             case 5:
-                listaTmp = Utilidades.inicializarCentrosVisitantes();
+                listaTmp = Utilidades.inicializarCentrosVisitantes(getApplicationContext().getFilesDir());
                 break;
             case 6:
-                listaTmp = Utilidades.inicializarArbolesSingulares();
+                listaTmp = Utilidades.inicializarArbolesSingulares(getApplicationContext().getFilesDir());
                 break;
             case 7:
-                listaTmp = Utilidades.inicializarZonasAcampada();
+                listaTmp = Utilidades.inicializarZonasAcampada(getApplicationContext().getFilesDir());
                 break;
             case 8:
-                listaTmp = Utilidades.inicializarCampamentos();
+                listaTmp = Utilidades.inicializarCampamentos(getApplicationContext().getFilesDir());
                 break;
             case 9:
-                listaTmp = Utilidades.inicializarRefugios();
+                listaTmp = Utilidades.inicializarRefugios(getApplicationContext().getFilesDir());
                 break;
             case 10:
-                listaItems = Utilidades.inicializarQuioscos();
+                listaItems = Utilidades.inicializarQuioscos(getApplicationContext().getFilesDir());
                 break;/*
             case 11:
                 listaItems = Utilidades.inicializarInfraestructurasMenores();
@@ -91,6 +94,25 @@ public class ListaItemsActivity extends AppCompatActivity {
         listaItems = listaTmp;
         listaItems.setEspacioNatural(espacioNatural);
         listaItems.actualizarEnEspacio();
+
+        if (listaItems.getEstanEnEspacio().size() == 0) {
+            AlertDialog.Builder builder;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                builder = new AlertDialog.Builder(ListaItemsActivity.this, android.R.style.Theme_DeviceDefault_Dialog);
+            } else {
+                builder = new AlertDialog.Builder(ListaItemsActivity.this);
+            }
+            builder.setTitle("Vacío")
+                    .setMessage("No se han encontrado elementos del tipo seleccionado en este espacio.")
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            onBackPressed();
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+
+        }
 
         // Cargar RecyclerView
         RecyclerView rv = findViewById(R.id.item_rv);
