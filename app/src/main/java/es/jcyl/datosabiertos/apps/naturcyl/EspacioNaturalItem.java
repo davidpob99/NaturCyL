@@ -27,7 +27,7 @@ import org.osmdroid.util.GeoPoint;
  * Características comunes de todos los componentes
  * de los espacios naturales.
  */
-public abstract class EspacioNaturalItem {
+public class EspacioNaturalItem {
     public static final String[] estados = {"Bueno", "Sin determinar", "Aceptable", "Malo"};
 
     private int id;

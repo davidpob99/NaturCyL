@@ -34,7 +34,6 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -53,6 +52,8 @@ import com.downloader.OnProgressListener;
 import com.downloader.PRDownloader;
 import com.downloader.PRDownloaderConfig;
 import com.downloader.Progress;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.osmdroid.util.GeoPoint;
 import org.w3c.dom.Document;
@@ -61,6 +62,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
@@ -87,9 +89,13 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rv;
     protected static ProgressDialog progressDialog;
 
+    private SharedPreferences preferencias;
+    private SharedPreferences.Editor editor;
+    private ArrayList<EspacioNaturalItem> favoritos;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences preferencias = this.getSharedPreferences("es.davidpob99.naturcyl", Context.MODE_PRIVATE);
+        SharedPreferences preferencias = getSharedPreferences("es.davidpob99.naturcyl", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferencias.edit();
 
         super.onCreate(savedInstanceState);
@@ -101,21 +107,20 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                obtenerFavoritos();
+                FavoritosActivity.favoritos = favoritos;
+                Intent myIntent = new Intent(MainActivity.this, FavoritosActivity.class);
+                startActivity(myIntent);
             }
         });
 
         // Primera ejecución
-        /*if (preferencias.getBoolean("firstrun", true)) {
+        if (preferencias.getBoolean("firstrun", true)) {
             editor.clear().commit();
             Gson gson = new Gson();
-            // Favoritos favoritos = new Favoritos();
-            String cadenaEspacio = gson.toJson(espa)
-            Set<String> stringSet = new HashSet<>();
-            editor.putStringSet("espacios_favoritos", espacioNaturalSet).commit();
+            editor.putString("favoritos", "").apply();
             editor.putBoolean("firstrun", false).apply();
-        }*/
+        }
 
         //inicio
         // Comprobar permisos
@@ -344,5 +349,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         rv.setAdapter(adapter);
+    }
+
+    private void obtenerFavoritos() {
+        preferencias = getSharedPreferences("es.davidpob99.naturcyl", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = preferencias.getString("favoritos", null);
+        Type type = new TypeToken<ArrayList<EspacioNaturalItem>>() {
+        }.getType();
+        favoritos = gson.fromJson(json, type);
+        if (favoritos == null) {
+            favoritos = new ArrayList<>();
+        }
+    }
+
+    private void guardarFavoritos() {
+        preferencias = this.getSharedPreferences("es.davidpob99.naturcyl", Context.MODE_PRIVATE);
+        editor = preferencias.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(favoritos);
+        editor.putString("favoritos", json);
+        editor.apply();
     }
 }

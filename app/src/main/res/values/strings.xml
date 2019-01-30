@@ -903,4 +903,5 @@
 
     </string>
     <string name="title_activity_cercanos">Cercanos</string>
+    <string name="title_activity_favoritos">Favoritos</string>
 </resources>

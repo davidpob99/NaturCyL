@@ -21,12 +21,9 @@
 
 package es.jcyl.datosabiertos.apps.naturcyl;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,7 +34,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import org.osmdroid.api.IMapController;
@@ -53,9 +49,6 @@ public class EspacioActivity extends AppCompatActivity {
     private MapView map;
     private IMapController mapController;
     private int posicion;
-    private Favoritos favoritos;
-    private SharedPreferences preferencias;
-    private SharedPreferences.Editor editor;
 
     private TextView espacioTipo;
     private TextView espacioFecha;
@@ -73,18 +66,7 @@ public class EspacioActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                obtenerFavoritos();
-                if (favoritosContieneEspacio()) {
-                    Snackbar.make(view, "Eliminado de favoritos", Snackbar.LENGTH_LONG)
-                            .setAction("Eliminado", null).show();
-                    favoritos.espacios.remove(espacioNatural);
-                    cambiarImagen();
-                } else {
-                    Snackbar.make(view, "Guardado en favoritos", Snackbar.LENGTH_LONG)
-                            .setAction("Guardado", null).show();
-                    favoritos.espacios.add(espacioNatural);
-                    cambiarImagen();
-                }
+
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -236,33 +218,5 @@ public class EspacioActivity extends AppCompatActivity {
         centroid[1] /= (6.0 * signedArea);
 
         return new GeoPoint(centroid[0], centroid[1]);
-    }
-
-    private boolean favoritosContieneEspacio() {
-        return favoritos.espacios.contains(espacioNatural);
-    }
-
-    private void obtenerFavoritos() {
-        preferencias = this.getSharedPreferences("es.davidpob99.naturcyl", Context.MODE_PRIVATE);
-        editor = preferencias.edit();
-        Gson gson = new Gson();
-        String favsJson = preferencias.getString("favoritos", "");
-        favoritos = gson.fromJson(favsJson, Favoritos.class);
-    }
-
-    private void guardarFavoritos() {
-        preferencias = this.getSharedPreferences("es.davidpob99.naturcyl", Context.MODE_PRIVATE);
-        editor = preferencias.edit();
-        Gson gson = new Gson();
-        String favsJson = gson.toJson(favoritos);
-        editor.putString("favoritos", favsJson).commit();
-    }
-
-    private void cambiarImagen() {
-        if (favoritosContieneEspacio()) {
-            fab.setImageResource(R.drawable.ic_star_white_24dp);
-        } else {
-            fab.setImageResource(R.drawable.ic_star_border_white_24dp);
-        }
     }
 }

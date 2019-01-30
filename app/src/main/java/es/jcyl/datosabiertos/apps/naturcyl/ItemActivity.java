@@ -21,7 +21,9 @@
 
 package es.jcyl.datosabiertos.apps.naturcyl;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -37,11 +39,16 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.osmdroid.api.IMapController;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class ItemActivity extends AppCompatActivity {
@@ -60,6 +67,11 @@ public class ItemActivity extends AppCompatActivity {
     private TextView interesTuristico;
     private TextView acceso;
     private TextView observaciones;
+    private FloatingActionButton fab;
+
+    private SharedPreferences preferencias;
+    private SharedPreferences.Editor editor;
+    private ArrayList<EspacioNaturalItem> favoritos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,15 +82,34 @@ public class ItemActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                if (favoritosContieneEspacio()) {
+                    Snackbar.make(view, "Eliminado de favoritos", Snackbar.LENGTH_LONG)
+                            .setAction("Eliminado", null).show();
+                    for (EspacioNaturalItem eni : favoritos) {
+                        if (eni.getNombre().equals(lista.getEstanEnEspacio().get(posicion).getNombre())) {
+                            favoritos.remove(eni);
+                        }
+                    }
+                    cambiarImagen();
+                    guardarFavoritos();
+                } else {
+                    Snackbar.make(view, "Guardado en favoritos", Snackbar.LENGTH_LONG)
+                            .setAction("Guardado", null).show();
+                    favoritos.add(lista.getEstanEnEspacio().get(posicion));
+                    cambiarImagen();
+                    guardarFavoritos();
+                }
             }
         });
         // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        obtenerFavoritos();
+        cambiarImagen();
 
         posicion = Integer.valueOf(getIntent().getStringExtra("posicion"));
         tipo = Integer.valueOf(getIntent().getStringExtra("tipo"));
@@ -95,9 +126,11 @@ public class ItemActivity extends AppCompatActivity {
 
         // Añadir marcador
         Resources res = getResources();
-        Drawable drawable = res.getDrawable(Utilidades.fotosItems[tipo]);
         Marker marcador = new Marker(map);
-        marcador.setIcon(drawable);
+        if (tipo != -1) {
+            Drawable drawable = res.getDrawable(Utilidades.fotosItems[tipo]);
+            marcador.setIcon(drawable);
+        }
         marcador.setPosition(lista.getEstanEnEspacio().get(posicion).getCoordenadas());
         marcador.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         marcador.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
@@ -412,6 +445,46 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 break;
+            case -1:
+                break;
+        }
+    }
+
+    private boolean favoritosContieneEspacio() {
+        for (EspacioNaturalItem eni : favoritos) {
+            if (eni.getNombre().equals(lista.getEstanEnEspacio().get(posicion).getNombre())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void obtenerFavoritos() {
+        preferencias = getSharedPreferences("es.davidpob99.naturcyl", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = preferencias.getString("favoritos", null);
+        Type type = new TypeToken<ArrayList<EspacioNaturalItem>>() {
+        }.getType();
+        favoritos = gson.fromJson(json, type);
+        if (favoritos == null) {
+            favoritos = new ArrayList<>();
+        }
+    }
+
+    private void guardarFavoritos() {
+        preferencias = this.getSharedPreferences("es.davidpob99.naturcyl", Context.MODE_PRIVATE);
+        editor = preferencias.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(favoritos);
+        editor.putString("favoritos", json);
+        editor.apply();
+    }
+
+    private void cambiarImagen() {
+        if (favoritosContieneEspacio()) {
+            fab.setImageResource(R.drawable.ic_star_white_24dp);
+        } else {
+            fab.setImageResource(R.drawable.ic_star_border_white_24dp);
         }
     }
 }

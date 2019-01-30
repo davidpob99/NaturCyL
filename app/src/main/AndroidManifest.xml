@@ -16,6 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".FavoritosActivity"
+            android:label="@string/title_activity_favoritos"
+            android:parentActivityName=".MainActivity"></activity>
+        <activity
             android:name=".CercanosActivity"
             android:label="@string/title_activity_cercanos"
             android:parentActivityName=".MainActivity"
