@@ -31,12 +31,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.tileprovider.tilesource.MapBoxTileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -49,11 +51,13 @@ public class EspacioActivity extends AppCompatActivity {
     private MapView map;
     private IMapController mapController;
     private int posicion;
+    private boolean satelite = false;
 
     private TextView espacioTipo;
     private TextView espacioFecha;
     private ImageView espacioFoto;
     private FloatingActionButton fab;
+    private ImageButton imageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +74,24 @@ public class EspacioActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        imageButton = findViewById(R.id.espacio_capa_btn);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!satelite) {
+                    MapBoxTileSource tileSource = new MapBoxTileSource("MapBoxSatelliteLabelled", 1, 19, 256, ".png");
+                    //option 1, load your settings from the manifest
+                    tileSource.setAccessToken(getResources().getString(R.string.MAPBOX_ACCESS_TOKEN));
+                    tileSource.setMapboxMapid(getResources().getString(R.string.MAPBOX_MAPID));
+                    map.setTileSource(tileSource);
+                    satelite = true;
+                } else {
+                    map.setTileSource(TileSourceFactory.MAPNIK);
+                    satelite = false;
+                }
+            }
+        });
 
         /*obtenerFavoritos();
         cambiarImagen();*/

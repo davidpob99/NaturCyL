@@ -46,7 +46,16 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+
+                <ImageButton
+                    android:id="@+id/item_capa_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:background="@color/colorPrimary"
+                    app:srcCompat="@drawable/ic_layers_outline_white_24dp" />
+            </android.support.v7.widget.Toolbar>
 
             <org.osmdroid.views.MapView
                 android:id="@+id/item_map"

@@ -36,6 +36,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -43,6 +44,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.tileprovider.tilesource.MapBoxTileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
@@ -58,6 +60,7 @@ public class ItemActivity extends AppCompatActivity {
 
     private int posicion;
     private int tipo;
+    private boolean satelite = false;
 
     private TextView codigo;
     private TextView area;
@@ -68,6 +71,8 @@ public class ItemActivity extends AppCompatActivity {
     private TextView acceso;
     private TextView observaciones;
     private FloatingActionButton fab;
+    private ImageButton imageButton;
+    private MapView map;
 
     private SharedPreferences preferencias;
     private SharedPreferences.Editor editor;
@@ -75,7 +80,6 @@ public class ItemActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        MapView map;
         IMapController mapController;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item);
@@ -103,6 +107,24 @@ public class ItemActivity extends AppCompatActivity {
                     favoritos.add(lista.getEstanEnEspacio().get(posicion));
                     cambiarImagen();
                     guardarFavoritos();
+                }
+            }
+        });
+
+        imageButton = findViewById(R.id.item_capa_btn);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!satelite) {
+                    MapBoxTileSource tileSource = new MapBoxTileSource("MapBoxSatelliteLabelled", 1, 19, 256, ".png");
+                    //option 1, load your settings from the manifest
+                    tileSource.setAccessToken(getResources().getString(R.string.MAPBOX_ACCESS_TOKEN));
+                    tileSource.setMapboxMapid(getResources().getString(R.string.MAPBOX_MAPID));
+                    map.setTileSource(tileSource);
+                    satelite = true;
+                } else {
+                    map.setTileSource(TileSourceFactory.MAPNIK);
+                    satelite = false;
                 }
             }
         });
