@@ -200,6 +200,11 @@ public class ItemActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_item, menu);
+        if (tipo == 11) {
+            menu.removeItem(R.id.accion_streetview);
+            menu.removeItem(R.id.accion_abrir);
+            menu.removeItem(R.id.accion_como_llegar);
+        }
         return true;
     }
 
@@ -212,15 +217,20 @@ public class ItemActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.accion_compartir) {
+            String compartirComun = "Visite "
+                    + lista.getEstanEnEspacio().get(posicion).getNombre()
+                    + " en el espacio de " + lista.getEspacioNatural().getNombre();
             Intent i = new Intent(android.content.Intent.ACTION_SEND);
             i.setType("text/plain");
-            i.putExtra(android.content.Intent.EXTRA_TEXT, "Visite "
-                    + lista.getEstanEnEspacio().get(posicion).getNombre()
-                    + " en el espacio de " + lista.getEspacioNatural().getNombre()
-                    + ". http://maps.google.com/maps?daddr="
-                    + lista.getEstanEnEspacio().get(posicion).getCoordenadas().getLatitude()
-                    + ","
-                    + lista.getEstanEnEspacio().get(posicion).getCoordenadas().getLongitude());
+            if (tipo == 11) {
+                i.putExtra(android.content.Intent.EXTRA_TEXT, compartirComun);
+            } else {
+                i.putExtra(android.content.Intent.EXTRA_TEXT, compartirComun
+                        + ". http://maps.google.com/maps?daddr="
+                        + lista.getEstanEnEspacio().get(posicion).getCoordenadas().getLatitude()
+                        + ","
+                        + lista.getEstanEnEspacio().get(posicion).getCoordenadas().getLongitude());
+            }
             startActivity(Intent.createChooser(i, "Compartir"));
         } else if (id == R.id.accion_abrir) {
             String uri = String.format(Locale.ENGLISH, "geo:%f,%f",

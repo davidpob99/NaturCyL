@@ -16,13 +16,13 @@
     <string name="observaciones">Observaciones</string>
     <string name="actualizar_datos">Actualizar datos</string>
     <string name="acceso">Acceso</string>
-    <string name="acerca">Acerca de</string>
+    <string name="acerca">Acerca de la app</string>
     <string name="compartir">Compartir</string>
     <string name="abrir">Abrir en</string>
     <string name="streetview">StreetView</string>
     <string name="como_llegar">Cómo llegar</string>
     <string name="informacion">Información</string>
-    <string name="conjunto_datos">Conjuntos de datos</string>
+    <string name="conjunto_datos">Acerca de los datos</string>
     <string name="terceros">Licencias de terceros</string>
     <string name="gnu_gpl_v3">GNU GPL v3</string>
     <string name="acerca_de">
@@ -58,6 +58,10 @@
         * Observatorios en espacios naturales\n
         * Miradores en espacios naturales\n
         * Quioscos en espacios naturales\n
+        * Sendas en espacios naturales\n
+
+        \nLos mapas usados en la aplicación se obtienen de [OpenStreetMap](https://www.openstreetmap.org/) y de [MapBox](https://www.mapbox.com/) (satélite).\n
+        \Para calcular la navegación en las sendas se usa [Graphhopper](https://www.graphhopper.com/).
     </string>
     <string name="licencia_terceros" tools:ignore="TypographyOther">
         ## AppIntro\n

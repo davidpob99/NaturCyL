@@ -124,6 +124,7 @@ public class SendaActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
+        senda = null;
         mapa.onDetach();
     }
 

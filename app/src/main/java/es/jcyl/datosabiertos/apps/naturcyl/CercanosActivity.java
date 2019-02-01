@@ -45,6 +45,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class CercanosActivity extends AppCompatActivity implements LocationListener {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
@@ -173,6 +174,10 @@ public class CercanosActivity extends AppCompatActivity implements LocationListe
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         provider = locationManager.getBestProvider(new Criteria(), false);
         checkLocationPermission();
+
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            mensajeNoGPS();
+        }
 
         // Spinner inicializacion
         spinner = findViewById(R.id.cercanos_spinner);
@@ -326,6 +331,26 @@ public class CercanosActivity extends AppCompatActivity implements LocationListe
             }
 
         }
+    }
+
+    private void mensajeNoGPS() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Parece que su GPS está desactivado, ¿le gustaría activarlo?")
+                .setCancelable(false)
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                        Toast.makeText(CercanosActivity.this, "Lógicamente no se pueden obtener los lugares más cercanos sin su ubicación", Toast.LENGTH_LONG).show();
+                        onBackPressed();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
 
