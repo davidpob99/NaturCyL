@@ -16,9 +16,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".SendaActivity"
+            android:label="@string/title_activity_senda"
+            android:parentActivityName=".ItemActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.jcyl.datosabiertos.apps.naturcyl.ItemActivity" />
+        </activity>
+        <activity
             android:name=".FavoritosActivity"
             android:label="@string/title_activity_favoritos"
-            android:parentActivityName=".MainActivity"></activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".CercanosActivity"
             android:label="@string/title_activity_cercanos"

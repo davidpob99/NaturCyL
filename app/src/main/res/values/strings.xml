@@ -901,6 +901,12 @@
         Instalaciones incluidas como infraestructuras de uso
         público destinadas a la venta de refrescos… etc.
 
+        \n## Senda\n
+
+        Itinerario que discurre en la mayoría de los casos por caminos tradicionales,
+        recorriendo el patrimonio natural y cultural, y habilitado para la marcha y
+        excursionismo, fundamentalmente a pie y, a veces, en bicicleta o caballería.
+
     </string>
     <string name="title_activity_cercanos">Cercanos</string>
     <string name="title_activity_favoritos">Favoritos</string>
@@ -909,4 +915,5 @@
     <string name="desnivel">Desnivel</string>
     <string name="dificultad">Dificultad</string>
     <string name="ciclabilidad">Ciclabilidad</string>
+    <string name="title_activity_senda">Navegación</string>
 </resources>

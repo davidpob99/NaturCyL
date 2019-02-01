@@ -94,23 +94,29 @@ public class ItemActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (tipo == 11) {
+                    SendaActivity.senda = (Senda) lista.get(posicion);
+                    Intent myIntent = new Intent(ItemActivity.this, SendaActivity.class);
+                    startActivity(myIntent);
 
-                if (favoritosContieneEspacio()) {
-                    Snackbar.make(view, "Eliminado de favoritos", Snackbar.LENGTH_LONG)
-                            .setAction("Eliminado", null).show();
-                    for (EspacioNaturalItem eni : favoritos) {
-                        if (eni.getNombre().equals(lista.getEstanEnEspacio().get(posicion).getNombre())) {
-                            favoritos.remove(eni);
-                        }
-                    }
-                    cambiarImagen();
-                    guardarFavoritos();
                 } else {
-                    Snackbar.make(view, "Guardado en favoritos", Snackbar.LENGTH_LONG)
-                            .setAction("Guardado", null).show();
-                    favoritos.add(lista.getEstanEnEspacio().get(posicion));
-                    cambiarImagen();
-                    guardarFavoritos();
+                    if (favoritosContieneEspacio()) {
+                        Snackbar.make(view, "Eliminado de favoritos", Snackbar.LENGTH_LONG)
+                                .setAction("Eliminado", null).show();
+                        for (EspacioNaturalItem eni : favoritos) {
+                            if (eni.getNombre().equals(lista.getEstanEnEspacio().get(posicion).getNombre())) {
+                                favoritos.remove(eni);
+                            }
+                        }
+                        cambiarImagen();
+                        guardarFavoritos();
+                    } else {
+                        Snackbar.make(view, "Guardado en favoritos", Snackbar.LENGTH_LONG)
+                                .setAction("Guardado", null).show();
+                        favoritos.add(lista.getEstanEnEspacio().get(posicion));
+                        cambiarImagen();
+                        guardarFavoritos();
+                    }
                 }
             }
         });
@@ -149,6 +155,7 @@ public class ItemActivity extends AppCompatActivity {
         mapController.setZoom(ZOOM_MAPA);
         // Comprobar si es senda
         if (tipo == 11) {
+            fab.setImageResource(R.drawable.ic_directions_white_24dp);
             Senda senda = (Senda) lista.getEstanEnEspacio().get(posicion);
             Polyline line = new Polyline();   //see note below!
             line.setPoints(senda.getCoordenadasSenda());
