@@ -33,10 +33,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -48,6 +51,7 @@ import org.osmdroid.tileprovider.tilesource.MapBoxTileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Polyline;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -143,25 +147,33 @@ public class ItemActivity extends AppCompatActivity {
         map.setMultiTouchControls(true);
         mapController = map.getController();
         mapController.setZoom(ZOOM_MAPA);
-        mapController.setCenter(lista.getEstanEnEspacio().get(posicion).getCoordenadas());
-        map.setClickable(false);
+        // Comprobar si es senda
+        if (tipo == 11) {
+            Senda senda = (Senda) lista.getEstanEnEspacio().get(posicion);
+            Polyline line = new Polyline();   //see note below!
+            line.setPoints(senda.getCoordenadasSenda());
+            map.getOverlayManager().add(line);
+            mapController.setCenter(senda.getCoordenadasSenda().get(Math.round(senda.getCoordenadasSenda().size() / 2)));
 
-        // Añadir marcador
-        Resources res = getResources();
-        Marker marcador = new Marker(map);
-        if (tipo != -1) {
-            Drawable drawable = res.getDrawable(Utilidades.fotosItems[tipo]);
-            marcador.setIcon(drawable);
-        }
-        marcador.setPosition(lista.getEstanEnEspacio().get(posicion).getCoordenadas());
-        marcador.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        marcador.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker, MapView mapView) {
-                return false;
+        } else {
+            mapController.setCenter(lista.getEstanEnEspacio().get(posicion).getCoordenadas());
+            // Añadir marcador
+            Resources res = getResources();
+            Marker marcador = new Marker(map);
+            if (tipo != -1) {
+                Drawable drawable = res.getDrawable(Utilidades.fotosItems[tipo]);
+                marcador.setIcon(drawable);
             }
-        });
-        map.getOverlays().add(marcador);
+            marcador.setPosition(lista.getEstanEnEspacio().get(posicion).getCoordenadas());
+            marcador.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            marcador.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker, MapView mapView) {
+                    return false;
+                }
+            });
+            map.getOverlays().add(marcador);
+        }
 
         // Añadir elementos comunes, de EspacioNaturalItem
         codigo = findViewById(R.id.codigo_item);
@@ -467,6 +479,30 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 break;
+            case 11:
+                Senda s = (Senda) lista.get(posicion);
+                LayoutInflater layoutInflater = LayoutInflater.from(this);
+                View tablaSenda = layoutInflater.inflate(R.layout.table_senda, null);
+                raiz.addView(tablaSenda);
+
+                TextView longitud = tablaSenda.findViewById(R.id.longitud_senda);
+                TextView tiempo = tablaSenda.findViewById(R.id.tiempo_senda);
+                TextView desnivel = tablaSenda.findViewById(R.id.desnivel_senda);
+                TextView dificultad = tablaSenda.findViewById(R.id.dificultad_senda);
+                TextView ciclabilidad = tablaSenda.findViewById(R.id.ciclabilidad_senda);
+                TextView codigo = tablaSenda.findViewById(R.id.codigo_senda);
+                ImageView fotoDificultad = tablaSenda.findViewById(R.id.foto_dificultad_senda);
+
+                Log.i("SENDA", s.toString());
+
+                longitud.setText(s.getLongitud() + " m");
+                tiempo.setText(s.getTiempoRecorrido() + " min");
+                desnivel.setText(s.getDesnivel() + " m");
+                dificultad.setText(Senda.DIFICULTAD[s.getDificultad() - 1]);
+                ciclabilidad.setText(s.getCiclabilidad() + " %");
+                codigo.setText(s.getCodigoSenda());
+                fotoDificultad.setColorFilter(getResources().getColor(Senda.COLORES_DIFICULTAD[s.getDificultad() - 1]));
+
             case -1:
                 break;
         }

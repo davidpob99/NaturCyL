@@ -49,7 +49,8 @@ public class Utilidades {
             "Zonas de acampada",
             "Campamentos",
             "Refugios",
-            "Quioscos"
+            "Quioscos",
+            "Sendas"
 
     };
     public static final int[] fotosItems = {
@@ -63,7 +64,8 @@ public class Utilidades {
             R.drawable.ic_tent_black_24dp,
             R.drawable.ic_tent_black_24dp,
             R.drawable.ic_castle_black_24dp,
-            R.drawable.ic_store_black_24dp
+            R.drawable.ic_store_black_24dp,
+            R.drawable.ic_routes_black_24dp
     };
 
     public static KmlDocument obtenerKmlDeUrl(String url) {
@@ -702,9 +704,87 @@ public class Utilidades {
                 lista.add(q);
             }
         }
-        /*for (Quiosco q : lista.elementos) {
-            Log.i("QUIOSCO", q.toString());
-        }*/
+        return lista;
+    }
+
+    public static ListaEspaciosNaturalesItems<Senda> inicializarSendas(File dir) {
+        Document kml = null;
+        ListaEspaciosNaturalesItems<Senda> lista = new ListaEspaciosNaturalesItems<>();
+        File file = obtenerFichero(dir, "Sendas.kml");
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+        try {
+            db = dbf.newDocumentBuilder();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            kml = db.parse(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
+        NodeList nodos = kml.getElementsByTagName("Placemark");
+        for (int i = 0; i < nodos.getLength(); i++) {
+            Node n = nodos.item(i);
+            if (n.getNodeType() == Node.ELEMENT_NODE) {
+                Element e = (Element) n;
+                NodeList nl = e.getElementsByTagName("SimpleData");
+                Senda s = new Senda();
+
+                for (int j = 0; j < nl.getLength(); j++) {
+                    Node no = nl.item(j);
+                    if (no.getNodeType() == Node.ELEMENT_NODE) {
+                        Element el = (Element) no;
+                        switch (el.getAttribute("name")) {
+                            default:
+                                inicializarComun(el, no, s);
+                                break;
+                            case "senda_tipo":
+                                s.setTipo(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "senda_longitud":
+                                s.setLongitud(Double.valueOf(no.getTextContent()));
+                                break;
+                            case "senda_tiempo_recorrido":
+                                s.setTiempoRecorrido(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "senda_ciclabilidad":
+                                s.setCiclabilidad(Double.valueOf(no.getTextContent()));
+                                break;
+                            case "senda_dificultad":
+                                s.setDificultad(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "senda_desnivel":
+                                s.setDesnivel(Integer.valueOf(no.getTextContent()));
+                                break;
+                            case "tipo_oficial":
+                                s.setTipoOficial(Integer.valueOf(no.getTextContent()));
+                                break;
+                        }
+                    }
+                }
+
+                try {
+                    String c = e.getElementsByTagName("coordinates").item(0).getTextContent();
+                    // Log.i("Coordenadas", c);
+                    String[] coordenadas = c.split(" ");
+                    ArrayList<GeoPoint> coordenadasSenda = new ArrayList<>();
+                    for (String coord : coordenadas) {
+                        String[] ll = coord.split(",");
+                        GeoPoint gp = new GeoPoint(Double.valueOf(ll[1]), Double.valueOf(ll[0]));
+                        coordenadasSenda.add(gp);
+                    }
+                    s.setCoordenadasSenda(coordenadasSenda);
+                    lista.add(s);
+                } catch (NullPointerException error) {
+                    error.printStackTrace();
+                }
+
+            }
+        }
         return lista;
     }
 }

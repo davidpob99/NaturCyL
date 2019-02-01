@@ -904,4 +904,9 @@
     </string>
     <string name="title_activity_cercanos">Cercanos</string>
     <string name="title_activity_favoritos">Favoritos</string>
+    <string name="longitud">Longitud</string>
+    <string name="tiempo">Tiempo</string>
+    <string name="desnivel">Desnivel</string>
+    <string name="dificultad">Dificultad</string>
+    <string name="ciclabilidad">Ciclabilidad</string>
 </resources>

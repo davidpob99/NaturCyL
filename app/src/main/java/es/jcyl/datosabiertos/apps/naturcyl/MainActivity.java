@@ -315,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
             descargar("Campamentos.kml", Campamento.URL_KML);
             descargar("Refugios.kml", Refugio.URL_KML);
             descargar("Quioscos.kml", Quiosco.URL_KML);
+            descargar("Sendas.kml", Senda.URL_KML);
         } else {
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
