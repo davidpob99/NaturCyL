@@ -83,6 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="sans-serif-light"
                     android:gravity="center"
                     android:text="TextView" />
 
@@ -97,6 +98,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="sans-serif-light"
                     android:gravity="center"
                     android:text="TextView" />
             </LinearLayout>
@@ -143,6 +145,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="sans-serif-light"
                     android:gravity="center"
                     android:text="TextView" />
 
@@ -157,6 +160,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="sans-serif-light"
                     android:gravity="center"
                     android:text="TextView" />
             </LinearLayout>
@@ -203,6 +207,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="sans-serif-light"
                     android:gravity="center"
                     android:text="TextView" />
 
@@ -217,6 +222,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:fontFamily="sans-serif-light"
                     android:gravity="center"
                     android:text="TextView" />
             </LinearLayout>
@@ -234,6 +240,7 @@
             android:id="@+id/acceso_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
             android:padding="8dp"
             android:text="TextView" />
 
@@ -249,6 +256,7 @@
             android:id="@+id/observaciones_item"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
             android:padding="8dp"
             android:text="TextView" />
 

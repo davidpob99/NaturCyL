@@ -286,6 +286,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(booleanAEspanol(a.isDelimitado()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -295,6 +296,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(booleanAEspanol(a.isAparcaBicis()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -307,6 +309,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(Observatorio.TIPOS[o.getTipoObservatorio() - 1 < 3 ? o.getTipoObservatorio() : 2]);
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -316,6 +319,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(o.getEntornoObservatorio());
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -328,6 +332,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(m.getEntorno());
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -340,6 +345,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(booleanAEspanol(zr.isMerendero()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -352,6 +358,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(booleanAEspanol(cp.isServicioInformativo()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -361,6 +368,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(booleanAEspanol(cp.isBiblioteca()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -370,6 +378,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(booleanAEspanol(cp.isTiendaVerde()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -382,6 +391,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(CentroVisitante.TIPOS[cv.getTipo() - 1 < 10 ? cv.getTipo() : 9]);
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -391,6 +401,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(cv.getDescripcion());
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -403,6 +414,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(as.getNombreArbol());
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -417,6 +429,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(String.valueOf(c.getCabanas()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -426,6 +439,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(String.valueOf(c.getParcelas()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -435,6 +449,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(Campamento.TIPOS[c.getTipoCamping() - 1 < 3 ? c.getTipoCamping() - 1 : 3]);
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -444,6 +459,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(c.getWeb());
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -456,6 +472,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(Refugio.TIPOS[r.getTipo() - 1 < 5 ? r.getTipo() : 4]);
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -465,6 +482,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(Refugio.USOS[r.getUso() - 1 < 3 ? r.getUso() : 2]);
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -474,6 +492,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(r.getActividad());
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -483,6 +502,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(booleanAEspanol(r.isCapacidadPernoctacion()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -492,6 +512,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
                 tv.setText(booleanAEspanol(r.isServicioComida()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
