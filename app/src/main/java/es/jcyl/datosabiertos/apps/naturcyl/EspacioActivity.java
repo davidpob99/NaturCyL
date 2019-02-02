@@ -43,6 +43,12 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+
 public class EspacioActivity extends AppCompatActivity {
     private static final double ZOOM_MAPA = 12;
     private static final String URL_ORTOFOTO = "http://www.idecyl.jcyl.es/IGCyL/services/PaisajeCubierta/Ortofoto/MapServer/WMSServer?request=GetCapabilities&service=WMS";
@@ -100,7 +106,6 @@ public class EspacioActivity extends AppCompatActivity {
         String s = getIntent().getStringExtra("posicion");
         posicion = Integer.valueOf(s);
 
-
         // Inicializar mapa
         map = findViewById(R.id.espacio_map);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -122,21 +127,26 @@ public class EspacioActivity extends AppCompatActivity {
         espacioFecha.setText(espacioNatural.getFechaDeclaracion());
         Picasso.get().load(EspacioNatural.URL_IMG_BASE + espacioNatural.getImagen()).into(espacioFoto);
 
+        Set<Integer> itemsDisponibles = comrobarItems();
+
         // Cargar RecyclerView
         RecyclerView rv = findViewById(R.id.espacio_item_rv);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        RVAdapterEspacioItem adapter = new RVAdapterEspacioItem(Utilidades.crearItems(), new RVClickListenerEspacio() {
+        final ArrayList<EItem> listaItemsDisponibles = Utilidades.crearItems(itemsDisponibles);
+        RVAdapterEspacioItem adapter = new RVAdapterEspacioItem(listaItemsDisponibles, new RVClickListenerEspacio() {
             @Override
             public void onClickItem(View v, int position) {
                 ListaItemsActivity.espacioNatural = espacioNatural;
                 Intent myIntent = new Intent(EspacioActivity.this, ListaItemsActivity.class);
-                myIntent.putExtra("posicion", String.valueOf(position));
+                myIntent.putExtra("posicion", String.valueOf(listaItemsDisponibles.get(position).getPosicion()));
                 startActivity(myIntent);
             }
         });
         rv.setAdapter(adapter);
+
+
     }
     @Override
     public void onPause() {
@@ -240,5 +250,25 @@ public class EspacioActivity extends AppCompatActivity {
         centroid[1] /= (6.0 * signedArea);
 
         return new GeoPoint(centroid[0], centroid[1]);
+    }
+
+    private Set comrobarItems() {
+        Set<Integer> set = new HashSet();
+
+        for (int i = 0; i < Utilidades.nombresFicheros.length; i++) {
+            try {
+                BufferedReader bf = new BufferedReader(new FileReader(getFilesDir() + "/" + Utilidades.nombresFicheros[i] + ".kml"));
+                String linea;
+                while ((linea = bf.readLine()) != null) {
+                    if (linea.contains(espacioNatural.getCodigo())) {
+                        set.add(i);
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return set;
     }
 }

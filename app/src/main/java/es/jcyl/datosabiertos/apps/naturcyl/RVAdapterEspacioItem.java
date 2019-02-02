@@ -60,8 +60,11 @@ public class RVAdapterEspacioItem extends RecyclerView.Adapter<RVAdapterEspacioI
 
     @Override
     public void onBindViewHolder(EspacioItemViewHolder espacioItemViewHolder, int i) {
-        espacioItemViewHolder.itemNombre.setText(items.get(i).getNombre());
-        espacioItemViewHolder.itemFoto.setImageResource(items.get(i).getFoto());
+        if (items.get(i) != null) {
+            espacioItemViewHolder.itemNombre.setText(items.get(i).getNombre());
+            espacioItemViewHolder.itemFoto.setImageResource(items.get(i).getFoto());
+        }
+
     }
 
     @Override

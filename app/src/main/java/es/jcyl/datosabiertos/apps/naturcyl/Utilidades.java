@@ -32,6 +32,7 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -53,6 +54,23 @@ public class Utilidades {
             "Sendas"
 
     };
+
+    public static final String[] nombresFicheros = {
+            "Aparcamientos",
+            "Observatorios",
+            "Miradores",
+            "ZonasRecreativas",
+            "CasasParque",
+            "CentrosVisitante",
+            "ArbolesSingulares",
+            "ZonasAcampada",
+            "Campamentos",
+            "Refugios",
+            "Quioscos",
+            "Sendas"
+
+    };
+
     public static final int[] fotosItems = {
             R.drawable.ic_local_parking_black_24dp,
             R.drawable.ic_binoculars_black_24dp,
@@ -87,11 +105,13 @@ public class Utilidades {
         return null;
     }
 
-    public static ArrayList<EItem> crearItems() {
+    public static ArrayList<EItem> crearItems(Set set) {
         ArrayList<EItem> items = new ArrayList<>();
         for (int i = 0; i < nombresItems.length; i++) {
-            EItem item = new EItem(nombresItems[i], fotosItems[i]);
-            items.add(item);
+            if (set.contains(i)) {
+                EItem item = new EItem(nombresItems[i], fotosItems[i], i);
+                items.add(item);
+            }
         }
         return items;
     }

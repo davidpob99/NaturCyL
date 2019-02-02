@@ -24,10 +24,12 @@ package es.jcyl.datosabiertos.apps.naturcyl;
 public class EItem {
     private String nombre;
     private int foto;
+    private int posicion;
 
-    public EItem(String nombre, int foto) {
+    public EItem(String nombre, int foto, int posicion) {
         this.nombre = nombre;
         this.foto = foto;
+        this.posicion = posicion;
     }
 
     public String getNombre() {
@@ -36,5 +38,9 @@ public class EItem {
 
     public int getFoto() {
         return foto;
+    }
+
+    public int getPosicion() {
+        return posicion;
     }
 }
