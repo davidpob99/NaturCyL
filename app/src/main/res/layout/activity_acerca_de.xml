@@ -23,7 +23,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AcercaDeActivity">
+    tools:context="es.davidpob99.naturcyl.AcercaDeActivity">
 
     <ScrollView
         android:layout_width="match_parent"

@@ -25,7 +25,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".EspacioActivity"
+    tools:context="es.davidpob99.naturcyl.EspacioActivity"
     tools:showIn="@layout/activity_espacio">
 
     <android.support.constraint.ConstraintLayout

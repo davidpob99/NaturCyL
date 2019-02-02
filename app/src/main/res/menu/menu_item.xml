@@ -22,7 +22,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="es.jcyl.datosabiertos.apps.naturcyl.ItemActivity">
+    tools:context="es.davidpob99.datosabiertos.apps.naturcyl.es.jcyl.naturcyl.ItemActivity">
     <item
         android:id="@+id/accion_compartir"
         android:orderInCategory="100"

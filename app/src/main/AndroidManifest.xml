@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="es.jcyl.datosabiertos.apps.naturcyl">
+    package="es.davidpob99.naturcyl">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,50 +16,50 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".SendaActivity"
+            android:name="es.davidpob99.naturcyl.SendaActivity"
             android:label="@string/title_activity_senda"
-            android:parentActivityName=".ItemActivity"
+            android:parentActivityName="es.davidpob99.naturcyl.ItemActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="es.jcyl.datosabiertos.apps.naturcyl.ItemActivity" />
+                android:value="es.davidpob99.datosabiertos.apps.naturcyl.es.jcyl.naturcyl.ItemActivity" />
         </activity>
         <activity
-            android:name=".FavoritosActivity"
+            android:name="es.davidpob99.naturcyl.FavoritosActivity"
             android:label="@string/title_activity_favoritos"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName="es.davidpob99.naturcyl.MainActivity" />
         <activity
-            android:name=".CercanosActivity"
+            android:name="es.davidpob99.naturcyl.CercanosActivity"
             android:label="@string/title_activity_cercanos"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="es.davidpob99.naturcyl.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="es.jcyl.datosabiertos.apps.naturcyl.MainActivity" />
+                android:value="es.davidpob99.datosabiertos.apps.naturcyl.es.jcyl.naturcyl.MainActivity" />
         </activity>
-        <activity android:name=".AcercaDeActivity" />
-        <activity android:name=".TextoActivity" />
-        <activity android:name=".ListaItemsActivity" />
+        <activity android:name="es.davidpob99.naturcyl.AcercaDeActivity" />
+        <activity android:name="es.davidpob99.naturcyl.TextoActivity" />
+        <activity android:name="es.davidpob99.naturcyl.ListaItemsActivity" />
         <activity
-            android:name=".ItemActivity"
+            android:name="es.davidpob99.naturcyl.ItemActivity"
             android:label="@string/title_activity_item"
-            android:parentActivityName=".EspacioActivity"
+            android:parentActivityName="es.davidpob99.naturcyl.EspacioActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="es.jcyl.datosabiertos.apps.naturcyl.EspacioActivity" />
+                android:value="es.davidpob99.datosabiertos.apps.naturcyl.es.jcyl.naturcyl.EspacioActivity" />
         </activity>
         <activity
-            android:name=".EspacioActivity"
+            android:name="es.davidpob99.naturcyl.EspacioActivity"
             android:label="@string/title_activity_espacio"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="es.davidpob99.naturcyl.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="es.jcyl.datosabiertos.apps.naturcyl.MainActivity" />
+                android:value="es.davidpob99.datosabiertos.apps.naturcyl.es.jcyl.naturcyl.MainActivity" />
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name="es.davidpob99.naturcyl.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -68,7 +68,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".IntroActivity" />
+        <activity android:name="es.davidpob99.naturcyl.IntroActivity" />
     </application>
 
 </manifest>
