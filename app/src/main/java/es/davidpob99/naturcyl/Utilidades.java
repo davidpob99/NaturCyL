@@ -401,13 +401,17 @@ public class Utilidades {
                                 cp.setServicioInformativo(Boolean.valueOf(no.getTextContent()));
                                 break;
                             case "casa_parque_cida_biblio":
-                                cp.setServicioInformativo(Boolean.valueOf(no.getTextContent()));
+                                cp.setBiblioteca(Boolean.valueOf(no.getTextContent()));
                                 break;
                             case "casa_parque_tienda_verde":
-                                cp.setServicioInformativo(Boolean.valueOf(no.getTextContent()));
+                                cp.setTiendaVerde(Boolean.valueOf(no.getTextContent()));
+                                break;
+                            case "web":
+                                cp.setWeb(no.getTextContent());
                                 break;
                             default:
                                 inicializarComun(el, no, cp);
+                                break;
                         }
                     }
                 }

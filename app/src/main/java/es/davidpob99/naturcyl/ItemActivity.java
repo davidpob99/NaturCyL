@@ -33,6 +33,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -280,7 +281,7 @@ public class ItemActivity extends AppCompatActivity {
         TextView tv;
         switch (tipo) {
             case 0:
-                Aparcamiento a = (Aparcamiento) lista.get(posicion);
+                Aparcamiento a = (Aparcamiento) lista.getEstanEnEspacio().get(posicion);
                 tv = new TextView(this);
                 tv.setText("Delimitado");
                 tv.setTypeface(null, Typeface.BOLD);
@@ -303,7 +304,7 @@ public class ItemActivity extends AppCompatActivity {
                 raiz.addView(tv);
                 break;
             case 1:
-                Observatorio o = (Observatorio) lista.get(posicion);
+                Observatorio o = (Observatorio) lista.getEstanEnEspacio().get(posicion);
                 tv = new TextView(this);
                 tv.setText("Tipo");
                 tv.setTypeface(null, Typeface.BOLD);
@@ -326,7 +327,7 @@ public class ItemActivity extends AppCompatActivity {
                 raiz.addView(tv);
                 break;
             case 2:
-                Mirador m = (Mirador) lista.get(posicion);
+                Mirador m = (Mirador) lista.getEstanEnEspacio().get(posicion);
                 tv = new TextView(this);
                 tv.setText("Entorno");
                 tv.setTypeface(null, Typeface.BOLD);
@@ -339,7 +340,7 @@ public class ItemActivity extends AppCompatActivity {
                 raiz.addView(tv);
                 break;
             case 3:
-                ZonaRecreativa zr = (ZonaRecreativa) lista.get(posicion);
+                ZonaRecreativa zr = (ZonaRecreativa) lista.getEstanEnEspacio().get(posicion);
                 tv = new TextView(this);
                 tv.setText("Merendero");
                 tv.setTypeface(null, Typeface.BOLD);
@@ -352,7 +353,7 @@ public class ItemActivity extends AppCompatActivity {
                 raiz.addView(tv);
                 break;
             case 4:
-                CasaParque cp = (CasaParque) lista.get(posicion);
+                CasaParque cp = (CasaParque) lista.getEstanEnEspacio().get(posicion);
                 tv = new TextView(this);
                 tv.setText("Servicio informativo");
                 tv.setTypeface(null, Typeface.BOLD);
@@ -383,9 +384,19 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setText(booleanAEspanol(cp.isTiendaVerde()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
+                tv.setText("Página web");
+                tv.setTypeface(null, Typeface.BOLD);
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
+                tv = new TextView(this);
+                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setText(cp.getWeb());
+                Linkify.addLinks(tv, Linkify.WEB_URLS);
+                tv.setPadding(8, 8, 8, 8);
+                raiz.addView(tv);
                 break;
             case 5:
-                CentroVisitante cv = (CentroVisitante) lista.get(posicion);
+                CentroVisitante cv = (CentroVisitante) lista.getEstanEnEspacio().get(posicion);
                 tv = new TextView(this);
                 tv.setText("Tipo");
                 tv.setTypeface(null, Typeface.BOLD);
@@ -408,7 +419,7 @@ public class ItemActivity extends AppCompatActivity {
                 raiz.addView(tv);
                 break;
             case 6:
-                ArbolSingular as = (ArbolSingular) lista.get(posicion);
+                ArbolSingular as = (ArbolSingular) lista.getEstanEnEspacio().get(posicion);
                 tv = new TextView(this);
                 tv.setText("Nombre");
                 tv.setTypeface(null, Typeface.BOLD);
@@ -423,7 +434,7 @@ public class ItemActivity extends AppCompatActivity {
             case 7:
                 break;
             case 8:
-                Campamento c = (Campamento) lista.get(posicion);
+                Campamento c = (Campamento) lista.getEstanEnEspacio().get(posicion);
                 tv = new TextView(this);
                 tv.setText("Número de cabañas");
                 tv.setTypeface(null, Typeface.BOLD);
@@ -466,7 +477,7 @@ public class ItemActivity extends AppCompatActivity {
                 raiz.addView(tv);
                 break;
             case 9:
-                Refugio r = (Refugio) lista.get(posicion);
+                Refugio r = (Refugio) lista.getEstanEnEspacio().get(posicion);
                 tv = new TextView(this);
                 tv.setText("Tipo");
                 tv.setTypeface(null, Typeface.BOLD);
@@ -519,7 +530,7 @@ public class ItemActivity extends AppCompatActivity {
                 raiz.addView(tv);
                 break;
             case 11:
-                Senda s = (Senda) lista.get(posicion);
+                Senda s = (Senda) lista.getEstanEnEspacio().get(posicion);
                 LayoutInflater layoutInflater = LayoutInflater.from(this);
                 View tablaSenda = layoutInflater.inflate(R.layout.table_senda, null);
                 raiz.addView(tablaSenda);

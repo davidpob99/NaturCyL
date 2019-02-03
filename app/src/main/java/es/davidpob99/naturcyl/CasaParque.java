@@ -28,6 +28,7 @@ public class CasaParque extends EspacioNaturalItem {
     private boolean servicioInformativo;
     private boolean biblioteca;
     private boolean tiendaVerde;
+    private String web;
 
     public CasaParque() {
         super();
@@ -39,6 +40,14 @@ public class CasaParque extends EspacioNaturalItem {
         this.servicioInformativo = servicioInformativo;
         this.biblioteca = biblioteca;
         this.tiendaVerde = tiendaVerde;
+    }
+
+    public String getWeb() {
+        return web;
+    }
+
+    public void setWeb(String web) {
+        this.web = web;
     }
 
     public boolean isServicioInformativo() {
