@@ -40,6 +40,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 
 public class Utilidades {
+    public static final String NO_DATO = "Sin datos";
     public static final String[] nombresItems = {
             "Aparcamientos",
             "Observatorios",

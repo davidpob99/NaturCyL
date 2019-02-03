@@ -263,13 +263,13 @@ public class ItemActivity extends AppCompatActivity {
 
     private void inicializarComun() {
         codigo.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isAccesibilidad()));
-        area.setText(String.valueOf(lista.getEstanEnEspacio().get(posicion).getSuperficie()) + MEDIDA_AREA);
+        area.setText(lista.getEstanEnEspacio().get(posicion).getSuperficie() != 0 ? String.valueOf(lista.getEstanEnEspacio().get(posicion).getSuperficie()) + MEDIDA_AREA : Utilidades.NO_DATO);
         estado.setText(EspacioNaturalItem.estados[lista.getEstanEnEspacio().get(posicion).getEstado() - 1]);
         senalizacion.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isSenalizacionExterna()));
         q.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isQ()));
         interesTuristico.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isInteresTuristico()));
-        acceso.setText(lista.getEstanEnEspacio().get(posicion).getAcceso());
-        observaciones.setText(lista.getEstanEnEspacio().get(posicion).getObservaciones());
+        acceso.setText(lista.getEstanEnEspacio().get(posicion).getAcceso() != "" ? lista.getEstanEnEspacio().get(posicion).getAcceso() : Utilidades.NO_DATO);
+        observaciones.setText(lista.getEstanEnEspacio().get(posicion).getObservaciones() != "" ? lista.getEstanEnEspacio().get(posicion).getObservaciones() : Utilidades.NO_DATO);
     }
 
     private String booleanAEspanol(boolean b) {
@@ -404,7 +404,7 @@ public class ItemActivity extends AppCompatActivity {
                 raiz.addView(tv);
                 tv = new TextView(this);
                 tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
-                tv.setText(CentroVisitante.TIPOS[cv.getTipo() - 1 < 10 ? cv.getTipo() : 9]);
+                tv.setText(CentroVisitante.TIPOS[cv.getTipo() - 1 < 10 ? cv.getTipo() : 9]); //TODO OUTOFBOUNDS
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);

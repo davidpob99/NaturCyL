@@ -148,6 +148,13 @@
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:text="@string/flickr_advertencia" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                android:visibility="visible"
+                tools:layout_editor_absoluteY="158dp" />
         </LinearLayout>
 
         <android.support.v7.widget.RecyclerView

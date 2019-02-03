@@ -163,10 +163,6 @@ public class MainActivity extends AppCompatActivity {
             Collections.sort(listaEspacios);
             cargarRV();
             progress.dismiss();
-        } else if (id == R.id.accion_licencia_terceros) {
-            Intent myIntent = new Intent(MainActivity.this, TextoActivity.class);
-            myIntent.putExtra("accion", "licencia_tercero");
-            startActivity(myIntent);
         } else if (id == R.id.accion_conjunto_datos) {
             Intent myIntent = new Intent(MainActivity.this, TextoActivity.class);
             myIntent.putExtra("accion", "conjunto_datos");

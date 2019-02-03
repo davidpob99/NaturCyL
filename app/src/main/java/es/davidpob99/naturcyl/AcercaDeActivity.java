@@ -52,6 +52,18 @@ public class AcercaDeActivity extends AppCompatActivity {
         }
     }
 
+    public void clickedTerceros(View v) {
+        Intent myIntent = new Intent(AcercaDeActivity.this, TextoActivity.class);
+        myIntent.putExtra("accion", "licencia_tercero");
+        startActivity(myIntent);
+    }
+
+    public void clickedPrivacidad(View v) {
+        Intent myIntent = new Intent(AcercaDeActivity.this, TextoActivity.class);
+        myIntent.putExtra("accion", "politica_privacidad");
+        startActivity(myIntent);
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         startActivity(new Intent(AcercaDeActivity.this, MainActivity.class));

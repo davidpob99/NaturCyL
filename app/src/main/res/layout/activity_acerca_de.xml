@@ -31,48 +31,77 @@
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp">
 
-        <RelativeLayout
+        <LinearLayout
+            android:id="@+id/b"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp">
+            android:orientation="vertical"
+            android:padding="8dp">
 
             <ImageView
                 android:id="@+id/acerca_de_foto"
                 android:layout_width="150dp"
                 android:layout_height="150dp"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="8sp" />
+                android:layout_gravity="center"
+                android:layout_marginStart="8sp"
+                android:layout_marginLeft="8sp"
+                android:layout_marginTop="8sp"
+                android:layout_marginEnd="8sp"
+                android:layout_marginRight="8sp"
+                android:layout_marginBottom="8sp" />
 
             <TextView
                 android:id="@+id/acerca_de_texto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/acerca_de_foto"
                 android:gravity="center"
                 android:padding="8sp"
                 android:text="@string/acerca_de"
                 android:textAlignment="inherit" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                android:visibility="visible" />
+
             <Button
                 android:id="@+id/boton_licencia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/acerca_de_texto"
+                android:background="#FAFAFA"
                 android:drawableLeft="@drawable/ic_description_black_24dp"
                 android:onClick="clickedLicense"
-                android:text="Ver Licencia" />
+                android:text="Licencia" />
+
+            <Button
+                android:id="@+id/boton_terceros"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FAFAFA"
+                android:drawableLeft="@drawable/ic_description_black_24dp"
+                android:onClick="clickedTerceros"
+                android:text="Bibliotecas de código abierto" />
+
+            <Button
+                android:id="@+id/boton_privacidad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#FAFAFA"
+                android:drawableLeft="@drawable/ic_description_black_24dp"
+                android:onClick="clickedPrivacidad"
+                android:text="@string/politica_privacidad" />
 
             <Button
                 android:id="@+id/boton_git"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/boton_licencia"
+                android:background="#FAFAFA"
                 android:drawableLeft="@drawable/ic_github"
                 android:onClick="clickedGit"
                 android:text="Ver en GitHub" />
 
-        </RelativeLayout>
+        </LinearLayout>
     </ScrollView>
 
 </android.support.constraint.ConstraintLayout>

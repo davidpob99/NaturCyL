@@ -23,7 +23,7 @@
     <string name="como_llegar">Cómo llegar</string>
     <string name="informacion">Información</string>
     <string name="conjunto_datos">Acerca de los datos</string>
-    <string name="terceros">Licencias de terceros</string>
+    <string name="terceros">Bibliotecas de código abierto</string>
     <string name="gnu_gpl_v3">GNU GPL v3</string>
     <string name="acerca_de">
         Aplicación para consultar los espacios naturales de la comunidad autónoma de Castilla y León, así como sus equipamientos y posibilidades \n\n
@@ -80,6 +80,36 @@
         See the License for the specific language governing permissions and
         limitations under the License.
 
+        \n## CarouselView\n
+
+        The MIT License (MIT)\n
+        Copyright (c) 2017 alexrainman1975@gmail.com\n\n
+        Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+        and associated documentation files (the "Software"), to deal in the Software without restriction,
+        including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+        and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+        subject to the following conditions:\n\n
+        The above copyright notice and this permission notice shall be included in all copies or substantial
+        portions of the Software.\n\n
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+        TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+        THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+        CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+
+        \n## Gson\n
+
+        Copyright 2008 Google Inc.\n\n
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at\n\n
+           http://www.apache.org/licenses/LICENSE-2.0\n\n
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
+        IN THE SOFTWARE.
+
         \n## Markwon\n
 
         Copyright 2017 Dimitry Ivanov (mail@dimitryivanov.ru)\n\n
@@ -116,6 +146,68 @@
         WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
         See the License for the specific language governing permissions and
         limitations under the License.
+
+        \n## OSMBonusPack\n
+        The components inside this GitHub project are under LGPL licence, with an important simplification: The constraints described in Section 4.d and 4.e of the LGPL LICENCE are DISCARDED.\n\n
+        This means that you are allowed to convey a Combined Work without providing the user any way to recombine or relink the application, and without providing any shared library mechanism.\n\n
+        In other terms, you are allowed to include the OSMBonusPack library in your Android application, without making your application open source.
+
+        \n## OSMDroid\n
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at\n\n
+           http://www.apache.org/licenses/LICENSE-2.0\n\n
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
+
+        \n## Picasso\n
+        Copyright 2013 Square, Inc.\n\n
+
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at\n\n
+           http://www.apache.org/licenses/LICENSE-2.0\n\n
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
+
+        \n## PRDownloader\n
+        Copyright (C) 2017 MINDORKS NEXTGEN PRIVATE LIMITED\n\n
+
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at\n\n
+           http://www.apache.org/licenses/LICENSE-2.0\n\n
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
+
+        \n## spots-dialog\n
+        The MIT License (MIT)\n
+        Copyright © 2015 Maxim Dybarsky\n\n
+        Permission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the “Software”), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:\n\n
+        The above copyright notice and this permission notice shall be included in
+        all copies or substantial portions of the Software.\n\n
+        THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+        THE SOFTWARE.
+
     </string>
     <string name="licencia_app" tools:ignore="TypographyOther"><![CDATA[
 
@@ -914,6 +1006,8 @@
 
     </string>
     <string name="title_activity_cercanos">Cercanos</string>
+    <string name="title_activity_acerca_de">Acerca de</string>
+    <string name="politica_privacidad">Política de privacidad</string>
     <string name="title_activity_favoritos">Favoritos</string>
     <string name="longitud">Longitud</string>
     <string name="tiempo">Tiempo</string>

@@ -4,22 +4,15 @@
     tools:context="es.davidpob99.datosabiertos.apps.naturcyl.es.jcyl.naturcyl.MainActivity">
     <item
         android:id="@+id/accion_cercanos"
-        android:orderInCategory="100"
         android:title="@string/title_activity_cercanos"
         app:showAsAction="never" />
     <item
         android:id="@+id/accion_actualizar_datos"
-        android:orderInCategory="100"
         android:title="@string/actualizar_datos"
         app:showAsAction="never" />
-    <group>
-        <item
-            android:id="@+id/accion_conjunto_datos"
-            android:title="@string/conjunto_datos" />
-        <item
-            android:id="@+id/accion_licencia_terceros"
-            android:title="@string/terceros" />
-    </group>
+    <item
+        android:id="@+id/accion_conjunto_datos"
+        android:title="@string/conjunto_datos" />
     <item
         android:id="@+id/accion_acerca_de"
         android:title="@string/acerca" />

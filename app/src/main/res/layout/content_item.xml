@@ -229,6 +229,12 @@
 
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:visibility="visible" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -259,6 +265,12 @@
             android:fontFamily="sans-serif-light"
             android:padding="8dp"
             android:text="TextView" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/listDivider"
+            android:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/particular_item"
