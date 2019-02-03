@@ -26,7 +26,10 @@ import android.graphics.Color;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.Polygon;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class EspacioNatural implements Comparable<EspacioNatural> {
     public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/espacios_naturales/1284378150075.kml";
@@ -36,7 +39,7 @@ public class EspacioNatural implements Comparable<EspacioNatural> {
     private boolean q;
     private String codigo;
     private String nombre;
-    private String fechaDeclaracion;
+    private Date fechaDeclaracion;
     private String tipoDeclaracion;
     private ArrayList<GeoPoint> coordenadas;
     private String imagen;
@@ -48,7 +51,11 @@ public class EspacioNatural implements Comparable<EspacioNatural> {
         this.q = q;
         this.codigo = codigo;
         this.nombre = nombre;
-        this.fechaDeclaracion = fechaDeclaracion;
+
+        String[] date = fechaDeclaracion.split("-");
+        this.fechaDeclaracion = new Date(Integer.valueOf(date[0]),
+                Integer.valueOf(date[1]),
+                Integer.valueOf(date[2]));
         this.tipoDeclaracion = tipoDeclaracion;
         this.coordenadas = coordenadas;
         this.imagen = imagen;
@@ -224,11 +231,10 @@ public class EspacioNatural implements Comparable<EspacioNatural> {
     }
 
     public String getFechaDeclaracion() {
-        return fechaDeclaracion;
-    }
-
-    public void setFechaDeclaracion(String fechaDeclaracion) {
-        this.fechaDeclaracion = fechaDeclaracion;
+        SimpleDateFormat formateador = new SimpleDateFormat(
+                "d 'de' MMMM 'de '", new Locale("es", "ES"));
+        String fecha = formateador.format(fechaDeclaracion) + fechaDeclaracion.getYear();
+        return fecha;
     }
 
     public String getTipoDeclaracion() {
