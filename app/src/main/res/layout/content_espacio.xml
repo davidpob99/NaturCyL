@@ -29,6 +29,7 @@
     tools:showIn="@layout/activity_espacio">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/espacio_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusableInTouchMode="true">
@@ -112,6 +113,43 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
+        <LinearLayout
+            android:id="@+id/espacio_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="32dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/espacio_descripcion">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="8dp"
+                android:text="Fotografías"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <com.synnapps.carouselview.CarouselView
+                android:id="@+id/espacio_carousel"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:padding="8dp"
+                app:fillColor="#FFFFFFFF"
+                app:pageColor="#00000000"
+                app:radius="6dp"
+                app:slideInterval="3000"
+                app:strokeColor="#FF777777"
+                app:strokeWidth="1dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:text="@string/flickr_advertencia" />
+        </LinearLayout>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/espacio_item_rv"
             android:layout_width="match_parent"
@@ -119,8 +157,10 @@
             android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/espacio_descripcion" />
+            app:layout_constraintTop_toBottomOf="@+id/espacio_linear_layout"
+            app:layout_constraintVertical_bias="1.0" />
 
     </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>

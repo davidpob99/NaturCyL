@@ -22,7 +22,10 @@
 package es.davidpob99.naturcyl;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,12 +37,19 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.synnapps.carouselview.CarouselView;
+import com.synnapps.carouselview.ImageClickListener;
+import com.synnapps.carouselview.ImageListener;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.location.FlickrPOIProvider;
+import org.osmdroid.bonuspack.location.POI;
 import org.osmdroid.tileprovider.tilesource.MapBoxTileSource;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
@@ -48,6 +58,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 
 public class EspacioActivity extends AppCompatActivity {
@@ -59,12 +70,15 @@ public class EspacioActivity extends AppCompatActivity {
     private IMapController mapController;
     private int posicion;
     private boolean satelite = false;
+    private String FLICKR_APIKEY;
 
     private TextView espacioTipo;
     private TextView espacioFecha;
     private ImageView espacioFoto;
     private FloatingActionButton fab;
     private ImageButton imageButton;
+    private CarouselView carouselView;
+    private ConstraintLayout constraintLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +95,10 @@ public class EspacioActivity extends AppCompatActivity {
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        FLICKR_APIKEY = getString(R.string.FLICKR_APIKEY);
+        carouselView = findViewById(R.id.espacio_carousel);
+        constraintLayout = findViewById(R.id.espacio_layout);
 
         imageButton = findViewById(R.id.espacio_capa_btn);
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -117,6 +135,8 @@ public class EspacioActivity extends AppCompatActivity {
 
         // Dibujar espacio
         map.getOverlayManager().add(espacioNatural.getPoligonoCoordenadas());
+
+        obtenerImagenes();
 
         // Inicializar texto e imagen
         espacioTipo = findViewById(R.id.espacio_tipo);
@@ -271,5 +291,47 @@ public class EspacioActivity extends AppCompatActivity {
             }
         }
         return set;
+    }
+
+    private void obtenerImagenes() {
+        try {
+            final ArrayList<POI> fotos = new ObtenerImagenes().execute().get();
+            if (fotos != null) {
+                carouselView.setPageCount(fotos.size());
+                carouselView.setImageListener(new ImageListener() {
+                    @Override
+                    public void setImageForPosition(int position, ImageView imageView) {
+                        Picasso.get().load(fotos.get(position).mThumbnailPath.replace("s.jpg", "h.jpg")).into(imageView);
+                    }
+                });
+                carouselView.setImageClickListener(new ImageClickListener() {
+                    @Override
+                    public void onClick(int position) {
+                        String fotoBuenaDefinicion = fotos.get(position).mThumbnailPath.replace("s.jpg", "h.jpg");
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.setDataAndType(Uri.parse(fotoBuenaDefinicion), "image/*");
+                        startActivity(intent);
+                    }
+                });
+            } else {
+                Toast.makeText(EspacioActivity.this, "No se han podido descargar las fotografías. Compruebe su conexión a Internet", Toast.LENGTH_LONG).show();
+            }
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public class ObtenerImagenes extends AsyncTask<Void, Void, ArrayList<POI>> {
+        @Override
+        protected ArrayList<POI> doInBackground(Void... voids) {
+            FlickrPOIProvider poiProvider = new FlickrPOIProvider(FLICKR_APIKEY);
+            BoundingBox bb = BoundingBox.fromGeoPoints(espacioNatural.getCoordenadas());
+            ArrayList<POI> fotos = poiProvider.getPOIInside(bb, 20);
+            return fotos;
+        }
     }
 }

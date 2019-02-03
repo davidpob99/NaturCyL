@@ -61,7 +61,8 @@
         * Sendas en espacios naturales\n
 
         \nLos mapas usados en la aplicación se obtienen de [OpenStreetMap](https://www.openstreetmap.org/) y de [MapBox](https://www.mapbox.com/) (satélite).\n
-        \Para calcular la navegación en las sendas se usa [Graphhopper](https://www.graphhopper.com/).
+        \Para calcular la navegación en las sendas se usa [Graphhopper](https://www.graphhopper.com/).\n
+        \nLas fotografías se obtienen a través de [Flickr](https://flickr.com) y pueden tener derechos de autor.
     </string>
     <string name="licencia_terceros" tools:ignore="TypographyOther">
         ## AppIntro\n
@@ -920,4 +921,5 @@
     <string name="dificultad">Dificultad</string>
     <string name="ciclabilidad">Ciclabilidad</string>
     <string name="title_activity_senda">Navegación</string>
+    <string name="flickr_advertencia">Las fotografías han sido extraídas de Flickr y pueden tener derechos de autor</string>
 </resources>
