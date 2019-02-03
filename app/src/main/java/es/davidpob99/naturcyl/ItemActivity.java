@@ -97,7 +97,7 @@ public class ItemActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (tipo == 11) {
-                    SendaActivity.senda = (Senda) lista.get(posicion);
+                    SendaActivity.senda = (Senda) lista.getEstanEnEspacio().get(posicion);
                     Intent myIntent = new Intent(ItemActivity.this, SendaActivity.class);
                     startActivity(myIntent);
 

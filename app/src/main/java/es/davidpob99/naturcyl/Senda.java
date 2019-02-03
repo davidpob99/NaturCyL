@@ -54,21 +54,6 @@ public class Senda extends EspacioNaturalItem {
         super();
     }
 
-    @Override
-    public String toString() {
-        return "Senda{" +
-                "tipo=" + tipo +
-                ", longitud=" + longitud +
-                ", tiempoRecorrido=" + tiempoRecorrido +
-                ", ciclabilidad=" + ciclabilidad +
-                ", codigoSenda='" + codigoSenda + '\'' +
-                ", dificultad=" + dificultad +
-                ", desnivel=" + desnivel +
-                ", tipoOficial=" + tipoOficial +
-                ", coordenadasSenda=" + coordenadasSenda +
-                '}';
-    }
-
     public int getTipo() {
         return tipo;
     }

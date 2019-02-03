@@ -21,6 +21,7 @@
 
 package es.davidpob99.naturcyl;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -39,6 +40,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.synnapps.carouselview.CarouselView;
 import com.synnapps.carouselview.ImageClickListener;
@@ -55,6 +58,10 @@ import org.osmdroid.views.MapView;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -91,7 +98,21 @@ public class EspacioActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Gson gson = new Gson();
+                Type tipoListaUrls = new TypeToken<ArrayList<URL>>() {
+                }.getType();
+                ArrayList<URL> urls = gson.fromJson(leerUrls(getApplicationContext()), tipoListaUrls);
+                URL url = null;
+                for (URL u : urls) {
+                    if (u.getCodigo().equals(espacioNatural.getCodigo())) {
+                        url = u;
+                        break;
+                    }
+                }
 
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url.getUrlJcyl()));
+                startActivity(intent);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -169,6 +190,7 @@ public class EspacioActivity extends AppCompatActivity {
 
 
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -333,5 +355,76 @@ public class EspacioActivity extends AppCompatActivity {
             ArrayList<POI> fotos = poiProvider.getPOIInside(bb, 20);
             return fotos;
         }
+    }
+
+    private String leerUrls(Context context) {
+        String json = null;
+        try {
+            InputStream is = context.getResources().openRawResource(R.raw.urls);
+
+            int size = is.available();
+
+            byte[] buffer = new byte[size];
+
+            is.read(buffer);
+
+            is.close();
+
+            json = new String(buffer, StandardCharsets.UTF_8);
+
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+    }
+}
+
+class URL {
+    String codigo;
+    String urlJcyl;
+    String urlWikipedia;
+
+    public URL() {
+    }
+
+    public URL(String codigo, String urlJcyl, String urlWikipedia) {
+        this.codigo = codigo;
+        this.urlJcyl = urlJcyl;
+        this.urlWikipedia = urlWikipedia;
+    }
+
+    @Override
+    public String toString() {
+        return "URL{" +
+                "codigo='" + codigo + '\'' +
+                ", urlJcyl='" + urlJcyl + '\'' +
+                ", urlWikipedia='" + urlWikipedia + '\'' +
+                '}';
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+
+    public String getUrlJcyl() {
+        return urlJcyl;
+    }
+
+    public void setUrlJcyl(String urlJcyl) {
+        this.urlJcyl = urlJcyl;
+    }
+
+    public String getUrlWikipedia() {
+        return urlWikipedia;
+    }
+
+    public void setUrlWikipedia(String urlWikipedia) {
+        this.urlWikipedia = urlWikipedia;
     }
 }

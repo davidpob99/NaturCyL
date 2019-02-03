@@ -28,7 +28,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -143,7 +142,6 @@ public class SendaActivity extends AppCompatActivity {
         while (senda.getCoordenadasSenda().size() > 80) {
             for (int i = 1; i < senda.getCoordenadasSenda().size() - 1 && coordenadas.size() > 80; i += 2) {
                 coordenadas.remove(i);
-                Log.i("POS", String.valueOf(coordenadas.size()));
             }
         }
         ObtenerSenda os = new ObtenerSenda();
