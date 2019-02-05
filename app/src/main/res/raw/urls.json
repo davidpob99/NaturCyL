@@ -113,5 +113,110 @@
     "codigo": "VLI",
     "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977540194/_/_/_",
     "urlWikipedia": "https://es.wikipedia.org/wiki/Reserva_natural_del_Valle_de_Iruelas"
+  },
+  {
+    "codigo": "SAC",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977574648/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Sierra_de_Ancares"
+  },
+  {
+    "codigo": "SIL",
+    "urlJcyl": "http://www.miespacionatural.es/category/2/3/17",
+    "urlWikipedia": null
+  },
+  {
+    "codigo": "BYL",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977587820/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Espacio_natural_Valle_de_San_Emiliano"
+  },
+  {
+    "codigo": "HVC",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977841603/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Espacio_natural_Hoces_de_Vegacervera"
+  },
+  {
+    "codigo": "TRC",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977574367/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Las_Tuerces"
+  },
+  {
+    "codigo": "CVA",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977572257/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Covalagua"
+  },
+  {
+    "codigo": "LGB",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977552833/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Monumento_natural_del_Lago_de_la_Ba%C3%B1a"
+  },
+  {
+    "codigo": "LGT",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977556121/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Monumento_natural_del_Lago_de_Truchillas"
+  },
+  {
+    "codigo": "SCU",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977595831/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Sierra_de_la_Culebra"
+  },
+  {
+    "codigo": "RLL",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977592840/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Espacio_natural_protegido_de_El_Rebollar"
+  },
+  {
+    "codigo": "SDM",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977569109/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Sierra_de_la_Demanda"
+  },
+  {
+    "codigo": "YSA",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977586158/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/La_Yecla_y_los_Sabinares_del_Arlanza"
+  },
+  {
+    "codigo": "URB",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977611029/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Sierra_de_Urbi%C3%B3n"
+  },
+  {
+    "codigo": "GUA",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1284333548770/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Parque_nacional_de_la_Sierra_de_Guadarrama"
+  },
+  {
+    "codigo": "HRZ",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977607426/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Hayedo_de_Riofr%C3%ADo_de_Riaza"
+  },
+  {
+    "codigo": "SPS",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977577126/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Espacio_natural_protegido_de_las_Sierras_de_la_Paramera_y_Serrota"
+  },
+  {
+    "codigo": "CDL",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977596112/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Sierra_de_Candelario"
+  },
+  {
+    "codigo": "QLM",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977842021/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Las_Quilamas"
+  },
+  {
+    "codigo": "PHC",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977596273/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Pinar_de_Hoyocasero"
+  },
+  {
+    "codigo": "CPL",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977557172/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Sitio_paleontol%C3%B3gico_de_Cerro_Pelado"
+  },
+  {
+    "codigo": "PEN",
+    "urlJcyl": "https://medioambiente.jcyl.es/web/jcyl/MedioAmbiente/es/Plantilla100/1131977541633/_/_/_",
+    "urlWikipedia": "https://es.wikipedia.org/wiki/Parque_nacional_de_Picos_de_Europa"
   }
 ]

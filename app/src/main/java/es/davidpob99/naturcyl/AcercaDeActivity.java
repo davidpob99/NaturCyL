@@ -42,14 +42,8 @@ public class AcercaDeActivity extends AppCompatActivity {
     }
 
     public void clickedLicense(View v) {
-        try {
-            Intent myIntent = new Intent(AcercaDeActivity.this, TextoActivity.class);
-            myIntent.putExtra("accion", "licencia_app");
-            startActivity(myIntent);
-        } catch (Exception e) {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.gnu.org/licenses/gpl-3.0-standalone.html"));
-            startActivity(browserIntent);
-        }
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.gnu.org/licenses/gpl-3.0-standalone.html"));
+        startActivity(browserIntent);
     }
 
     public void clickedTerceros(View v) {

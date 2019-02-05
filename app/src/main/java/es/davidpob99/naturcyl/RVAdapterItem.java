@@ -61,7 +61,12 @@ public class RVAdapterItem extends RecyclerView.Adapter<RVAdapterItem.ItemViewHo
     @Override
     public void onBindViewHolder(RVAdapterItem.ItemViewHolder itemViewHolder, int i) {
         itemViewHolder.itemNombre.setText(items.get(i).getNombre());
-        itemViewHolder.itemEstado.setText("Estado: " + EspacioNaturalItem.estados[items.get(i).getEstado() - 1]);
+        try {
+            itemViewHolder.itemEstado.setText("Estado: " + EspacioNaturalItem.estados[items.get(i).getEstado() - 1]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+            itemViewHolder.itemEstado.setText("Estado: Sin determinar");
+        }
     }
 
     @Override

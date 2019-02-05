@@ -31,8 +31,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -117,9 +119,32 @@ public class MainActivity extends AppCompatActivity {
         // Primera ejecución
         if (preferencias.getBoolean("firstrun", true)) {
             editor.clear().commit();
-            Gson gson = new Gson();
             editor.putString("favoritos", "").apply();
             editor.putBoolean("firstrun", false).apply();
+            startActivity(new Intent(MainActivity.this, IntroActivity.class));
+            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Al usar esta app, aceptas la Política de Privacidad y la Licencia (GNU GPL v3). Puedes consultar ambas en cualquier momento en el apartado 'Acerca de la app' ")
+                    .setNeutralButton(getString(R.string.politica_privacidad), new DialogInterface.OnClickListener() {
+                        public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                            Intent myIntent = new Intent(MainActivity.this, TextoActivity.class);
+                            myIntent.putExtra("accion", "politica_privacidad");
+                            startActivity(myIntent);
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.gnu_gpl_v3), new DialogInterface.OnClickListener() {
+                        public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.gnu.org/licenses/gpl-3.0-standalone.html"));
+                            startActivity(browserIntent);
+                        }
+                    })
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+            final AlertDialog alert = builder.create();
+            alert.show();
         }
 
         //inicio
@@ -190,7 +215,11 @@ public class MainActivity extends AppCompatActivity {
                     cargarRV();
                 } else {
                     Toast.makeText(this, "Sin el permiso de almacenamiento no puede funcionar la app. Saliendo...", Toast.LENGTH_LONG).show();
-                    exit(1);
+                    (new Handler()).postDelayed(new Runnable() {
+                        public void run() {
+                            exit(1);
+                        }
+                    }, 4000);
                 }
             }
         }

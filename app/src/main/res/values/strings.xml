@@ -1016,4 +1016,22 @@
     <string name="ciclabilidad">Ciclabilidad</string>
     <string name="title_activity_senda">Navegación</string>
     <string name="flickr_advertencia">Las fotografías han sido extraídas de Flickr y pueden tener derechos de autor</string>
+    <string name="politica_privacidad_texto">
+        Los datos que se introduzcan en la aplicación, como la selección de los equipamientos favoritos NO se envían a ningún servidor y
+        se guardan solo en el propio dispositivo.\n
+
+        \nNO se recoge ningún tipo de dato asociado al uso de la app, ni local ni remotamente.\n
+
+        \nLa ubicación se utiliza únicamente para obtener los equipamientos más cercanos, de forma local. En ningún caso esta información es enviada
+        a ningún servidor.\n
+
+        \nEl almacenamiento es necesario para guardar los datos de los espacios naturales y usarlos sin conexión.\n
+
+        \nEsta aplicación obtiene datos de los servidores de la [Junta de Castilla y León](http://www.jcyl.es), [OpenStreetMap](https://www.openstreetmap.org/),
+        [MapBox](https://www.mapbox.com/), [Graphhopper](https://www.graphhopper.com/) y [Flickr](https://flickr.com), por lo que al hacer las peticiones dichos servicios guarden cierta información del dispositivo (por ejemplo IP). Se recomienda revisar las políticas de
+        dichos servicios.\n
+
+        \nCon la finalidad de proteger la privacidad de los usuarios que usan esta app no se usan los mapas de Google ni ningún otro servicio
+        asciado a esta empresa, aunque la aplicación se distribuye a través de Google Play.
+    </string>
 </resources>

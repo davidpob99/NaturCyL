@@ -264,7 +264,12 @@ public class ItemActivity extends AppCompatActivity {
     private void inicializarComun() {
         codigo.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isAccesibilidad()));
         area.setText(lista.getEstanEnEspacio().get(posicion).getSuperficie() != 0 ? String.valueOf(lista.getEstanEnEspacio().get(posicion).getSuperficie()) + MEDIDA_AREA : Utilidades.NO_DATO);
-        estado.setText(EspacioNaturalItem.estados[lista.getEstanEnEspacio().get(posicion).getEstado() - 1]);
+        try {
+            estado.setText(EspacioNaturalItem.estados[lista.getEstanEnEspacio().get(posicion).getEstado() - 1]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+            estado.setText("Estado: Sin determinar");
+        }
         senalizacion.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isSenalizacionExterna()));
         q.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isQ()));
         interesTuristico.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isInteresTuristico()));
@@ -548,10 +553,21 @@ public class ItemActivity extends AppCompatActivity {
                 longitud.setText(s.getLongitud() + " m");
                 tiempo.setText(s.getTiempoRecorrido() + " min");
                 desnivel.setText(s.getDesnivel() + " m");
-                dificultad.setText(Senda.DIFICULTAD[s.getDificultad() - 1]);
+                try {
+                    dificultad.setText(Senda.DIFICULTAD[s.getDificultad() - 1]);
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                    dificultad.setText(Utilidades.NO_DATO);
+                }
+
                 ciclabilidad.setText(s.getCiclabilidad() + " %");
                 codigo.setText(s.getCodigoSenda());
-                fotoDificultad.setColorFilter(getResources().getColor(Senda.COLORES_DIFICULTAD[s.getDificultad() - 1]));
+                try {
+                    fotoDificultad.setColorFilter(getResources().getColor(Senda.COLORES_DIFICULTAD[s.getDificultad() - 1]));
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                    fotoDificultad.setColorFilter(Senda.COLORES_DIFICULTAD[1]);
+                }
 
             case -1:
                 break;

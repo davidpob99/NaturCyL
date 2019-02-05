@@ -24,12 +24,9 @@ package es.davidpob99.naturcyl;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.TextView;
 
 import ru.noties.markwon.Markwon;
-
-import static android.text.Html.fromHtml;
 
 public class TextoActivity extends AppCompatActivity {
     private TextView texto;
@@ -44,27 +41,14 @@ public class TextoActivity extends AppCompatActivity {
         texto = findViewById(R.id.texto);
 
         switch (accion) {
-            /*case "politica_privacidad":
-                texto.setText(fromHtml(getString(R.string.privacy_text)));
-                setTitle(getString(R.string.action_privacy));
-                break;*/
+            case "politica_privacidad":
+                Markwon.setMarkdown(texto, getString(R.string.politica_privacidad_texto));
+                setTitle(getString(R.string.politica_privacidad));
+                break;
 
             case "licencia_tercero":
                 Markwon.setMarkdown(texto, getString(R.string.licencia_terceros));
                 setTitle(getString(R.string.terceros));
-                break;
-
-            case "licencia_app":
-                try {
-                    texto.setText(fromHtml(getString(R.string.licencia_app)));
-                    setTitle(getString(R.string.gnu_gpl_v3));
-                    getSupportActionBar().setDisplayHomeAsUpEnabled(false); // Back button
-                } catch (Exception e) {
-                    Log.e("GNU GPL v3", "exception", e);/*
-                    startActivity(new Intent(TextoActivity.this, AboutActivity.class));
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.gnu.org/licenses/gpl-3.0-standalone.html"));
-                    startActivity(browserIntent);*/
-                }
                 break;
             case "conjunto_datos":
                 Markwon.setMarkdown(texto, getString(R.string.datos));
