@@ -32,6 +32,7 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,12 +49,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.downloader.Error;
-import com.downloader.OnDownloadListener;
-import com.downloader.OnProgressListener;
-import com.downloader.PRDownloader;
-import com.downloader.PRDownloaderConfig;
-import com.downloader.Progress;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -63,8 +58,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Type;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
@@ -72,8 +73,6 @@ import java.util.concurrent.ExecutionException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
-import dmax.dialog.SpotsDialog;
 
 import static java.lang.System.exit;
 
@@ -89,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<EspacioNatural> listaEspacios;
 
     private RecyclerView rv;
-    protected static ProgressDialog progressDialog;
+    private ProgressDialog pDialog;
 
     private SharedPreferences preferencias;
     private SharedPreferences.Editor editor;
@@ -120,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         if (preferencias.getBoolean("firstrun", true)) {
             editor.clear().commit();
             editor.putString("favoritos", "").apply();
-            editor.putBoolean("firstrun", false).apply();
+            editor.putBoolean("firstrun", false).commit();
             startActivity(new Intent(MainActivity.this, IntroActivity.class));
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Al usar esta app, aceptas la Política de Privacidad y la Licencia (GNU GPL v3). Puedes consultar ambas en cualquier momento en el apartado 'Acerca de la app' ")
@@ -286,39 +285,6 @@ public class MainActivity extends AppCompatActivity {
         }*/
     }
 
-    private void descargar(String nombreFichero, final String url) {
-        PRDownloader.initialize(getApplicationContext());
-        // Setting timeout globally for the download network requests:
-        PRDownloaderConfig prDownloaderConfig = PRDownloaderConfig.newBuilder()
-                .setReadTimeout(30_000)
-                .setConnectTimeout(30_000)
-                .build();
-        PRDownloader.initialize(getApplicationContext(), prDownloaderConfig);
-
-        final AlertDialog ad = new SpotsDialog.Builder().setContext(MainActivity.this).setMessage("Descargando datos").build();
-        int downloadId = PRDownloader.download(url, getApplicationContext().getFilesDir().toString(), nombreFichero)
-                .build()
-                .setOnProgressListener(new OnProgressListener() {
-                    @Override
-                    public void onProgress(Progress progress) {
-                        ad.show();
-                    }
-                })
-                .start(new OnDownloadListener() {
-                    @Override
-                    public void onDownloadComplete() {
-                        Log.i("INFO", "Archivo " + url + " descargado en" + getApplicationContext().getFilesDir().toString());
-                        ad.dismiss();
-                    }
-
-                    @Override
-                    public void onError(Error error) {
-                        Log.e("ERROR", error.toString());
-                        ad.dismiss();
-                    }
-                });
-    }
-
     private void descargarTodo() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -328,6 +294,25 @@ public class MainActivity extends AppCompatActivity {
                 activeNetwork.isConnectedOrConnecting();
 
         if (isConnected) {
+            ParametrosDescarga[] descargas = {
+                    new ParametrosDescarga(EspacioNatural.URL_KML, "Espacios.kml"),
+                    new ParametrosDescarga(Aparcamiento.URL_KML, "Aparcamientos.kml"),
+                    new ParametrosDescarga(Observatorio.URL_KML, "Observatorios.kml"),
+                    new ParametrosDescarga(Mirador.URL_KML, "Miradores.kml"),
+                    new ParametrosDescarga(ArbolSingular.URL_KML, "ArbolesSingulares.kml"),
+                    new ParametrosDescarga(ZonaRecreativa.URL_KML, "ZonasRecreativas.kml"),
+                    new ParametrosDescarga(CasaParque.URL_KML, "CasasParque.kml"),
+                    new ParametrosDescarga(CentroVisitante.URL_KML, "CentrosVisitante.kml"),
+                    new ParametrosDescarga(ZonaAcampada.URL_KML, "ZonasAcampada.kml"),
+                    new ParametrosDescarga(Campamento.URL_KML, "Campamentos.kml"),
+                    new ParametrosDescarga(Refugio.URL_KML, "Refugios.kml"),
+                    new ParametrosDescarga(Quiosco.URL_KML, "Quioscos.kml"),
+                    new ParametrosDescarga(Senda.URL_KML, "Sendas.kml")
+
+            };
+            new DescargarKMLs().execute(descargas);
+
+            /*
             descargar("Espacios.kml", EspacioNatural.URL_KML);
             descargar("Aparcamientos.kml", Aparcamiento.URL_KML);
             descargar("Observatorios.kml", Observatorio.URL_KML);
@@ -340,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
             descargar("Campamentos.kml", Campamento.URL_KML);
             descargar("Refugios.kml", Refugio.URL_KML);
             descargar("Quioscos.kml", Quiosco.URL_KML);
-            descargar("Sendas.kml", Senda.URL_KML);
+            descargar("Sendas.kml", Senda.URL_KML);*/
         } else {
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -396,5 +381,85 @@ public class MainActivity extends AppCompatActivity {
         String json = gson.toJson(favoritos);
         editor.putString("favoritos", json);
         editor.apply();
+    }
+
+    class DescargarKMLs extends AsyncTask<ParametrosDescarga, String, String> {
+
+        /**
+         * Before starting background thread
+         */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            //System.out.println("Starting download");
+
+            pDialog = new ProgressDialog(MainActivity.this);
+            pDialog.setMessage("Descargando datos, por favor espere");
+            pDialog.setIndeterminate(false);
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
+
+        /**
+         * Downloading file in background thread
+         */
+        @Override
+        protected String doInBackground(ParametrosDescarga... f_url) {
+            for (ParametrosDescarga pd : f_url) {
+                int count;
+                try {
+                    //System.out.println("Downloading");
+                    URL url = new URL(pd.url);
+                    URLConnection conection = url.openConnection();
+                    conection.connect();
+                    // getting file length
+                    int lenghtOfFile = conection.getContentLength();
+                    // input stream to read file - with 8k buffer
+                    InputStream input = new BufferedInputStream(url.openStream(), 8192);
+                    // Output stream to write file
+                    OutputStream output = new FileOutputStream(getFilesDir() + "/" + pd.nombreFichero);
+                    byte data[] = new byte[1024];
+
+                    long total = 0;
+                    while ((count = input.read(data)) != -1) {
+                        total += count;
+
+                        // writing data to file
+                        output.write(data, 0, count);
+
+                    }
+                    // flushing output
+                    output.flush();
+                    // closing streams
+                    output.close();
+                    input.close();
+
+                } catch (Exception e) {
+                    Log.e("Error: ", e.getMessage());
+                }
+            }
+            return null;
+        }
+
+        /**
+         * After completing background task
+         **/
+        @Override
+        protected void onPostExecute(String file_url) {
+            //System.out.println("Downloaded");
+
+            pDialog.dismiss();
+        }
+
+    }
+
+    class ParametrosDescarga {
+        String url;
+        String nombreFichero;
+
+        public ParametrosDescarga(String url, String nombreFichero) {
+            this.url = url;
+            this.nombreFichero = nombreFichero;
+        }
     }
 }

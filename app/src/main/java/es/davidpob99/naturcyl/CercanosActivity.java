@@ -130,9 +130,15 @@ public class CercanosActivity extends AppCompatActivity implements LocationListe
                     EspacioNaturalItem eni = listaItems.getElementos().get(i);
                     loc.setLatitude(eni.getCoordenadas().getLatitude());
                     loc.setLongitude(eni.getCoordenadas().getLongitude());
-                    // Log.i("DIST", String.valueOf(localizacion.distanceTo(loc)));
-                    if (localizacion.distanceTo(loc) <= metros) {
-                        listaFinal.add(eni);
+                    Log.i("DIST", String.valueOf(localizacion));
+
+                    try {
+                        if (localizacion.distanceTo(loc) <= metros) {
+                            listaFinal.add(eni);
+                        }
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                        Toast.makeText(CercanosActivity.this, "No se ha podido obtener su ubicación. Compruebe que está activada", Toast.LENGTH_LONG).show();
                     }
                     listaFinal.deElementosAEnEspacio();
                 }
@@ -182,7 +188,11 @@ public class CercanosActivity extends AppCompatActivity implements LocationListe
 
         // Spinner inicializacion
         spinner = findViewById(R.id.cercanos_spinner);
-        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Utilidades.nombresItems));
+        String[] nombres = new String[Utilidades.nombresItems.length - 1];
+        for (int i = 0; i < Utilidades.nombresItems.length - 1; i++) {
+            nombres[i] = Utilidades.nombresItems[i];
+        }
+        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nombres));
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapter, View vies,
@@ -225,13 +235,16 @@ public class CercanosActivity extends AppCompatActivity implements LocationListe
 
     @Override
     public void onLocationChanged(Location location) {
-        localizacion = location;
+        double lat = location.getLatitude();
+        double lng = location.getLongitude();
 
-        Double lat = location.getLatitude();
-        Double lng = location.getLongitude();
+        localizacion = new Location("");
+        localizacion.setLatitude(lat);
+        localizacion.setLongitude(lng);
 
-        Log.i("Location info: Lat", lat.toString());
-        Log.i("Location info: Lng", lng.toString());
+
+        Log.i("Location info: Lat", String.valueOf(lat));
+        Log.i("Location info: Lng", String.valueOf(lng));
 
     }
 

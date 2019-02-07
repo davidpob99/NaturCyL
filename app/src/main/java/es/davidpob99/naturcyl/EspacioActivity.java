@@ -21,7 +21,9 @@
 
 package es.davidpob99.naturcyl;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -70,7 +72,7 @@ import java.util.concurrent.ExecutionException;
 
 public class EspacioActivity extends AppCompatActivity {
     private static final double ZOOM_MAPA = 12;
-    private static final String URL_ORTOFOTO = "http://www.idecyl.jcyl.es/IGCyL/services/PaisajeCubierta/Ortofoto/MapServer/WMSServer?request=GetCapabilities&service=WMS";
+    // private static final String URL_ORTOFOTO = "http://www.idecyl.jcyl.es/IGCyL/services/PaisajeCubierta/Ortofoto/MapServer/WMSServer?request=GetCapabilities&service=WMS";
 
     protected static EspacioNatural espacioNatural;
     private MapView map;
@@ -99,20 +101,34 @@ public class EspacioActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Gson gson = new Gson();
-                Type tipoListaUrls = new TypeToken<ArrayList<URL>>() {
+                Type tipoListaUrls = new TypeToken<ArrayList<URLEspacio>>() {
                 }.getType();
-                ArrayList<URL> urls = gson.fromJson(leerUrls(getApplicationContext()), tipoListaUrls);
-                URL url = null;
-                for (URL u : urls) {
+                ArrayList<URLEspacio> urls = gson.fromJson(leerUrls(getApplicationContext()), tipoListaUrls);
+                URLEspacio url = null;
+                for (final URLEspacio u : urls) {
                     if (u.getCodigo().equals(espacioNatural.getCodigo())) {
-                        url = u;
+                        AlertDialog.Builder builder = new AlertDialog.Builder(EspacioActivity.this);
+                        builder.setTitle("Seleccione enlace")
+                                .setNegativeButton("JCyL", new DialogInterface.OnClickListener() {
+                                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                                        intent.setData(Uri.parse(u.getUrlJcyl()));
+                                        startActivity(intent);
+                                    }
+                                })
+                                .setPositiveButton("Wikipedia", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                                        intent.setData(Uri.parse(u.getUrlWikipedia()));
+                                        startActivity(intent);
+                                    }
+                                });
+                        final AlertDialog alert = builder.create();
+                        alert.show();
                         break;
                     }
                 }
-
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(url.getUrlJcyl()));
-                startActivity(intent);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -381,15 +397,12 @@ public class EspacioActivity extends AppCompatActivity {
     }
 }
 
-class URL {
+class URLEspacio {
     String codigo;
     String urlJcyl;
     String urlWikipedia;
 
-    public URL() {
-    }
-
-    public URL(String codigo, String urlJcyl, String urlWikipedia) {
+    private URLEspacio(String codigo, String urlJcyl, String urlWikipedia) {
         this.codigo = codigo;
         this.urlJcyl = urlJcyl;
         this.urlWikipedia = urlWikipedia;
@@ -397,7 +410,7 @@ class URL {
 
     @Override
     public String toString() {
-        return "URL{" +
+        return "URLEspacio{" +
                 "codigo='" + codigo + '\'' +
                 ", urlJcyl='" + urlJcyl + '\'' +
                 ", urlWikipedia='" + urlWikipedia + '\'' +
