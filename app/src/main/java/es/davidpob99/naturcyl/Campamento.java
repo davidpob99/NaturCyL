@@ -5,23 +5,21 @@
  *
  * Copyright (C) 2019  David Población Criado
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Este programa es software libre: puede redistribuirlo y/o modificarlo bajo
+ * los términos de la Licencia General Pública de GNU publicada por la Free
+ * Software Foundation, ya sea la versión 3 de la Licencia, o (a su elección)
+ * cualquier versión posterior.\n\n
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Este programa se distribuye con la esperanza de que sea útil pero SIN
+ * NINGUNA GARANTÍA; incluso sin la garantía implícita de MERCANTIBILIDAD o
+ * CALIFICADA PARA UN PROPÓSITO EN PARTICULAR. Vea la Licencia General Pública
+ * de GNU para más detalles.\n\n
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Usted ha debido de recibir una copia de la Licencia General Pública
+ * de GNU junto con este programa. Si no, vea http://www.gnu.org/licenses/
  */
 
 package es.davidpob99.naturcyl;
-
-import org.osmdroid.util.GeoPoint;
 
 /**
  * Los Campamentos Juveniles son equipamientos al aire libre en los que el
@@ -45,9 +43,9 @@ import org.osmdroid.util.GeoPoint;
  * instalaciones y servicios que facilitan su utiicación y, en algunos casos, con
  * instalaciones de carácter permanete como pueden ser casa prefabricadas
  */
-public class Campamento extends EspacioNaturalItem {
+class Campamento extends EspacioNaturalItem {
     public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/campamentos_turismo/1284378128806.kml";
-    public static final String[] TIPOS = {
+    static final String[] TIPOS = {
             "Juvenil",
             "Turístico",
             "Turístico",
@@ -62,15 +60,6 @@ public class Campamento extends EspacioNaturalItem {
 
     public Campamento() {
         super();
-    }
-
-    public Campamento(int id, boolean q, String codigo, String observaciones, String fechaEstado, String fechaDeclaracion, int estado, boolean senalizacionExterna, String acceso, String nombre, boolean interesTuristico, double superficie, GeoPoint coordenadas, boolean servicioInformativo, int cabanas, int parcelas, int tipoCamping, String web) {
-        super(id, q, codigo, observaciones, fechaEstado, fechaDeclaracion, estado, senalizacionExterna, acceso, nombre, interesTuristico, superficie, coordenadas);
-        this.servicioInformativo = servicioInformativo;
-        this.cabanas = cabanas;
-        this.parcelas = parcelas;
-        this.tipoCamping = tipoCamping;
-        this.web = web;
     }
 
     public String getWeb() {

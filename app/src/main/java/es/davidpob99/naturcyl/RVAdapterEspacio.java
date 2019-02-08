@@ -5,22 +5,23 @@
  *
  * Copyright (C) 2019  David Población Criado
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Este programa es software libre: puede redistribuirlo y/o modificarlo bajo
+ * los términos de la Licencia General Pública de GNU publicada por la Free
+ * Software Foundation, ya sea la versión 3 de la Licencia, o (a su elección)
+ * cualquier versión posterior.\n\n
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Este programa se distribuye con la esperanza de que sea útil pero SIN
+ * NINGUNA GARANTÍA; incluso sin la garantía implícita de MERCANTIBILIDAD o
+ * CALIFICADA PARA UN PROPÓSITO EN PARTICULAR. Vea la Licencia General Pública
+ * de GNU para más detalles.\n\n
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Usted ha debido de recibir una copia de la Licencia General Pública
+ * de GNU junto con este programa. Si no, vea http://www.gnu.org/licenses/
  */
 
 package es.davidpob99.naturcyl;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -38,8 +39,8 @@ import java.util.ArrayList;
  * Adaptador del RecyclerView que contiene los Espacios Naturales y que se encuentra en MainActivity
  */
 public class RVAdapterEspacio extends RecyclerView.Adapter<RVAdapterEspacio.EspacioViewHolder> {
-    private ArrayList<EspacioNatural> listaEspacios;
-    private RVClickListenerEspacio listener;
+    private final ArrayList<EspacioNatural> listaEspacios;
+    private final RVClickListenerEspacio listener;
 
     public RVAdapterEspacio(ArrayList<EspacioNatural> listaEspacios, RVClickListenerEspacio listener) {
         this.listaEspacios = listaEspacios;
@@ -51,36 +52,32 @@ public class RVAdapterEspacio extends RecyclerView.Adapter<RVAdapterEspacio.Espa
         return listaEspacios.size();
     }
 
+    @NonNull
     @Override
-    public EspacioViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public EspacioViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.espacio_cardview, viewGroup, false);
         final EspacioViewHolder pvh = new EspacioViewHolder(v);
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onClickItem(v, pvh.getLayoutPosition());
+                listener.onClickItem(pvh.getLayoutPosition());
             }
         });
         return pvh;
     }
 
     @Override
-    public void onBindViewHolder(EspacioViewHolder espacioViewHolder, int i) {
+    public void onBindViewHolder(@NonNull EspacioViewHolder espacioViewHolder, int i) {
         espacioViewHolder.espacioNombre.setText(listaEspacios.get(i).getNombre());
         espacioViewHolder.espacioTipo.setText(listaEspacios.get(i).getTipoDeclaracion());
         Picasso.get().load(EspacioNatural.URL_IMG_BASE + listaEspacios.get(i).getImagen()).into(espacioViewHolder.espacioFoto);
     }
 
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
     public static class EspacioViewHolder extends RecyclerView.ViewHolder {
-        CardView cv;
-        TextView espacioNombre;
-        TextView espacioTipo;
-        ImageView espacioFoto;
+        final CardView cv;
+        final TextView espacioNombre;
+        final TextView espacioTipo;
+        final ImageView espacioFoto;
 
         EspacioViewHolder(View v) {
             super(v);

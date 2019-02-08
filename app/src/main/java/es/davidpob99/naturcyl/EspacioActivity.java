@@ -5,18 +5,18 @@
  *
  * Copyright (C) 2019  David Población Criado
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Este programa es software libre: puede redistribuirlo y/o modificarlo bajo
+ * los términos de la Licencia General Pública de GNU publicada por la Free
+ * Software Foundation, ya sea la versión 3 de la Licencia, o (a su elección)
+ * cualquier versión posterior.\n\n
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Este programa se distribuye con la esperanza de que sea útil pero SIN
+ * NINGUNA GARANTÍA; incluso sin la garantía implícita de MERCANTIBILIDAD o
+ * CALIFICADA PARA UN PROPÓSITO EN PARTICULAR. Vea la Licencia General Pública
+ * de GNU para más detalles.\n\n
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Usted ha debido de recibir una copia de la Licencia General Pública
+ * de GNU junto con este programa. Si no, vea http://www.gnu.org/licenses/
  */
 
 package es.davidpob99.naturcyl;
@@ -28,12 +28,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,28 +67,20 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 
 public class EspacioActivity extends AppCompatActivity {
     private static final double ZOOM_MAPA = 12;
-    // private static final String URL_ORTOFOTO = "http://www.idecyl.jcyl.es/IGCyL/services/PaisajeCubierta/Ortofoto/MapServer/WMSServer?request=GetCapabilities&service=WMS";
 
-    protected static EspacioNatural espacioNatural;
+    static EspacioNatural espacioNatural;
     private MapView map;
-    private IMapController mapController;
-    private int posicion;
     private boolean satelite = false;
     private String FLICKR_APIKEY;
 
-    private TextView espacioTipo;
-    private TextView espacioFecha;
-    private ImageView espacioFoto;
-    private FloatingActionButton fab;
-    private ImageButton imageButton;
     private CarouselView carouselView;
-    private ConstraintLayout constraintLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +89,7 @@ public class EspacioActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,8 +97,7 @@ public class EspacioActivity extends AppCompatActivity {
                 Type tipoListaUrls = new TypeToken<ArrayList<URLEspacio>>() {
                 }.getType();
                 ArrayList<URLEspacio> urls = gson.fromJson(leerUrls(getApplicationContext()), tipoListaUrls);
-                URLEspacio url = null;
-                for (final URLEspacio u : urls) {
+                for (final URLEspacio u : Objects.requireNonNull(urls)) {
                     if (u.getCodigo().equals(espacioNatural.getCodigo())) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(EspacioActivity.this);
                         builder.setTitle("Seleccione enlace")
@@ -131,13 +123,12 @@ public class EspacioActivity extends AppCompatActivity {
                 }
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         FLICKR_APIKEY = getString(R.string.FLICKR_APIKEY);
         carouselView = findViewById(R.id.espacio_carousel);
-        constraintLayout = findViewById(R.id.espacio_layout);
 
-        imageButton = findViewById(R.id.espacio_capa_btn);
+        ImageButton imageButton = findViewById(R.id.espacio_capa_btn);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -155,18 +146,11 @@ public class EspacioActivity extends AppCompatActivity {
             }
         });
 
-        /*obtenerFavoritos();
-        cambiarImagen();*/
-
-        // Obtener de main
-        String s = getIntent().getStringExtra("posicion");
-        posicion = Integer.valueOf(s);
-
         // Inicializar mapa
         map = findViewById(R.id.espacio_map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setMultiTouchControls(true);
-        mapController = map.getController();
+        IMapController mapController = map.getController();
         mapController.setZoom(ZOOM_MAPA);
         mapController.setCenter(calcularPuntoMedio());
 
@@ -176,9 +160,9 @@ public class EspacioActivity extends AppCompatActivity {
         obtenerImagenes();
 
         // Inicializar texto e imagen
-        espacioTipo = findViewById(R.id.espacio_tipo);
-        espacioFecha = findViewById(R.id.espacio_descripcion);
-        espacioFoto = findViewById(R.id.espacio_foto);
+        TextView espacioTipo = findViewById(R.id.espacio_tipo);
+        TextView espacioFecha = findViewById(R.id.espacio_descripcion);
+        ImageView espacioFoto = findViewById(R.id.espacio_foto);
 
         setTitle(espacioNatural.getNombre());
         espacioTipo.setText(espacioNatural.getTipoDeclaracion());
@@ -195,7 +179,7 @@ public class EspacioActivity extends AppCompatActivity {
         final ArrayList<EItem> listaItemsDisponibles = Utilidades.crearItems(itemsDisponibles);
         RVAdapterEspacioItem adapter = new RVAdapterEspacioItem(listaItemsDisponibles, new RVClickListenerEspacio() {
             @Override
-            public void onClickItem(View v, int position) {
+            public void onClickItem(int position) {
                 ListaItemsActivity.espacioNatural = espacioNatural;
                 Intent myIntent = new Intent(EspacioActivity.this, ListaItemsActivity.class);
                 myIntent.putExtra("posicion", String.valueOf(listaItemsDisponibles.get(position).getPosicion()));
@@ -252,21 +236,7 @@ public class EspacioActivity extends AppCompatActivity {
      *
      * @return coordenadas del punto medio del polígono
      */
-    public GeoPoint calcularPuntoMedio() {
-        /*double x = 0.;
-        double y = 0.;
-        int cont = espacioNatural.getCoordenadas().size();
-        for (int i = 0; i < cont - 1; i++) {
-            final GeoPoint point = espacioNatural.getCoordenadas().get(i);
-            x += point.getLatitude();
-            y += point.getLongitude();
-        }
-
-        x = x / cont;
-        y = y / cont;
-
-        return new GeoPoint(x, y);*/
-
+    private GeoPoint calcularPuntoMedio() {
         double[] centroid = {0, 0};
         double[][] vertices = new double[2][espacioNatural.getCoordenadas().size()];
         for (int j = 0; j < espacioNatural.getCoordenadas().size(); j++) {
@@ -274,14 +244,14 @@ public class EspacioActivity extends AppCompatActivity {
             vertices[1][j] = espacioNatural.getCoordenadas().get(j).getLongitude();
         }
         double signedArea = 0.0;
-        double x0 = 0.0; // Current vertex X
-        double y0 = 0.0; // Current vertex Y
-        double x1 = 0.0; // Next vertex X
-        double y1 = 0.0; // Next vertex Y
-        double a = 0.0;  // Partial signed area
+        double x0; // Current vertex X
+        double y0; // Current vertex Y
+        double x1; // Next vertex X
+        double y1; // Next vertex Y
+        double a;  // Partial signed area
 
         // For all vertices except last
-        int i = 0;
+        int i;
         for (i = 0; i < espacioNatural.getCoordenadas().size() - 1; ++i) {
             x0 = vertices[0][i];
             y0 = vertices[1][i];
@@ -313,10 +283,11 @@ public class EspacioActivity extends AppCompatActivity {
 
     private Set comrobarItems() {
         Set<Integer> set = new HashSet();
+        BufferedReader bf = null;
 
         for (int i = 0; i < Utilidades.nombresFicheros.length; i++) {
             try {
-                BufferedReader bf = new BufferedReader(new FileReader(getFilesDir() + "/" + Utilidades.nombresFicheros[i] + ".kml"));
+                bf = new BufferedReader(new FileReader(getFilesDir() + "/" + Utilidades.nombresFicheros[i] + ".kml"));
                 String linea;
                 while ((linea = bf.readLine()) != null) {
                     if (linea.contains(espacioNatural.getCodigo())) {
@@ -325,7 +296,13 @@ public class EspacioActivity extends AppCompatActivity {
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("FICHERO", "Problema al abrir fichero", e);
+            } finally {
+                try {
+                    Objects.requireNonNull(bf).close();
+                } catch (IOException e) {
+                    Log.e("FICHERO", "Problema al cerrar fichero", e);
+                }
             }
         }
         return set;
@@ -357,57 +334,46 @@ public class EspacioActivity extends AppCompatActivity {
             }
 
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            Log.e("FLICKR", "Problema al descargar fotos", e);
         } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public class ObtenerImagenes extends AsyncTask<Void, Void, ArrayList<POI>> {
-        @Override
-        protected ArrayList<POI> doInBackground(Void... voids) {
-            FlickrPOIProvider poiProvider = new FlickrPOIProvider(FLICKR_APIKEY);
-            BoundingBox bb = BoundingBox.fromGeoPoints(espacioNatural.getCoordenadas());
-            ArrayList<POI> fotos = poiProvider.getPOIInside(bb, 20);
-            return fotos;
+            Log.e("FLICKR", "Problema al descargar fotos", e);
+            Thread.currentThread().interrupt();
         }
     }
 
     private String leerUrls(Context context) {
-        String json = null;
+        String json;
         try {
             InputStream is = context.getResources().openRawResource(R.raw.urls);
-
             int size = is.available();
-
             byte[] buffer = new byte[size];
 
             is.read(buffer);
-
             is.close();
-
             json = new String(buffer, StandardCharsets.UTF_8);
-
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (IOException e) {
+            Log.e("JSON", "Error al leer", e);
             return null;
         }
         return json;
     }
+
+    class ObtenerImagenes extends AsyncTask<Void, Void, ArrayList<POI>> {
+        @Override
+        protected ArrayList<POI> doInBackground(Void... voids) {
+            FlickrPOIProvider poiProvider = new FlickrPOIProvider(FLICKR_APIKEY);
+            BoundingBox bb = BoundingBox.fromGeoPoints(espacioNatural.getCoordenadas());
+            return poiProvider.getPOIInside(bb, 20);
+        }
+    }
 }
 
 class URLEspacio {
-    String codigo;
-    String urlJcyl;
-    String urlWikipedia;
+    private String codigo;
+    private String urlJcyl;
+    private String urlWikipedia;
 
-    private URLEspacio(String codigo, String urlJcyl, String urlWikipedia) {
-        this.codigo = codigo;
-        this.urlJcyl = urlJcyl;
-        this.urlWikipedia = urlWikipedia;
-    }
-
+    @NonNull
     @Override
     public String toString() {
         return "URLEspacio{" +

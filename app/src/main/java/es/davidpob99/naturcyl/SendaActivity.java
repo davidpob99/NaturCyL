@@ -5,18 +5,18 @@
  *
  * Copyright (C) 2019  David Población Criado
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Este programa es software libre: puede redistribuirlo y/o modificarlo bajo
+ * los términos de la Licencia General Pública de GNU publicada por la Free
+ * Software Foundation, ya sea la versión 3 de la Licencia, o (a su elección)
+ * cualquier versión posterior.\n\n
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Este programa se distribuye con la esperanza de que sea útil pero SIN
+ * NINGUNA GARANTÍA; incluso sin la garantía implícita de MERCANTIBILIDAD o
+ * CALIFICADA PARA UN PROPÓSITO EN PARTICULAR. Vea la Licencia General Pública
+ * de GNU para más detalles.\n\n
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Usted ha debido de recibir una copia de la Licencia General Pública
+ * de GNU junto con este programa. Si no, vea http://www.gnu.org/licenses/
  */
 
 package es.davidpob99.naturcyl;
@@ -44,15 +44,14 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 
 public class SendaActivity extends AppCompatActivity {
     private static final double ZOOM_MAPA = 18;
-    protected static Senda senda;
+    static Senda senda;
     private MapView mapa;
-    private IMapController mapController;
-    private ImageButton imageButton;
 
     private boolean direcciones = true;
     private boolean satelite = false;
@@ -78,10 +77,11 @@ public class SendaActivity extends AppCompatActivity {
                     fab.setImageResource(R.drawable.ic_directions_white_24dp);
                     Toast.makeText(SendaActivity.this, "Direcciones desactivadas", Toast.LENGTH_SHORT).show();
                 } else {
-                    // TODO mapa.getOverlays().clear();
+                    mapa.getOverlays().clear();
                     mostrarDirecciones();
                     fab.setImageResource(R.drawable.ic_routes_white_24dp);
                     Toast.makeText(SendaActivity.this, "Direcciones activadas", Toast.LENGTH_SHORT).show();
+                    direcciones = true;
                 }
 
             }
@@ -94,7 +94,7 @@ public class SendaActivity extends AppCompatActivity {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
+                        // Continuar con la actividad
                     }
                 })
                 .create()
@@ -102,7 +102,7 @@ public class SendaActivity extends AppCompatActivity {
         crearMapa();
         mostrarDirecciones();
 
-        imageButton = findViewById(R.id.senda_capa_btn);
+        ImageButton imageButton = findViewById(R.id.senda_capa_btn);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,7 +132,7 @@ public class SendaActivity extends AppCompatActivity {
         mapa = findViewById(R.id.senda_map);
         mapa.setTileSource(TileSourceFactory.MAPNIK);
         mapa.setMultiTouchControls(true);
-        mapController = mapa.getController();
+        IMapController mapController = mapa.getController();
         mapController.setZoom(ZOOM_MAPA);
         mapController.setCenter(senda.getCoordenadasSenda().get(0));
     }
@@ -160,7 +160,7 @@ public class SendaActivity extends AppCompatActivity {
         mapa.invalidate();
 
         Drawable nodeIcon = getResources().getDrawable(R.drawable.marker_default);
-        for (int i = 0; i < road.mNodes.size(); i++) {
+        for (int i = 0; i < Objects.requireNonNull(road).mNodes.size(); i++) {
             RoadNode node = road.mNodes.get(i);
             Marker nodeMarker = new Marker(mapa);
             nodeMarker.setPosition(node.mLocation);

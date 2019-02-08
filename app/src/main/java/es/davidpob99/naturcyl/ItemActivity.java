@@ -5,18 +5,18 @@
  *
  * Copyright (C) 2019  David Población Criado
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Este programa es software libre: puede redistribuirlo y/o modificarlo bajo
+ * los términos de la Licencia General Pública de GNU publicada por la Free
+ * Software Foundation, ya sea la versión 3 de la Licencia, o (a su elección)
+ * cualquier versión posterior.\n\n
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Este programa se distribuye con la esperanza de que sea útil pero SIN
+ * NINGUNA GARANTÍA; incluso sin la garantía implícita de MERCANTIBILIDAD o
+ * CALIFICADA PARA UN PROPÓSITO EN PARTICULAR. Vea la Licencia General Pública
+ * de GNU para más detalles.\n\n
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Usted ha debido de recibir una copia de la Licencia General Pública
+ * de GNU junto con este programa. Si no, vea http://www.gnu.org/licenses/
  */
 
 package es.davidpob99.naturcyl;
@@ -57,12 +57,14 @@ import org.osmdroid.views.overlay.Polyline;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 
 
 public class ItemActivity extends AppCompatActivity {
     private static final double ZOOM_MAPA = 17;
     private static final String MEDIDA_AREA = " m\u00B2";
-    protected static ListaEspaciosNaturalesItems<? extends EspacioNaturalItem> lista;
+    private static final String ROBOTO_LIGHT = "sans-serif-light";
+    static ListaEspaciosNaturalesItems<? extends EspacioNaturalItem> lista;
 
     private int posicion;
     private int tipo;
@@ -77,11 +79,9 @@ public class ItemActivity extends AppCompatActivity {
     private TextView acceso;
     private TextView observaciones;
     private FloatingActionButton fab;
-    private ImageButton imageButton;
     private MapView map;
 
     private SharedPreferences preferencias;
-    private SharedPreferences.Editor editor;
     private ArrayList<EspacioNaturalItem> favoritos;
 
     @Override
@@ -123,7 +123,7 @@ public class ItemActivity extends AppCompatActivity {
             }
         });
 
-        imageButton = findViewById(R.id.item_capa_btn);
+        ImageButton imageButton = findViewById(R.id.item_capa_btn);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,7 +140,6 @@ public class ItemActivity extends AppCompatActivity {
                 }
             }
         });
-        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         obtenerFavoritos();
         cambiarImagen();
@@ -162,7 +161,7 @@ public class ItemActivity extends AppCompatActivity {
             Polyline line = new Polyline();   //see note below!
             line.setPoints(senda.getCoordenadasSenda());
             map.getOverlayManager().add(line);
-            mapController.setCenter(senda.getCoordenadasSenda().get(Math.round(senda.getCoordenadasSenda().size() / 2)));
+            mapController.setCenter(senda.getCoordenadasSenda().get(Math.round(senda.getCoordenadasSenda().size() / 2f)));
 
         } else {
             mapController.setCenter(lista.getEstanEnEspacio().get(posicion).getCoordenadas());
@@ -267,14 +266,14 @@ public class ItemActivity extends AppCompatActivity {
         try {
             estado.setText(EspacioNaturalItem.estados[lista.getEstanEnEspacio().get(posicion).getEstado() - 1]);
         } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
+            Log.e("DATOS", "Asociado a la falta de uniformidad de datos de la JCyL", e);
             estado.setText("Estado: Sin determinar");
         }
         senalizacion.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isSenalizacionExterna()));
         q.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isQ()));
         interesTuristico.setText(booleanAEspanol(lista.getEstanEnEspacio().get(posicion).isInteresTuristico()));
-        acceso.setText(lista.getEstanEnEspacio().get(posicion).getAcceso() != "" ? lista.getEstanEnEspacio().get(posicion).getAcceso() : Utilidades.NO_DATO);
-        observaciones.setText(lista.getEstanEnEspacio().get(posicion).getObservaciones() != "" ? lista.getEstanEnEspacio().get(posicion).getObservaciones() : Utilidades.NO_DATO);
+        acceso.setText(!Objects.equals(lista.getEstanEnEspacio().get(posicion).getAcceso(), "") ? lista.getEstanEnEspacio().get(posicion).getAcceso() : Utilidades.NO_DATO);
+        observaciones.setText(!Objects.equals(lista.getEstanEnEspacio().get(posicion).getObservaciones(), "") ? lista.getEstanEnEspacio().get(posicion).getObservaciones() : Utilidades.NO_DATO);
     }
 
     private String booleanAEspanol(boolean b) {
@@ -293,7 +292,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(booleanAEspanol(a.isDelimitado()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -303,7 +302,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(booleanAEspanol(a.isAparcaBicis()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -316,7 +315,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(Observatorio.TIPOS[o.getTipoObservatorio() - 1 < 3 ? o.getTipoObservatorio() : 2]);
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -326,7 +325,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(o.getEntornoObservatorio());
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -339,7 +338,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(m.getEntorno());
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -352,7 +351,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(booleanAEspanol(zr.isMerendero()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -365,7 +364,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(booleanAEspanol(cp.isServicioInformativo()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -375,7 +374,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(booleanAEspanol(cp.isBiblioteca()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -385,7 +384,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(booleanAEspanol(cp.isTiendaVerde()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -395,7 +394,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(cp.getWeb());
                 Linkify.addLinks(tv, Linkify.WEB_URLS);
                 tv.setPadding(8, 8, 8, 8);
@@ -409,7 +408,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(CentroVisitante.TIPOS[cv.getTipo() - 1 < 10 ? cv.getTipo() : 9]); //TODO OUTOFBOUNDS
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -419,7 +418,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(cv.getDescripcion());
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -432,7 +431,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(as.getNombreArbol());
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -447,7 +446,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(String.valueOf(c.getCabanas()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -457,7 +456,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(String.valueOf(c.getParcelas()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -467,7 +466,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(Campamento.TIPOS[c.getTipoCamping() - 1 < 3 ? c.getTipoCamping() - 1 : 3]);
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -477,7 +476,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(c.getWeb());
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -490,7 +489,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(Refugio.TIPOS[r.getTipo() - 1 < 5 ? r.getTipo() : 4]);
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -500,7 +499,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(Refugio.USOS[r.getUso() - 1 < 3 ? r.getUso() : 2]);
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -510,7 +509,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(r.getActividad());
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -520,7 +519,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(booleanAEspanol(r.isCapacidadPernoctacion()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -530,7 +529,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
                 tv = new TextView(this);
-                tv.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
+                tv.setTypeface(Typeface.create(ROBOTO_LIGHT, Typeface.NORMAL));
                 tv.setText(booleanAEspanol(r.isServicioComida()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
@@ -546,7 +545,7 @@ public class ItemActivity extends AppCompatActivity {
                 TextView desnivel = tablaSenda.findViewById(R.id.desnivel_senda);
                 TextView dificultad = tablaSenda.findViewById(R.id.dificultad_senda);
                 TextView ciclabilidad = tablaSenda.findViewById(R.id.ciclabilidad_senda);
-                TextView codigo = tablaSenda.findViewById(R.id.codigo_senda);
+                TextView codigoSenda = tablaSenda.findViewById(R.id.codigo_senda);
                 ImageView fotoDificultad = tablaSenda.findViewById(R.id.foto_dificultad_senda);
 
                 Log.i("SENDA", s.toString());
@@ -557,20 +556,22 @@ public class ItemActivity extends AppCompatActivity {
                 try {
                     dificultad.setText(Senda.DIFICULTAD[s.getDificultad() - 1]);
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    e.printStackTrace();
+                    Log.e("DATOS", "Asociado a la falta de uniformidad de datos de la JCyL", e);
                     dificultad.setText(Utilidades.NO_DATO);
                 }
 
                 ciclabilidad.setText(s.getCiclabilidad() + " %");
-                codigo.setText(s.getCodigoSenda());
+                codigoSenda.setText(s.getCodigoSenda());
                 try {
                     fotoDificultad.setColorFilter(getResources().getColor(Senda.COLORES_DIFICULTAD[s.getDificultad() - 1]));
                 } catch (ArrayIndexOutOfBoundsException e) {
-                    e.printStackTrace();
+                    Log.e("DATOS", "Asociado a la falta de uniformidad de datos de la JCyL", e);
                     fotoDificultad.setColorFilter(Senda.COLORES_DIFICULTAD[1]);
                 }
-
+                break;
             case -1:
+                break;
+            default:
                 break;
         }
     }
@@ -598,7 +599,7 @@ public class ItemActivity extends AppCompatActivity {
 
     private void guardarFavoritos() {
         preferencias = this.getSharedPreferences("es.davidpob99.naturcyl", Context.MODE_PRIVATE);
-        editor = preferencias.edit();
+        SharedPreferences.Editor editor = preferencias.edit();
         Gson gson = new Gson();
         String json = gson.toJson(favoritos);
         editor.putString("favoritos", json);

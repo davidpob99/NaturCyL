@@ -5,18 +5,18 @@
  *
  * Copyright (C) 2019  David Población Criado
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Este programa es software libre: puede redistribuirlo y/o modificarlo bajo
+ * los términos de la Licencia General Pública de GNU publicada por la Free
+ * Software Foundation, ya sea la versión 3 de la Licencia, o (a su elección)
+ * cualquier versión posterior.\n\n
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Este programa se distribuye con la esperanza de que sea útil pero SIN
+ * NINGUNA GARANTÍA; incluso sin la garantía implícita de MERCANTIBILIDAD o
+ * CALIFICADA PARA UN PROPÓSITO EN PARTICULAR. Vea la Licencia General Pública
+ * de GNU para más detalles.\n\n
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Usted ha debido de recibir una copia de la Licencia General Pública
+ * de GNU junto con este programa. Si no, vea http://www.gnu.org/licenses/
  */
 
 package es.davidpob99.naturcyl;
@@ -36,6 +36,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -68,6 +69,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -91,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
 
     private SharedPreferences preferencias;
-    private SharedPreferences.Editor editor;
     private ArrayList<EspacioNaturalItem> favoritos;
 
     @Override
@@ -203,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case REQUEST_WRITE_STORAGE: {
@@ -244,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         try {
-            kmlEspacios = db.parse(file);
+            kmlEspacios = Objects.requireNonNull(db).parse(file);
         } catch (Exception e) {
             e.printStackTrace();
             try {
@@ -255,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
                 r.printStackTrace();
             }
         }
-        NodeList nodosEspacios = kmlEspacios.getElementsByTagName("Placemark");
+        NodeList nodosEspacios = Objects.requireNonNull(kmlEspacios).getElementsByTagName("Placemark");
         for (int i = 0; i < nodosEspacios.getLength(); i++) {
             Node n = nodosEspacios.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -352,7 +353,7 @@ public class MainActivity extends AppCompatActivity {
         rv.setLayoutManager(llm);
         RVAdapterEspacio adapter = new RVAdapterEspacio(listaEspacios, new RVClickListenerEspacio() {
             @Override
-            public void onClickItem(View v, int position) {
+            public void onClickItem(int position) {
                 EspacioActivity.espacioNatural = listaEspacios.get(position);
                 Intent myIntent = new Intent(MainActivity.this, EspacioActivity.class);
                 myIntent.putExtra("posicion", String.valueOf(position));
@@ -376,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void guardarFavoritos() {
         preferencias = this.getSharedPreferences("es.davidpob99.naturcyl", Context.MODE_PRIVATE);
-        editor = preferencias.edit();
+        SharedPreferences.Editor editor = preferencias.edit();
         Gson gson = new Gson();
         String json = gson.toJson(favoritos);
         editor.putString("favoritos", json);
@@ -454,10 +455,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     class ParametrosDescarga {
-        String url;
-        String nombreFichero;
+        final String url;
+        final String nombreFichero;
 
-        public ParametrosDescarga(String url, String nombreFichero) {
+        ParametrosDescarga(String url, String nombreFichero) {
             this.url = url;
             this.nombreFichero = nombreFichero;
         }

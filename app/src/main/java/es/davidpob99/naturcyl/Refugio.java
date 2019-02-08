@@ -5,23 +5,21 @@
  *
  * Copyright (C) 2019  David Población Criado
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Este programa es software libre: puede redistribuirlo y/o modificarlo bajo
+ * los términos de la Licencia General Pública de GNU publicada por la Free
+ * Software Foundation, ya sea la versión 3 de la Licencia, o (a su elección)
+ * cualquier versión posterior.\n\n
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Este programa se distribuye con la esperanza de que sea útil pero SIN
+ * NINGUNA GARANTÍA; incluso sin la garantía implícita de MERCANTIBILIDAD o
+ * CALIFICADA PARA UN PROPÓSITO EN PARTICULAR. Vea la Licencia General Pública
+ * de GNU para más detalles.\n\n
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Usted ha debido de recibir una copia de la Licencia General Pública
+ * de GNU junto con este programa. Si no, vea http://www.gnu.org/licenses/
  */
 
 package es.davidpob99.naturcyl;
-
-import org.osmdroid.util.GeoPoint;
 
 /**
  * Estructura techada que se crea para dar cobijo y permitir el descanso y
@@ -29,10 +27,10 @@ import org.osmdroid.util.GeoPoint;
  * difícil práctica. Cubren las demandas de visitantes en zonas de montaña, alta
  * montaña y otras zonas aisladas o de difícil accesibilidad.
  */
-public class Refugio extends EspacioNaturalItem {
+class Refugio extends EspacioNaturalItem {
     public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/refugios/1284378322579.kml";
-    public static final String[] TIPOS = {"Cabaña", "Chozo o Chivitera", "Caseta", "Casa o Edificación", "Refugio de montaña"};
-    public static final String[] USOS = {"Libre", "Restringido", "Desuso"};
+    static final String[] TIPOS = {"Cabaña", "Chozo o Chivitera", "Caseta", "Casa o Edificación", "Refugio de montaña"};
+    static final String[] USOS = {"Libre", "Restringido", "Desuso"};
 
     private int tipo;
     private int uso;
@@ -42,15 +40,6 @@ public class Refugio extends EspacioNaturalItem {
 
     public Refugio() {
         super();
-    }
-
-    public Refugio(int id, boolean q, String codigo, String observaciones, String fechaEstado, String fechaDeclaracion, int estado, boolean senalizacionExterna, String acceso, String nombre, boolean interesTuristico, double superficie, GeoPoint coordenadas, int tipo, int uso, String actividad, boolean capacidadPernoctacion, boolean servicioComida) {
-        super(id, q, codigo, observaciones, fechaEstado, fechaDeclaracion, estado, senalizacionExterna, acceso, nombre, interesTuristico, superficie, coordenadas);
-        this.tipo = tipo;
-        this.uso = uso;
-        this.actividad = actividad;
-        this.capacidadPernoctacion = capacidadPernoctacion;
-        this.servicioComida = servicioComida;
     }
 
     public int getTipo() {

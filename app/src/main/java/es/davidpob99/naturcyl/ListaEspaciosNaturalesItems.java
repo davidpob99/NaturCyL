@@ -5,18 +5,18 @@
  *
  * Copyright (C) 2019  David Población Criado
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Este programa es software libre: puede redistribuirlo y/o modificarlo bajo
+ * los términos de la Licencia General Pública de GNU publicada por la Free
+ * Software Foundation, ya sea la versión 3 de la Licencia, o (a su elección)
+ * cualquier versión posterior.\n\n
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Este programa se distribuye con la esperanza de que sea útil pero SIN
+ * NINGUNA GARANTÍA; incluso sin la garantía implícita de MERCANTIBILIDAD o
+ * CALIFICADA PARA UN PROPÓSITO EN PARTICULAR. Vea la Licencia General Pública
+ * de GNU para más detalles.\n\n
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Usted ha debido de recibir una copia de la Licencia General Pública
+ * de GNU junto con este programa. Si no, vea http://www.gnu.org/licenses/
  */
 
 package es.davidpob99.naturcyl;
@@ -28,8 +28,8 @@ import org.osmdroid.util.GeoPoint;
 import java.util.ArrayList;
 
 public class ListaEspaciosNaturalesItems<E extends EspacioNaturalItem> {
-    private ArrayList<E> elementos;
-    private ArrayList<E> estanEnEspacio;
+    private final ArrayList<E> elementos;
+    private final ArrayList<E> estanEnEspacio;
     private EspacioNatural espacioNatural;
 
     public ListaEspaciosNaturalesItems() {
@@ -40,9 +40,7 @@ public class ListaEspaciosNaturalesItems<E extends EspacioNaturalItem> {
     public ListaEspaciosNaturalesItems(ArrayList<E> elementos) {
         this.elementos = new ArrayList<>();
         estanEnEspacio = new ArrayList<>();
-        for (E e : elementos) {
-            this.elementos.add(e);
-        }
+        this.elementos.addAll(elementos);
     }
 
     public void deElementosAEnEspacio() {
@@ -113,7 +111,7 @@ public class ListaEspaciosNaturalesItems<E extends EspacioNaturalItem> {
      * @param gp The point to check
      * @return true if the point is inside the boundary, false otherwise
      */
-    public boolean poligonoContiene(GeoPoint gp) {
+    private boolean poligonoContiene(GeoPoint gp) {
         int i;
         int j;
         boolean result = false;

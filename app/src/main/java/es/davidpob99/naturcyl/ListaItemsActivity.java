@@ -5,18 +5,18 @@
  *
  * Copyright (C) 2019  David Población Criado
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Este programa es software libre: puede redistribuirlo y/o modificarlo bajo
+ * los términos de la Licencia General Pública de GNU publicada por la Free
+ * Software Foundation, ya sea la versión 3 de la Licencia, o (a su elección)
+ * cualquier versión posterior.\n\n
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Este programa se distribuye con la esperanza de que sea útil pero SIN
+ * NINGUNA GARANTÍA; incluso sin la garantía implícita de MERCANTIBILIDAD o
+ * CALIFICADA PARA UN PROPÓSITO EN PARTICULAR. Vea la Licencia General Pública
+ * de GNU para más detalles.\n\n
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Usted ha debido de recibir una copia de la Licencia General Pública
+ * de GNU junto con este programa. Si no, vea http://www.gnu.org/licenses/
  */
 
 package es.davidpob99.naturcyl;
@@ -29,11 +29,10 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 
 public class ListaItemsActivity extends AppCompatActivity {
-    protected static EspacioNatural espacioNatural;
+    static EspacioNatural espacioNatural;
     private int posicion;
     private ListaEspaciosNaturalesItems<? extends EspacioNaturalItem> listaItems;
 
@@ -44,7 +43,6 @@ public class ListaItemsActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_items);
-        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Obtener de EspacioActivity
         posicion = Integer.valueOf(getIntent().getStringExtra("posicion"));
@@ -88,15 +86,14 @@ public class ListaItemsActivity extends AppCompatActivity {
             case 11:
                 listaTmp = Utilidades.inicializarSendas(getApplicationContext().getFilesDir());
                 break;
-            case 12:/*
-                listaItems = Utilidades.inicializarSendas();
-                break;*/
+            default:
+                break;
         }
         listaItems = listaTmp;
         listaItems.setEspacioNatural(espacioNatural);
         listaItems.actualizarEnEspacio();
 
-        if (listaItems.getEstanEnEspacio().size() == 0) {
+        if (listaItems.getEstanEnEspacio().isEmpty()) {
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 builder = new AlertDialog.Builder(ListaItemsActivity.this, android.R.style.Theme_DeviceDefault_Dialog);
@@ -122,7 +119,7 @@ public class ListaItemsActivity extends AppCompatActivity {
         rv.setLayoutManager(llm);
         RVAdapterItem adapter = new RVAdapterItem(listaItems.getEstanEnEspacio(), new RVClickListenerEspacio() {
             @Override
-            public void onClickItem(View v, int position) {
+            public void onClickItem(int position) {
                 ItemActivity.lista = listaItems;
                 Intent myIntent = new Intent(ListaItemsActivity.this, ItemActivity.class);
                 myIntent.putExtra("tipo", String.valueOf(posicion));

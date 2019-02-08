@@ -5,21 +5,23 @@
  *
  * Copyright (C) 2019  David Población Criado
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Este programa es software libre: puede redistribuirlo y/o modificarlo bajo
+ * los términos de la Licencia General Pública de GNU publicada por la Free
+ * Software Foundation, ya sea la versión 3 de la Licencia, o (a su elección)
+ * cualquier versión posterior.\n\n
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Este programa se distribuye con la esperanza de que sea útil pero SIN
+ * NINGUNA GARANTÍA; incluso sin la garantía implícita de MERCANTIBILIDAD o
+ * CALIFICADA PARA UN PROPÓSITO EN PARTICULAR. Vea la Licencia General Pública
+ * de GNU para más detalles.\n\n
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Usted ha debido de recibir una copia de la Licencia General Pública
+ * de GNU junto con este programa. Si no, vea http://www.gnu.org/licenses/
  */
 
 package es.davidpob99.naturcyl;
+
+import android.support.annotation.NonNull;
 
 import org.osmdroid.util.GeoPoint;
 
@@ -27,8 +29,8 @@ import org.osmdroid.util.GeoPoint;
  * Características comunes de todos los componentes
  * de los espacios naturales.
  */
-public class EspacioNaturalItem {
-    public static final String[] estados = {"Bueno", "Sin determinar", "Aceptable", "Malo"};
+class EspacioNaturalItem {
+    static final String[] estados = {"Bueno", "Sin determinar", "Aceptable", "Malo"};
 
     private int id;
     private boolean q;
@@ -45,26 +47,11 @@ public class EspacioNaturalItem {
     private GeoPoint coordenadas;
     private boolean accesibilidad;
 
-    public EspacioNaturalItem() {
-
+    EspacioNaturalItem() {
+        super();
     }
 
-    public EspacioNaturalItem(int id, boolean q, String codigo, String observaciones, String fechaEstado, String fechaDeclaracion, int estado, boolean senalizacionExterna, String acceso, String nombre, boolean interesTuristico, double superficie, GeoPoint coordenadas) {
-        this.id = id;
-        this.q = q;
-        this.codigo = codigo;
-        this.observaciones = observaciones;
-        this.fechaEstado = fechaEstado;
-        this.fechaDeclaracion = fechaDeclaracion;
-        this.estado = estado;
-        this.senalizacionExterna = senalizacionExterna;
-        this.acceso = acceso;
-        this.nombre = nombre;
-        this.interesTuristico = interesTuristico;
-        this.superficie = superficie;
-        this.coordenadas = coordenadas;
-    }
-
+    @NonNull
     @Override
     public String toString() {
         return "EspacioNaturalItem{" +

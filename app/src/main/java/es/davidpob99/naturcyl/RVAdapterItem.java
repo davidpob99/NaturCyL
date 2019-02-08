@@ -5,22 +5,23 @@
  *
  * Copyright (C) 2019  David Población Criado
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Este programa es software libre: puede redistribuirlo y/o modificarlo bajo
+ * los términos de la Licencia General Pública de GNU publicada por la Free
+ * Software Foundation, ya sea la versión 3 de la Licencia, o (a su elección)
+ * cualquier versión posterior.\n\n
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Este programa se distribuye con la esperanza de que sea útil pero SIN
+ * NINGUNA GARANTÍA; incluso sin la garantía implícita de MERCANTIBILIDAD o
+ * CALIFICADA PARA UN PROPÓSITO EN PARTICULAR. Vea la Licencia General Pública
+ * de GNU para más detalles.\n\n
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Usted ha debido de recibir una copia de la Licencia General Pública
+ * de GNU junto con este programa. Si no, vea http://www.gnu.org/licenses/
  */
 
 package es.davidpob99.naturcyl;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -32,8 +33,8 @@ import java.util.ArrayList;
 
 
 public class RVAdapterItem extends RecyclerView.Adapter<RVAdapterItem.ItemViewHolder> {
-    private ArrayList<? extends EspacioNaturalItem> items;
-    private RVClickListenerEspacio listener;
+    private final ArrayList<? extends EspacioNaturalItem> items;
+    private final RVClickListenerEspacio listener;
 
     public RVAdapterItem(ArrayList<? extends EspacioNaturalItem> items, RVClickListenerEspacio listener) {
         this.items = items;
@@ -45,21 +46,22 @@ public class RVAdapterItem extends RecyclerView.Adapter<RVAdapterItem.ItemViewHo
         return items.size();
     }
 
+    @NonNull
     @Override
-    public RVAdapterItem.ItemViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RVAdapterItem.ItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_cardview, viewGroup, false);
         final RVAdapterItem.ItemViewHolder pvh = new RVAdapterItem.ItemViewHolder(v);
         v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onClickItem(v, pvh.getLayoutPosition());
+                listener.onClickItem(pvh.getLayoutPosition());
             }
         });
         return pvh;
     }
 
     @Override
-    public void onBindViewHolder(RVAdapterItem.ItemViewHolder itemViewHolder, int i) {
+    public void onBindViewHolder(@NonNull RVAdapterItem.ItemViewHolder itemViewHolder, int i) {
         itemViewHolder.itemNombre.setText(items.get(i).getNombre());
         try {
             itemViewHolder.itemEstado.setText("Estado: " + EspacioNaturalItem.estados[items.get(i).getEstado() - 1]);
@@ -69,15 +71,10 @@ public class RVAdapterItem extends RecyclerView.Adapter<RVAdapterItem.ItemViewHo
         }
     }
 
-    @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
-        super.onAttachedToRecyclerView(recyclerView);
-    }
-
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
-        CardView cv;
-        TextView itemNombre;
-        TextView itemEstado;
+        final CardView cv;
+        final TextView itemNombre;
+        final TextView itemEstado;
 
         ItemViewHolder(View v) {
             super(v);

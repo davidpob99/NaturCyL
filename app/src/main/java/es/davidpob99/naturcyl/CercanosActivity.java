@@ -5,18 +5,18 @@
  *
  * Copyright (C) 2019  David Población Criado
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Este programa es software libre: puede redistribuirlo y/o modificarlo bajo
+ * los términos de la Licencia General Pública de GNU publicada por la Free
+ * Software Foundation, ya sea la versión 3 de la Licencia, o (a su elección)
+ * cualquier versión posterior.\n\n
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Este programa se distribuye con la esperanza de que sea útil pero SIN
+ * NINGUNA GARANTÍA; incluso sin la garantía implícita de MERCANTIBILIDAD o
+ * CALIFICADA PARA UN PROPÓSITO EN PARTICULAR. Vea la Licencia General Pública
+ * de GNU para más detalles.\n\n
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Usted ha debido de recibir una copia de la Licencia General Pública
+ * de GNU junto con este programa. Si no, vea http://www.gnu.org/licenses/
  */
 
 package es.davidpob99.naturcyl;
@@ -49,13 +49,14 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
+import java.util.Objects;
+
 
 public class CercanosActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
-    public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
 
-    private Spinner spinner;
     private EditText distancia;
     private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
@@ -66,6 +67,9 @@ public class CercanosActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Spinner spinner;
+
         setContentView(R.layout.activity_cercanos);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -115,19 +119,21 @@ public class CercanosActivity extends AppCompatActivity implements
                     case 10:
                         listaItems = Utilidades.inicializarQuioscos(getApplicationContext().getFilesDir());
                         break;
+                    default:
+                        break;
                 }
                 double metros;
                 try {
                     metros = Double.valueOf(distancia.getText().toString());
                 } catch (NumberFormatException e) {
-                    e.printStackTrace();
+                    Log.e("DIST", "Distancia null", e);
                     new AlertDialog.Builder(CercanosActivity.this)
                             .setTitle("Error")
                             .setMessage("Especifique una distancia en metros por favor")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-
+                                    // Continuar con la actividad
                                 }
                             })
                             .create()
@@ -149,20 +155,20 @@ public class CercanosActivity extends AppCompatActivity implements
                             listaFinal.add(eni);
                         }
                     } catch (NullPointerException e) {
-                        e.printStackTrace();
+                        Log.e("DIST", "Distancia null", e);
                         Toast.makeText(CercanosActivity.this, "No se ha podido obtener su ubicación. Compruebe que está activada", Toast.LENGTH_LONG).show();
                     }
                     listaFinal.deElementosAEnEspacio();
                 }
 
-                if (listaFinal.getElementos().size() == 0) {
+                if (listaFinal.getElementos().isEmpty()) {
                     new AlertDialog.Builder(CercanosActivity.this)
                             .setTitle("Vacío")
                             .setMessage("No se han encontrado " + Utilidades.nombresItems[posicion].toLowerCase() + " a menos distancia que la indicada (" + metros + " m).")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-
+                                    // Continuar con la actividad
                                 }
                             })
                             .create()
@@ -177,7 +183,7 @@ public class CercanosActivity extends AppCompatActivity implements
                 rv.setLayoutManager(llm);
                 RVAdapterItem adapter = new RVAdapterItem(listaFinal.getElementos(), new RVClickListenerEspacio() {
                     @Override
-                    public void onClickItem(View v, int position) {
+                    public void onClickItem(int position) {
                         ItemActivity.lista = listaFinal;
                         Intent myIntent = new Intent(CercanosActivity.this, ItemActivity.class);
                         myIntent.putExtra("tipo", String.valueOf(posicion));
@@ -188,33 +194,31 @@ public class CercanosActivity extends AppCompatActivity implements
                 rv.setAdapter(adapter);
             }
         });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         // Spinner inicializacion
         spinner = findViewById(R.id.cercanos_spinner);
         String[] nombres = new String[Utilidades.nombresItems.length - 1];
-        for (int i = 0; i < Utilidades.nombresItems.length - 1; i++) {
-            nombres[i] = Utilidades.nombresItems[i];
-        }
-        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nombres));
+        if (Utilidades.nombresItems.length - 1 >= 0)
+            System.arraycopy(Utilidades.nombresItems, 0, nombres, 0, Utilidades.nombresItems.length - 1);
+        spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, nombres));
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapter, View vies,
                                        int position, long id) {
                 posicion = position;
-                // Log.i("INFO", String.valueOf(posicion));
-
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapter) {
+                // Continuar con la actividad
             }
         });
         // Inicializacion distancia
         distancia = findViewById(R.id.cercanos_metros);
     }
 
-    public boolean checkLocationPermission() {
+    private void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -248,17 +252,14 @@ public class CercanosActivity extends AppCompatActivity implements
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
             }
-            return false;
         } else {
-            return true;
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_LOCATION: {
+                                           @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION) {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length == 1
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -272,31 +273,8 @@ public class CercanosActivity extends AppCompatActivity implements
                 } else {
                     Toast.makeText(this, "Permisos no otorgados", Toast.LENGTH_LONG).show();
                 }
-            }
-
         }
     }
-
-    private void mensajeNoGPS() {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Parece que su GPS está desactivado, ¿le gustaría activarlo?")
-                .setCancelable(false)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        dialog.cancel();
-                        Toast.makeText(CercanosActivity.this, "Lógicamente no se pueden obtener los lugares más cercanos sin su ubicación", Toast.LENGTH_LONG).show();
-                        onBackPressed();
-                    }
-                });
-        final AlertDialog alert = builder.create();
-        alert.show();
-    }
-
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -312,12 +290,12 @@ public class CercanosActivity extends AppCompatActivity implements
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        // Continuar con la actividad
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        // Continuar con la actividad
     }
 
     @Override

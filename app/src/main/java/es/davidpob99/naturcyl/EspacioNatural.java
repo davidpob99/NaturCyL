@@ -5,23 +5,24 @@
  *
  * Copyright (C) 2019  David Población Criado
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
+ * Este programa es software libre: puede redistribuirlo y/o modificarlo bajo
+ * los términos de la Licencia General Pública de GNU publicada por la Free
+ * Software Foundation, ya sea la versión 3 de la Licencia, o (a su elección)
+ * cualquier versión posterior.\n\n
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Este programa se distribuye con la esperanza de que sea útil pero SIN
+ * NINGUNA GARANTÍA; incluso sin la garantía implícita de MERCANTIBILIDAD o
+ * CALIFICADA PARA UN PROPÓSITO EN PARTICULAR. Vea la Licencia General Pública
+ * de GNU para más detalles.\n\n
  *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * Usted ha debido de recibir una copia de la Licencia General Pública
+ * de GNU junto con este programa. Si no, vea http://www.gnu.org/licenses/
  */
 
 package es.davidpob99.naturcyl;
 
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.overlay.Polygon;
@@ -39,12 +40,12 @@ public class EspacioNatural implements Comparable<EspacioNatural> {
     private boolean q;
     private String codigo;
     private String nombre;
-    private Date fechaDeclaracion;
+    private final Date fechaDeclaracion;
     private String tipoDeclaracion;
     private ArrayList<GeoPoint> coordenadas;
     private String imagen;
     private ArrayList<EspacioNaturalItem> items;
-    private Polygon poligonoCoordenadas;
+    private final Polygon poligonoCoordenadas;
 
     public EspacioNatural(int id, boolean q, String codigo, String nombre, String fechaDeclaracion, String tipoDeclaracion, ArrayList<GeoPoint> coordenadas, String imagen) {
         this.id = id;
@@ -70,6 +71,7 @@ public class EspacioNatural implements Comparable<EspacioNatural> {
         return nombre.compareTo(espacioNatural.getNombre());
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "EspacioNatural{" +
@@ -83,30 +85,6 @@ public class EspacioNatural implements Comparable<EspacioNatural> {
                 ", imagen='" + imagen + '\'' +
                 '}';
     }
-    /*
-    public boolean estaEnEspacio(EspacioNaturalItem eni) {
-        GeoPoint coordenadasEni = eni.getCoordenadas();
-        double xMin = coordenadas.get(0).getLatitude();
-        double yMin = coordenadas.get(0).getLongitude();
-        double xMax = xMin;
-        double yMax = yMin;
-
-        for (GeoPoint gp : coordenadas) {
-            if (xMin > gp.getLatitude()) {
-                xMin = gp.getLatitude();
-            }
-            if (xMax < gp.getLatitude()) {
-                xMax = gp.getLatitude();
-            }
-            if (yMin > gp.getLongitude()) {
-                yMin = gp.getLongitude();
-            }
-            if (yMax < gp.getLongitude()) {
-                yMax = gp.getLongitude();
-            }
-        }
-        return coordenadasEni.getLatitude() <= xMax && coordenadasEni.getLatitude() >= xMin && coordenadasEni.getLongitude() <= yMax && coordenadasEni.getLongitude() >= yMin;
-    }*/
 
     public boolean hayAparcamiento() {
         for (EspacioNaturalItem eni : items) {
@@ -233,8 +211,7 @@ public class EspacioNatural implements Comparable<EspacioNatural> {
     public String getFechaDeclaracion() {
         SimpleDateFormat formateador = new SimpleDateFormat(
                 "d 'de' MMMM 'de '", new Locale("es", "ES"));
-        String fecha = formateador.format(fechaDeclaracion) + fechaDeclaracion.getYear();
-        return fecha;
+        return formateador.format(fechaDeclaracion) + fechaDeclaracion.getYear();
     }
 
     public String getTipoDeclaracion() {
