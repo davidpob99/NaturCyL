@@ -21,8 +21,6 @@
 
 package es.davidpob99.naturcyl;
 
-import org.osmdroid.util.GeoPoint;
-
 /**
  * Equipamiento que es punto de referencia de toda la oferta de uso público y está
  * destinado a cumplir los servicios de recepción, información e interpretación
@@ -33,7 +31,7 @@ import org.osmdroid.util.GeoPoint;
  * interpretación se realiza tanto con atención personalizada como con
  * exposiciones interpretativas.
  */
-public class CentroVisitante extends CasaParque {
+public class CentroVisitante extends EspacioNaturalItem {
     public static final String URL_KML = "https://datosabiertos.jcyl.es/web/jcyl/risp/es/medio-ambiente/centros_de_visitantes/1284378137727.kml";
     public static final String[] TIPOS = {
             "Aula de la Naturaleza",
@@ -51,12 +49,6 @@ public class CentroVisitante extends CasaParque {
 
     public CentroVisitante() {
         super();
-    }
-
-    public CentroVisitante(int id, boolean q, String codigo, String fechaDeclaracion, int estado, String fechaEstado, boolean senalizacionExterna, String observaciones, String acceso, boolean interesTuristico, double superficie, GeoPoint coordenadas, String nombre, String web, boolean servicioInformativo, boolean biblioteca, boolean tiendaVerde, int tipo, String descripcion) {
-        super(id, q, codigo, fechaDeclaracion, estado, fechaEstado, senalizacionExterna, observaciones, acceso, interesTuristico, superficie, coordenadas, nombre, web, servicioInformativo, biblioteca, tiendaVerde);
-        this.tipo = tipo;
-        this.descripcion = descripcion;
     }
 
     public int getTipo() {

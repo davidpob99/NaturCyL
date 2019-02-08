@@ -23,15 +23,13 @@ package es.davidpob99.naturcyl;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -47,14 +45,21 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
-public class CercanosActivity extends AppCompatActivity implements LocationListener {
+
+public class CercanosActivity extends AppCompatActivity implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
-    LocationManager locationManager;
-    String provider;
-    Location localizacion;
+
     private Spinner spinner;
     private EditText distancia;
+    private GoogleApiClient mGoogleApiClient;
+    private Location mLastLocation;
+
     private int posicion;
     private ListaEspaciosNaturalesItems<? extends EspacioNaturalItem> listaItems;
 
@@ -64,6 +69,13 @@ public class CercanosActivity extends AppCompatActivity implements LocationListe
         setContentView(R.layout.activity_cercanos);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Cargar Google Play Services
+        mGoogleApiClient = new GoogleApiClient.Builder(CercanosActivity.this)
+                .addConnectionCallbacks(CercanosActivity.this)
+                .addOnConnectionFailedListener(CercanosActivity.this)
+                .addApi(LocationServices.API)
+                .build();
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -130,10 +142,10 @@ public class CercanosActivity extends AppCompatActivity implements LocationListe
                     EspacioNaturalItem eni = listaItems.getElementos().get(i);
                     loc.setLatitude(eni.getCoordenadas().getLatitude());
                     loc.setLongitude(eni.getCoordenadas().getLongitude());
-                    Log.i("DIST", String.valueOf(localizacion));
+                    Log.i("DIST", String.valueOf(mLastLocation));
 
                     try {
-                        if (localizacion.distanceTo(loc) <= metros) {
+                        if (mLastLocation.distanceTo(loc) <= metros) {
                             listaFinal.add(eni);
                         }
                     } catch (NullPointerException e) {
@@ -178,14 +190,6 @@ public class CercanosActivity extends AppCompatActivity implements LocationListe
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        provider = locationManager.getBestProvider(new Criteria(), false);
-        checkLocationPermission();
-
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            mensajeNoGPS();
-        }
-
         // Spinner inicializacion
         spinner = findViewById(R.id.cercanos_spinner);
         String[] nombres = new String[Utilidades.nombresItems.length - 1];
@@ -204,63 +208,10 @@ public class CercanosActivity extends AppCompatActivity implements LocationListe
 
             @Override
             public void onNothingSelected(AdapterView<?> adapter) {
-                // Mensaje error
             }
         });
         // Inicializacion distancia
         distancia = findViewById(R.id.cercanos_metros);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-
-            locationManager.requestLocationUpdates(provider, 400, 1, this);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-
-            locationManager.removeUpdates(this);
-        }
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        double lat = location.getLatitude();
-        double lng = location.getLongitude();
-
-        localizacion = new Location("");
-        localizacion.setLatitude(lat);
-        localizacion.setLongitude(lng);
-
-
-        Log.i("Location info: Lat", String.valueOf(lat));
-        Log.i("Location info: Lng", String.valueOf(lng));
-
-    }
-
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
     }
 
     public boolean checkLocationPermission() {
@@ -309,39 +260,18 @@ public class CercanosActivity extends AppCompatActivity implements LocationListe
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_LOCATION: {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
+                if (grantResults.length == 1
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // location-related task you need to do.
-                    if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.ACCESS_FINE_LOCATION)
-                            == PackageManager.PERMISSION_GRANTED) {
-
-                        //Request location updates:
-                        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                        provider = locationManager.getBestProvider(new Criteria(), false);
-                        locationManager.requestLocationUpdates(provider, 400, 1, this);
+                    checkLocationPermission();
+                    mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                    if (mLastLocation != null) {
+                        //hacer cosas
+                    } else {
+                        Toast.makeText(this, "Ubicación no encontrada", Toast.LENGTH_LONG).show();
                     }
-
                 } else {
-
-                    new AlertDialog.Builder(CercanosActivity.this)
-                            .setTitle("Ubicación")
-                            .setMessage("No se ha permitido el uso de la ubicación, por lo que no se pueden encontrar los elementos más cercanos.")
-                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    onBackPressed();
-                                }
-                            })
-                            .create()
-                            .show();
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-
+                    Toast.makeText(this, "Permisos no otorgados", Toast.LENGTH_LONG).show();
                 }
-                return;
             }
 
         }
@@ -367,5 +297,39 @@ public class CercanosActivity extends AppCompatActivity implements LocationListe
         alert.show();
     }
 
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        checkLocationPermission();
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation != null) {
+            // Trabajar con coordenadas
+        } else {
+            Toast.makeText(this, "Ubicación no encontrada", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mGoogleApiClient.disconnect();
+    }
 
 }

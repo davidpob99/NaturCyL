@@ -999,6 +999,7 @@
         dichos servicios.\n
 
         \nCon la finalidad de proteger la privacidad de los usuarios que usan esta app no se usan los mapas de Google ni ningún otro servicio
-        asciado a esta empresa, aunque la aplicación se distribuye a través de Google Play.
+        asciado a esta empresa, aunque la aplicación se distribuye a través de Google Play y para obtener el acceso a la ubicación del dispositivo
+        es necesario usar Google Play Services.
     </string>
 </resources>

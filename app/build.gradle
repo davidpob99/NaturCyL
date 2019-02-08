@@ -59,4 +59,5 @@ dependencies {
     implementation 'ru.noties:markwon:2.0.1'
     implementation 'com.github.AppIntro:AppIntro:v4.2.3'
     implementation 'com.synnapps:carouselview:0.1.5'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
 }

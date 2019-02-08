@@ -389,6 +389,7 @@ public class ItemActivity extends AppCompatActivity {
                 tv.setText(booleanAEspanol(cp.isTiendaVerde()));
                 tv.setPadding(8, 8, 8, 8);
                 raiz.addView(tv);
+                tv = new TextView(this);
                 tv.setText("Página web");
                 tv.setTypeface(null, Typeface.BOLD);
                 tv.setPadding(8, 8, 8, 8);
