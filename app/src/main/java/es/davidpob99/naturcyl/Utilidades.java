@@ -32,7 +32,6 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -77,7 +76,7 @@ class Utilidades {
     public static final int[] fotosItems = {
             R.drawable.ic_local_parking_black_24dp,
             R.drawable.ic_binoculars_black_24dp,
-            R.drawable.ic_remove_red_eye_black_24dp,
+            R.drawable.ic_camera_alt_black_24dp,
             R.drawable.ic_beach_black_24dp,
             R.drawable.ic_home_black_24dp,
             R.drawable.ic_bank_black_24dp,
@@ -182,13 +181,13 @@ class Utilidades {
         }
 
         try {
-            kml = Objects.requireNonNull(db).parse(file);
+            kml = db.parse(file);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
         }
-        NodeList nodos = Objects.requireNonNull(kml).getElementsByTagName("Placemark");
+        NodeList nodos = kml.getElementsByTagName("Placemark");
         for (int i = 0; i < nodos.getLength(); i++) {
             Node n = nodos.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -233,13 +232,13 @@ class Utilidades {
         }
 
         try {
-            kml = Objects.requireNonNull(db).parse(file);
+            kml = db.parse(file);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
         }
-        NodeList nodos = Objects.requireNonNull(kml).getElementsByTagName("Placemark");
+        NodeList nodos = kml.getElementsByTagName("Placemark");
         for (int i = 0; i < nodos.getLength(); i++) {
             Node n = nodos.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -285,13 +284,13 @@ class Utilidades {
         }
 
         try {
-            kml = Objects.requireNonNull(db).parse(file);
+            kml = db.parse(file);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
         }
-        NodeList nodos = Objects.requireNonNull(kml).getElementsByTagName("Placemark");
+        NodeList nodos = kml.getElementsByTagName("Placemark");
         for (int i = 0; i < nodos.getLength(); i++) {
             Node n = nodos.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -332,13 +331,13 @@ class Utilidades {
         }
 
         try {
-            kml = Objects.requireNonNull(db).parse(file);
+            kml = db.parse(file);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
         }
-        NodeList nodos = Objects.requireNonNull(kml).getElementsByTagName("Placemark");
+        NodeList nodos = kml.getElementsByTagName("Placemark");
         for (int i = 0; i < nodos.getLength(); i++) {
             Node n = nodos.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -380,13 +379,13 @@ class Utilidades {
         }
 
         try {
-            kml = Objects.requireNonNull(db).parse(file);
+            kml = db.parse(file);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
         }
-        NodeList nodos = Objects.requireNonNull(kml).getElementsByTagName("Placemark");
+        NodeList nodos = kml.getElementsByTagName("Placemark");
         for (int i = 0; i < nodos.getLength(); i++) {
             Node n = nodos.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -437,13 +436,13 @@ class Utilidades {
         }
 
         try {
-            kml = Objects.requireNonNull(db).parse(file);
+            kml = db.parse(file);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
         }
-        NodeList nodos = Objects.requireNonNull(kml).getElementsByTagName("Placemark");
+        NodeList nodos = kml.getElementsByTagName("Placemark");
         for (int i = 0; i < nodos.getLength(); i++) {
             Node n = nodos.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -488,13 +487,13 @@ class Utilidades {
         }
 
         try {
-            kml = Objects.requireNonNull(db).parse(file);
+            kml = db.parse(file);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
         }
-        NodeList nodos = Objects.requireNonNull(kml).getElementsByTagName("Placemark");
+        NodeList nodos = kml.getElementsByTagName("Placemark");
         for (int i = 0; i < nodos.getLength(); i++) {
             Node n = nodos.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -538,13 +537,13 @@ class Utilidades {
         }
 
         try {
-            kml = Objects.requireNonNull(db).parse(file);
+            kml = db.parse(file);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
         }
-        NodeList nodos = Objects.requireNonNull(kml).getElementsByTagName("Placemark");
+        NodeList nodos = kml.getElementsByTagName("Placemark");
         for (int i = 0; i < nodos.getLength(); i++) {
             Node n = nodos.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -582,13 +581,13 @@ class Utilidades {
         }
 
         try {
-            kml = Objects.requireNonNull(db).parse(file);
+            kml = db.parse(file);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
         }
-        NodeList nodos = Objects.requireNonNull(kml).getElementsByTagName("Placemark");
+        NodeList nodos = kml.getElementsByTagName("Placemark");
         for (int i = 0; i < nodos.getLength(); i++) {
             Node n = nodos.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -642,13 +641,13 @@ class Utilidades {
         }
 
         try {
-            kml = Objects.requireNonNull(db).parse(file);
+            kml = db.parse(file);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
         }
-        NodeList nodos = Objects.requireNonNull(kml).getElementsByTagName("Placemark");
+        NodeList nodos = kml.getElementsByTagName("Placemark");
         for (int i = 0; i < nodos.getLength(); i++) {
             Node n = nodos.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -702,13 +701,13 @@ class Utilidades {
         }
 
         try {
-            kml = Objects.requireNonNull(db).parse(file);
+            kml = db.parse(file);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
         }
-        NodeList nodos = Objects.requireNonNull(kml).getElementsByTagName("Placemark");
+        NodeList nodos = kml.getElementsByTagName("Placemark");
         for (int i = 0; i < nodos.getLength(); i++) {
             Node n = nodos.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -747,13 +746,13 @@ class Utilidades {
         }
 
         try {
-            kml = Objects.requireNonNull(db).parse(file);
+            kml = db.parse(file);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
         }
-        NodeList nodos = Objects.requireNonNull(kml).getElementsByTagName("Placemark");
+        NodeList nodos = kml.getElementsByTagName("Placemark");
         for (int i = 0; i < nodos.getLength(); i++) {
             Node n = nodos.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {

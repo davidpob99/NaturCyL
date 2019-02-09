@@ -44,7 +44,6 @@ import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polyline;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 
@@ -160,7 +159,7 @@ public class SendaActivity extends AppCompatActivity {
         mapa.invalidate();
 
         Drawable nodeIcon = getResources().getDrawable(R.drawable.marker_default);
-        for (int i = 0; i < Objects.requireNonNull(road).mNodes.size(); i++) {
+        for (int i = 0; i < road.mNodes.size(); i++) {
             RoadNode node = road.mNodes.get(i);
             Marker nodeMarker = new Marker(mapa);
             nodeMarker.setPosition(node.mLocation);

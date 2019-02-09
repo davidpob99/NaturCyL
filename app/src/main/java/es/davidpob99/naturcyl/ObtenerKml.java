@@ -30,7 +30,6 @@ import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Objects;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -57,7 +56,7 @@ class ObtenerKml extends AsyncTask<String, Void, Document> {
             e.printStackTrace();
         }
         try {
-            doc = Objects.requireNonNull(db).parse(Objects.requireNonNull(url).openStream());
+            doc = db.parse(url.openStream());
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SAXException e) {

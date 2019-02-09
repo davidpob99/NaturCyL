@@ -65,11 +65,10 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -87,9 +86,23 @@ import static java.lang.System.exit;
  */
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_WRITE_STORAGE = 112;
-    private ArrayList<EspacioNatural> listaEspacios;
+    private final ParametrosDescarga[] descargas = {
+            new ParametrosDescarga(EspacioNatural.URL_KML, "Espacios.kml"),
+            new ParametrosDescarga(Aparcamiento.URL_KML, "Aparcamientos.kml"),
+            new ParametrosDescarga(Observatorio.URL_KML, "Observatorios.kml"),
+            new ParametrosDescarga(Mirador.URL_KML, "Miradores.kml"),
+            new ParametrosDescarga(ArbolSingular.URL_KML, "ArbolesSingulares.kml"),
+            new ParametrosDescarga(ZonaRecreativa.URL_KML, "ZonasRecreativas.kml"),
+            new ParametrosDescarga(CasaParque.URL_KML, "CasasParque.kml"),
+            new ParametrosDescarga(CentroVisitante.URL_KML, "CentrosVisitante.kml"),
+            new ParametrosDescarga(ZonaAcampada.URL_KML, "ZonasAcampada.kml"),
+            new ParametrosDescarga(Campamento.URL_KML, "Campamentos.kml"),
+            new ParametrosDescarga(Refugio.URL_KML, "Refugios.kml"),
+            new ParametrosDescarga(Quiosco.URL_KML, "Quioscos.kml"),
+            new ParametrosDescarga(Senda.URL_KML, "Sendas.kml")
 
-    private RecyclerView rv;
+    };
+    private ArrayList<EspacioNatural> listaEspacios;
     private ProgressDialog pDialog;
 
     private SharedPreferences preferencias;
@@ -104,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        // Acciones del botón flotante
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,13 +128,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(myIntent);
             }
         });
-
         // Primera ejecución
         if (preferencias.getBoolean("firstrun", true)) {
             editor.clear().commit();
             editor.putString("favoritos", "").apply();
             editor.putBoolean("firstrun", false).commit();
-            startActivity(new Intent(MainActivity.this, IntroActivity.class));
+            descargarTodo();
+            startActivity(new Intent(MainActivity.this, IntroActivity.class)); // Actividad de introducción
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Al usar esta app, aceptas la Política de Privacidad y la Licencia (GNU GPL v3). Puedes consultar ambas en cualquier momento en el apartado 'Acerca de la app' ")
                     .setNeutralButton(getString(R.string.politica_privacidad), new DialogInterface.OnClickListener() {
@@ -140,29 +153,27 @@ public class MainActivity extends AppCompatActivity {
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-
+                            // Seguir con la app
                         }
                     });
             final AlertDialog alert = builder.create();
             alert.show();
+        } else {
+            comprobarDescarga();
         }
-
-        //inicio
         // Comprobar permisos
-        boolean hasPermission = (ContextCompat.checkSelfPermission(this,
+        boolean hayPermiso = (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
-        if (!hasPermission) {
+        if (!hayPermiso) {
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     REQUEST_WRITE_STORAGE);
         } else {
-            // descargarTodo();
-            inicializarEspacios(getApplicationContext().getFilesDir());
-            Collections.sort(listaEspacios);
+            inicializarEspacios(getFilesDir());
+            Collections.sort(listaEspacios); // Ordenar datos
             cargarRV();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -173,21 +184,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.accion_actualizar_datos) {
-            ProgressDialog progress = ProgressDialog.show(this, "dialog title",
-                    "dialog message", true);
-            progress.show();
             descargarTodo();
-            inicializarEspacios(getApplicationContext().getFilesDir());
+            inicializarEspacios(getFilesDir());
             Collections.sort(listaEspacios);
             cargarRV();
-            progress.dismiss();
         } else if (id == R.id.accion_conjunto_datos) {
             Intent myIntent = new Intent(MainActivity.this, TextoActivity.class);
             myIntent.putExtra("accion", "conjunto_datos");
@@ -199,7 +202,6 @@ public class MainActivity extends AppCompatActivity {
             Intent myIntent = new Intent(MainActivity.this, CercanosActivity.class);
             startActivity(myIntent);
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -209,8 +211,7 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_WRITE_STORAGE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    descargarTodo();
-                    inicializarEspacios(getApplicationContext().getFilesDir());
+                    inicializarEspacios(getFilesDir());
                     Collections.sort(listaEspacios);
                     cargarRV();
                 } else {
@@ -245,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         try {
-            kmlEspacios = Objects.requireNonNull(db).parse(file);
+            kmlEspacios = db.parse(file);
         } catch (Exception e) {
             e.printStackTrace();
             try {
@@ -256,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
                 r.printStackTrace();
             }
         }
-        NodeList nodosEspacios = Objects.requireNonNull(kmlEspacios).getElementsByTagName("Placemark");
+        NodeList nodosEspacios = kmlEspacios.getElementsByTagName("Placemark");
         for (int i = 0; i < nodosEspacios.getLength(); i++) {
             Node n = nodosEspacios.item(i);
             if (n.getNodeType() == Node.ELEMENT_NODE) {
@@ -281,52 +282,16 @@ public class MainActivity extends AppCompatActivity {
                 listaEspacios.add(en);
             }
         }
-        /*for (EspacioNatural en : listaEspacios) {
-            Log.i("ESPACIO", en.toString());
-        }*/
     }
 
     private void descargarTodo() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
+        //Comprobar si hay acceso a Internet
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
+        boolean conexion = activeNetwork != null &&
                 activeNetwork.isConnectedOrConnecting();
-
-        if (isConnected) {
-            ParametrosDescarga[] descargas = {
-                    new ParametrosDescarga(EspacioNatural.URL_KML, "Espacios.kml"),
-                    new ParametrosDescarga(Aparcamiento.URL_KML, "Aparcamientos.kml"),
-                    new ParametrosDescarga(Observatorio.URL_KML, "Observatorios.kml"),
-                    new ParametrosDescarga(Mirador.URL_KML, "Miradores.kml"),
-                    new ParametrosDescarga(ArbolSingular.URL_KML, "ArbolesSingulares.kml"),
-                    new ParametrosDescarga(ZonaRecreativa.URL_KML, "ZonasRecreativas.kml"),
-                    new ParametrosDescarga(CasaParque.URL_KML, "CasasParque.kml"),
-                    new ParametrosDescarga(CentroVisitante.URL_KML, "CentrosVisitante.kml"),
-                    new ParametrosDescarga(ZonaAcampada.URL_KML, "ZonasAcampada.kml"),
-                    new ParametrosDescarga(Campamento.URL_KML, "Campamentos.kml"),
-                    new ParametrosDescarga(Refugio.URL_KML, "Refugios.kml"),
-                    new ParametrosDescarga(Quiosco.URL_KML, "Quioscos.kml"),
-                    new ParametrosDescarga(Senda.URL_KML, "Sendas.kml")
-
-            };
+        if (conexion) {
             new DescargarKMLs().execute(descargas);
-
-            /*
-            descargar("Espacios.kml", EspacioNatural.URL_KML);
-            descargar("Aparcamientos.kml", Aparcamiento.URL_KML);
-            descargar("Observatorios.kml", Observatorio.URL_KML);
-            descargar("Miradores.kml", Mirador.URL_KML);
-            descargar("ArbolesSingulares.kml", ArbolSingular.URL_KML);
-            descargar("ZonasRecreativas.kml", ZonaRecreativa.URL_KML);
-            descargar("CasasParque.kml", CasaParque.URL_KML);
-            descargar("CentrosVisitante.kml", CentroVisitante.URL_KML);
-            descargar("ZonasAcampada.kml", ZonaAcampada.URL_KML);
-            descargar("Campamentos.kml", Campamento.URL_KML);
-            descargar("Refugios.kml", Refugio.URL_KML);
-            descargar("Quioscos.kml", Quiosco.URL_KML);
-            descargar("Sendas.kml", Senda.URL_KML);*/
         } else {
             AlertDialog.Builder builder;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -346,6 +311,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Carga la lista de espacios naturales
+     */
     private void cargarRV() {
         RecyclerView rv = findViewById(R.id.espacio_rv);
         rv.setHasFixedSize(true);
@@ -363,6 +331,9 @@ public class MainActivity extends AppCompatActivity {
         rv.setAdapter(adapter);
     }
 
+    /**
+     * Desde las preferencias, obtiene los favoritos anteriormente guardados
+     */
     private void obtenerFavoritos() {
         preferencias = getSharedPreferences("es.davidpob99.naturcyl", Context.MODE_PRIVATE);
         Gson gson = new Gson();
@@ -375,24 +346,41 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void guardarFavoritos() {
-        preferencias = this.getSharedPreferences("es.davidpob99.naturcyl", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferencias.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(favoritos);
-        editor.putString("favoritos", json);
-        editor.apply();
+    /**
+     * Comprueba que se han descargado todos los conjuntos de datos y muestra un error si no
+     */
+    private void comprobarDescarga() {
+        for (ParametrosDescarga pd : descargas) {
+            File file = new File(getFilesDir() + "/" + pd.nombreFichero);
+            if (!file.exists()) {
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_DeviceDefault_Dialog);
+                } else {
+                    builder = new AlertDialog.Builder(MainActivity.this);
+                }
+                builder.setTitle("Error")
+                        .setCancelable(false)
+                        .setMessage("Los datos no han sido descargados correctamente, se volverán a descargar. No cierre la app mientras se descarguen")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                descargarTodo();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                return;
+            }
+        }
     }
 
+    /**
+     * Tarea asíncrona que descarga los conjuntos de datos y los guarda en distintos ficheros kml
+     */
     class DescargarKMLs extends AsyncTask<ParametrosDescarga, String, String> {
-
-        /**
-         * Before starting background thread
-         */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //System.out.println("Starting download");
 
             pDialog = new ProgressDialog(MainActivity.this);
             pDialog.setMessage("Descargando datos, por favor espere");
@@ -401,40 +389,27 @@ public class MainActivity extends AppCompatActivity {
             pDialog.show();
         }
 
-        /**
-         * Downloading file in background thread
-         */
         @Override
         protected String doInBackground(ParametrosDescarga... f_url) {
             for (ParametrosDescarga pd : f_url) {
                 int count;
                 try {
-                    //System.out.println("Downloading");
                     URL url = new URL(pd.url);
-                    URLConnection conection = url.openConnection();
+                    HttpURLConnection conection = (HttpURLConnection) url.openConnection();
                     conection.connect();
-                    // getting file length
-                    int lenghtOfFile = conection.getContentLength();
-                    // input stream to read file - with 8k buffer
                     InputStream input = new BufferedInputStream(url.openStream(), 8192);
-                    // Output stream to write file
                     OutputStream output = new FileOutputStream(getFilesDir() + "/" + pd.nombreFichero);
                     byte data[] = new byte[1024];
 
                     long total = 0;
                     while ((count = input.read(data)) != -1) {
                         total += count;
-
-                        // writing data to file
                         output.write(data, 0, count);
-
                     }
-                    // flushing output
                     output.flush();
-                    // closing streams
                     output.close();
                     input.close();
-
+                    conection.disconnect();
                 } catch (Exception e) {
                     Log.e("Error: ", e.getMessage());
                 }
@@ -442,18 +417,17 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
 
-        /**
-         * After completing background task
-         **/
         @Override
         protected void onPostExecute(String file_url) {
-            //System.out.println("Downloaded");
-
             pDialog.dismiss();
+            comprobarDescarga();
         }
 
     }
 
+    /**
+     * Representación de un parámetro de descarga para el AsyncTask
+     */
     class ParametrosDescarga {
         final String url;
         final String nombreFichero;

@@ -35,7 +35,7 @@
         <LinearLayout
             android:id="@+id/b"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="8dp">
 
@@ -72,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#FAFAFA"
-                android:drawableLeft="@drawable/ic_description_black_24dp"
+                android:drawableStart="@drawable/ic_description_black_24dp"
                 android:onClick="clickedLicense"
                 android:text="Licencia" />
 
@@ -81,7 +81,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#FAFAFA"
-                android:drawableLeft="@drawable/ic_description_black_24dp"
+                android:drawableStart="@drawable/ic_description_black_24dp"
                 android:onClick="clickedTerceros"
                 android:text="Bibliotecas de código abierto" />
 
@@ -90,7 +90,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#FAFAFA"
-                android:drawableLeft="@drawable/ic_description_black_24dp"
+                android:drawableStart="@drawable/ic_description_black_24dp"
                 android:onClick="clickedPrivacidad"
                 android:text="@string/politica_privacidad" />
 
@@ -99,7 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#FAFAFA"
-                android:drawableLeft="@drawable/ic_github"
+                android:drawableStart="@drawable/ic_github"
                 android:onClick="clickedGit"
                 android:text="Ver en GitHub" />
 

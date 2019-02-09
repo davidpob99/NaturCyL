@@ -49,8 +49,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 
-import java.util.Objects;
-
 
 public class CercanosActivity extends AppCompatActivity implements
         GoogleApiClient.ConnectionCallbacks,
@@ -67,57 +65,55 @@ public class CercanosActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Spinner spinner;
 
         setContentView(R.layout.activity_cercanos);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         // Cargar Google Play Services
         mGoogleApiClient = new GoogleApiClient.Builder(CercanosActivity.this)
                 .addConnectionCallbacks(CercanosActivity.this)
                 .addOnConnectionFailedListener(CercanosActivity.this)
                 .addApi(LocationServices.API)
                 .build();
-
+        // Acción del botón flotante
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch (posicion) {
                     case 0:
-                        listaItems = Utilidades.inicializarAparcamientos(getApplicationContext().getFilesDir());
+                        listaItems = Utilidades.inicializarAparcamientos(getFilesDir());
                         break;
                     case 1:
-                        listaItems = Utilidades.inicializarObservatorios(getApplicationContext().getFilesDir());
+                        listaItems = Utilidades.inicializarObservatorios(getFilesDir());
                         break;
                     case 2:
-                        listaItems = Utilidades.inicializarMiradores(getApplicationContext().getFilesDir());
+                        listaItems = Utilidades.inicializarMiradores(getFilesDir());
                         break;
                     case 3:
-                        listaItems = Utilidades.inicializarZonasRecreativas(getApplicationContext().getFilesDir());
+                        listaItems = Utilidades.inicializarZonasRecreativas(getFilesDir());
                         break;
                     case 4:
-                        listaItems = Utilidades.inicializarCasasParque(getApplicationContext().getFilesDir());
+                        listaItems = Utilidades.inicializarCasasParque(getFilesDir());
                         break;
                     case 5:
-                        listaItems = Utilidades.inicializarCentrosVisitantes(getApplicationContext().getFilesDir());
+                        listaItems = Utilidades.inicializarCentrosVisitantes(getFilesDir());
                         break;
                     case 6:
-                        listaItems = Utilidades.inicializarArbolesSingulares(getApplicationContext().getFilesDir());
+                        listaItems = Utilidades.inicializarArbolesSingulares(getFilesDir());
                         break;
                     case 7:
-                        listaItems = Utilidades.inicializarZonasAcampada(getApplicationContext().getFilesDir());
+                        listaItems = Utilidades.inicializarZonasAcampada(getFilesDir());
                         break;
                     case 8:
-                        listaItems = Utilidades.inicializarCampamentos(getApplicationContext().getFilesDir());
+                        listaItems = Utilidades.inicializarCampamentos(getFilesDir());
                         break;
                     case 9:
-                        listaItems = Utilidades.inicializarRefugios(getApplicationContext().getFilesDir());
+                        listaItems = Utilidades.inicializarRefugios(getFilesDir());
                         break;
                     case 10:
-                        listaItems = Utilidades.inicializarQuioscos(getApplicationContext().getFilesDir());
+                        listaItems = Utilidades.inicializarQuioscos(getFilesDir());
                         break;
                     default:
                         break;
@@ -141,15 +137,12 @@ public class CercanosActivity extends AppCompatActivity implements
                     return;
 
                 }
-
                 final ListaEspaciosNaturalesItems<EspacioNaturalItem> listaFinal = new ListaEspaciosNaturalesItems<>();
                 for (int i = 0; i < listaItems.getElementos().size(); i++) {
                     Location loc = new Location("");
                     EspacioNaturalItem eni = listaItems.getElementos().get(i);
                     loc.setLatitude(eni.getCoordenadas().getLatitude());
                     loc.setLongitude(eni.getCoordenadas().getLongitude());
-                    Log.i("DIST", String.valueOf(mLastLocation));
-
                     try {
                         if (mLastLocation.distanceTo(loc) <= metros) {
                             listaFinal.add(eni);
@@ -160,7 +153,6 @@ public class CercanosActivity extends AppCompatActivity implements
                     }
                     listaFinal.deElementosAEnEspacio();
                 }
-
                 if (listaFinal.getElementos().isEmpty()) {
                     new AlertDialog.Builder(CercanosActivity.this)
                             .setTitle("Vacío")
@@ -175,7 +167,6 @@ public class CercanosActivity extends AppCompatActivity implements
                             .show();
                     return;
                 }
-
                 // Cargar RecyclerView
                 RecyclerView rv = findViewById(R.id.cercanos_rv);
                 rv.setHasFixedSize(true);
@@ -194,8 +185,7 @@ public class CercanosActivity extends AppCompatActivity implements
                 rv.setAdapter(adapter);
             }
         });
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // Spinner inicializacion
         spinner = findViewById(R.id.cercanos_spinner);
         String[] nombres = new String[Utilidades.nombresItems.length - 1];
@@ -208,7 +198,6 @@ public class CercanosActivity extends AppCompatActivity implements
                                        int position, long id) {
                 posicion = position;
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapter) {
                 // Continuar con la actividad
@@ -222,14 +211,9 @@ public class CercanosActivity extends AppCompatActivity implements
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
+                // Explicación concreta de esta app
                 new AlertDialog.Builder(this)
                         .setTitle("Ubicación")
                         .setMessage("Es necesaria la ubicación para calcular los elementos más cercanos")
@@ -247,12 +231,10 @@ public class CercanosActivity extends AppCompatActivity implements
 
 
             } else {
-                // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_LOCATION);
             }
-        } else {
         }
     }
 
@@ -260,7 +242,7 @@ public class CercanosActivity extends AppCompatActivity implements
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION) {
-                // If request is cancelled, the result arrays are empty.
+            // Comprobar si tenemos permiso
                 if (grantResults.length == 1
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     checkLocationPermission();

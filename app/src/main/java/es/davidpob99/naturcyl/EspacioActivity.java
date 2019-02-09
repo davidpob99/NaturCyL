@@ -22,6 +22,7 @@
 package es.davidpob99.naturcyl;
 
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -67,7 +68,6 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
@@ -97,7 +97,7 @@ public class EspacioActivity extends AppCompatActivity {
                 Type tipoListaUrls = new TypeToken<ArrayList<URLEspacio>>() {
                 }.getType();
                 ArrayList<URLEspacio> urls = gson.fromJson(leerUrls(getApplicationContext()), tipoListaUrls);
-                for (final URLEspacio u : Objects.requireNonNull(urls)) {
+                for (final URLEspacio u : urls) {
                     if (u.getCodigo().equals(espacioNatural.getCodigo())) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(EspacioActivity.this);
                         builder.setTitle("Seleccione enlace")
@@ -123,7 +123,7 @@ public class EspacioActivity extends AppCompatActivity {
                 }
             }
         });
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FLICKR_APIKEY = getString(R.string.FLICKR_APIKEY);
         carouselView = findViewById(R.id.espacio_carousel);
@@ -299,7 +299,7 @@ public class EspacioActivity extends AppCompatActivity {
                 Log.e("FICHERO", "Problema al abrir fichero", e);
             } finally {
                 try {
-                    Objects.requireNonNull(bf).close();
+                    bf.close();
                 } catch (IOException e) {
                     Log.e("FICHERO", "Problema al cerrar fichero", e);
                 }
@@ -322,11 +322,17 @@ public class EspacioActivity extends AppCompatActivity {
                 carouselView.setImageClickListener(new ImageClickListener() {
                     @Override
                     public void onClick(int position) {
-                        String fotoBuenaDefinicion = fotos.get(position).mThumbnailPath.replace("s.jpg", "h.jpg");
-                        Intent intent = new Intent();
-                        intent.setAction(Intent.ACTION_VIEW);
-                        intent.setDataAndType(Uri.parse(fotoBuenaDefinicion), "image/*");
-                        startActivity(intent);
+                        try {
+                            String fotoBuenaDefinicion = fotos.get(position).mThumbnailPath.replace("s.jpg", "h.jpg");
+                            Intent intent = new Intent();
+                            intent.setAction(Intent.ACTION_VIEW);
+                            intent.setDataAndType(Uri.parse(fotoBuenaDefinicion), "image/*");
+                            startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            Log.e("VERSION", "Versión no soporta apertura de imágenes", e);
+                            Toast.makeText(EspacioActivity.this, "No soportado click en esta versión de Android", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 });
             } else {

@@ -169,8 +169,13 @@ public class ItemActivity extends AppCompatActivity {
             Resources res = getResources();
             Marker marcador = new Marker(map);
             if (tipo != -1) {
-                Drawable drawable = res.getDrawable(Utilidades.fotosItems[tipo]);
-                marcador.setIcon(drawable);
+                try {
+                    Drawable drawable = res.getDrawable(Utilidades.fotosItems[tipo]);
+                    marcador.setIcon(drawable);
+                } catch (RuntimeException e) {
+                    Log.e("MARKER", "Icono en marcador no soportado", e);
+                }
+
             }
             marcador.setPosition(lista.getEstanEnEspacio().get(posicion).getCoordenadas());
             marcador.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);

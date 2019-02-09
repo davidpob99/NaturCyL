@@ -51,40 +51,40 @@ public class ListaItemsActivity extends AppCompatActivity {
 
         switch (posicion) {
             case 0:
-                listaTmp = Utilidades.inicializarAparcamientos(getApplicationContext().getFilesDir());
+                listaTmp = Utilidades.inicializarAparcamientos(getFilesDir());
                 break;
             case 1:
-                listaTmp = Utilidades.inicializarObservatorios(getApplicationContext().getFilesDir());
+                listaTmp = Utilidades.inicializarObservatorios(getFilesDir());
                 break;
             case 2:
-                listaTmp = Utilidades.inicializarMiradores(getApplicationContext().getFilesDir());
+                listaTmp = Utilidades.inicializarMiradores(getFilesDir());
                 break;
             case 3:
-                listaTmp = Utilidades.inicializarZonasRecreativas(getApplicationContext().getFilesDir());
+                listaTmp = Utilidades.inicializarZonasRecreativas(getFilesDir());
                 break;
             case 4:
-                listaTmp = Utilidades.inicializarCasasParque(getApplicationContext().getFilesDir());
+                listaTmp = Utilidades.inicializarCasasParque(getFilesDir());
                 break;
             case 5:
-                listaTmp = Utilidades.inicializarCentrosVisitantes(getApplicationContext().getFilesDir());
+                listaTmp = Utilidades.inicializarCentrosVisitantes(getFilesDir());
                 break;
             case 6:
-                listaTmp = Utilidades.inicializarArbolesSingulares(getApplicationContext().getFilesDir());
+                listaTmp = Utilidades.inicializarArbolesSingulares(getFilesDir());
                 break;
             case 7:
-                listaTmp = Utilidades.inicializarZonasAcampada(getApplicationContext().getFilesDir());
+                listaTmp = Utilidades.inicializarZonasAcampada(getFilesDir());
                 break;
             case 8:
-                listaTmp = Utilidades.inicializarCampamentos(getApplicationContext().getFilesDir());
+                listaTmp = Utilidades.inicializarCampamentos(getFilesDir());
                 break;
             case 9:
-                listaTmp = Utilidades.inicializarRefugios(getApplicationContext().getFilesDir());
+                listaTmp = Utilidades.inicializarRefugios(getFilesDir());
                 break;
             case 10:
-                listaTmp = Utilidades.inicializarQuioscos(getApplicationContext().getFilesDir());
+                listaTmp = Utilidades.inicializarQuioscos(getFilesDir());
                 break;
             case 11:
-                listaTmp = Utilidades.inicializarSendas(getApplicationContext().getFilesDir());
+                listaTmp = Utilidades.inicializarSendas(getFilesDir());
                 break;
             default:
                 break;

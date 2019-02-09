@@ -24,6 +24,7 @@ package es.davidpob99.naturcyl;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.widget.Toast;
 
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
@@ -59,6 +60,7 @@ public class IntroActivity extends AppIntro {
     public void onSkipPressed(Fragment currentFragment) {
         super.onSkipPressed(currentFragment);
         // Do something when users tap on Skip button.
+        Toast.makeText(IntroActivity.this, "Se están descargando los datos. Por favor no cierre la app aunque parezca bloqueada", Toast.LENGTH_LONG).show();
         finish();
     }
 
@@ -66,6 +68,7 @@ public class IntroActivity extends AppIntro {
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
         // Do something when users tap on Done button.
+        Toast.makeText(IntroActivity.this, "Se están descargando los datos. Por favor no cierre la app aunque parezca bloqueada", Toast.LENGTH_LONG).show();
         finish();
     }
 }
