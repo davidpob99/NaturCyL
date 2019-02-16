@@ -15,6 +15,7 @@ Los equipamientos disponibles en la aplicación son los siguientes:
 * Miradores
 * Quioscos
 * Sendas
+* Espacios naturales
 
 Además permite el guardado de los equipamientos favoritos y la obtención de los más cercanos dado un radio en metros.
 
