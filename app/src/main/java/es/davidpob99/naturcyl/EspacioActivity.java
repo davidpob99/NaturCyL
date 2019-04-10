@@ -187,8 +187,6 @@ public class EspacioActivity extends AppCompatActivity {
             }
         });
         rv.setAdapter(adapter);
-
-
     }
 
     @Override
@@ -223,7 +221,6 @@ public class EspacioActivity extends AppCompatActivity {
             myIntent.putExtra("accion", "leyenda");
             startActivity(myIntent);
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -316,23 +313,23 @@ public class EspacioActivity extends AppCompatActivity {
                 carouselView.setImageListener(new ImageListener() {
                     @Override
                     public void setImageForPosition(int position, ImageView imageView) {
-                        Picasso.get().load(fotos.get(position).mThumbnailPath.replace("s.jpg", "h.jpg")).into(imageView);
+                        Picasso.get().load(fotos.get(position).mThumbnailPath.replace("s.jpg", "b.jpg")).into(imageView);
                     }
                 });
                 carouselView.setImageClickListener(new ImageClickListener() {
                     @Override
                     public void onClick(int position) {
                         try {
-                            String fotoBuenaDefinicion = fotos.get(position).mThumbnailPath.replace("s.jpg", "h.jpg");
+                            String fotoBuenaDefinicion = fotos.get(position).mThumbnailPath.replace("s.jpg", "b.jpg");
                             Intent intent = new Intent();
                             intent.setAction(Intent.ACTION_VIEW);
+                            Log.i("FOTO", fotoBuenaDefinicion);
                             intent.setDataAndType(Uri.parse(fotoBuenaDefinicion), "image/*");
                             startActivity(intent);
                         } catch (ActivityNotFoundException e) {
                             Log.e("VERSION", "Versión no soporta apertura de imágenes", e);
                             Toast.makeText(EspacioActivity.this, "No soportado click en esta versión de Android", Toast.LENGTH_SHORT).show();
                         }
-
                     }
                 });
             } else {

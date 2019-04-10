@@ -63,4 +63,9 @@ public class AcercaDeActivity extends AppCompatActivity {
         startActivity(new Intent(AcercaDeActivity.this, MainActivity.class));
         return super.onKeyDown(keyCode, event);
     }
+
+    public void clickedPremios(View v) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://datosabiertos.jcyl.es/web/jcyl/RISP/es/Plantilla100/1284858507958/_/_/_"));
+        startActivity(browserIntent);
+    }
 }

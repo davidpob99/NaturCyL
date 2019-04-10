@@ -53,6 +53,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -173,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
             Collections.sort(listaEspacios); // Ordenar datos
             cargarRV();
         }
+        Configuration.getInstance().setUserAgentValue(this.getApplicationContext().getPackageName()); // necesario para descargar mapas
     }
 
     @Override
